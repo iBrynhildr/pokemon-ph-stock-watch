@@ -1,5 +1,2532 @@
 {
   "announcements": {
+    "pokemon_asia_news|https://asia.pokemon-card.com/hk-en/archive/special/card/certificationsystem/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apply your knowledge and skills on PokÃ©mon TCG with pride as an Official Judge or Event Organizer! Event",
+      "url": "https://asia.pokemon-card.com/hk-en/archive/special/card/certificationsystem/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/hk-en/archive/special/card/exam_details_5/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 5th Certification Exam has begun! Event",
+      "url": "https://asia.pokemon-card.com/hk-en/archive/special/card/exam_details_5/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/hk-en/archive/topics/event/pokemon_tcg_town_league_open_registration_announcement_aug_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League Open Registration Announcement (AUG 2022) Event",
+      "url": "https://asia.pokemon-card.com/hk-en/archive/topics/event/pokemon_tcg_town_league_open_registration_announcement_aug_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/hk-en/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League will be held late July 2022 Event",
+      "url": "https://asia.pokemon-card.com/hk-en/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/hk-en/exam_details_7/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 7th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/hk-en/exam_details_7/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/hk-en/exam_details_8/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 8th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/hk-en/exam_details_8/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/archive/special/card/certificationsystem/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apply your knowledge and skills on PokÃ©mon TCG with pride as an Official Judge or Event Organizer! Event",
+      "url": "https://asia.pokemon-card.com/my/archive/special/card/certificationsystem/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/archive/special/card/exam_details_5/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 5th Certification Exam has begun! Event",
+      "url": "https://asia.pokemon-card.com/my/archive/special/card/exam_details_5/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/archive/special/card/new-trainer-journey/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game New Trainer Journey Event",
+      "url": "https://asia.pokemon-card.com/my/archive/special/card/new-trainer-journey/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/archive/topics/event/pokemon_tcg_town_league_at_impulse_gaming_aug_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League at Impulse Gaming (AUG 2022) Event",
+      "url": "https://asia.pokemon-card.com/my/archive/topics/event/pokemon_tcg_town_league_at_impulse_gaming_aug_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/archive/topics/event/pokemon_tcg_town_league_open_registration_announcement_aug_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League Open Registration Announcement (AUG 2022) Event",
+      "url": "https://asia.pokemon-card.com/my/archive/topics/event/pokemon_tcg_town_league_open_registration_announcement_aug_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League will be held late July 2022 Event",
+      "url": "https://asia.pokemon-card.com/my/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/event/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Launching the PokÃ©mon Game On! initiative! Event",
+      "url": "https://asia.pokemon-card.com/my/event/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/exam_details_7/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 7th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/my/exam_details_7/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/my/exam_details_8/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 8th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/my/exam_details_8/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archive/special/card/certificationsystem/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apply your knowledge and skills on PokÃ©mon TCG with pride as an Official Judge or Event Organizer! Event",
+      "url": "https://asia.pokemon-card.com/ph/archive/special/card/certificationsystem/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archive/special/card/exam_details_5/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 5th Certification Exam has begun! Event",
+      "url": "https://asia.pokemon-card.com/ph/archive/special/card/exam_details_5/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archive/special/card/new-trainer-journey/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game New Trainer Journey Event",
+      "url": "https://asia.pokemon-card.com/ph/archive/special/card/new-trainer-journey/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archive/topics/event/pokemon_tcg_town_league_open_registration_announcement_aug_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League Open Registration Announcement (AUG 2022) Event",
+      "url": "https://asia.pokemon-card.com/ph/archive/topics/event/pokemon_tcg_town_league_open_registration_announcement_aug_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League will be held late July 2022 Event",
+      "url": "https://asia.pokemon-card.com/ph/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1396/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Letâs enjoy Remote PokÃ©mon Trading Card Game Battles! Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/1396/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1597/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon GO enhancement booster packs appear! Teaser footage revealed! Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/1597/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1668/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG September 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1668/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1682/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG September 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1682/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1687/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG September 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1687/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1695/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG September 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1695/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1738/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The release of background images you can use for video chat applications! Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/1738/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1775/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Regional League Registration Open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1775/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1845/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2022-23 Singapore PokÃ©mon TCG Town League Tournaments Details Information Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1845/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1921/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2022-23 Malaysia PokÃ©mon TCG Town League Tournaments Details Information Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1921/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1923/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2022-23 Philippines PokÃ©mon TCG Town League Tournaments Details Information Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1923/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1927/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2022-23 Hong Kong PokÃ©mon TCG Town League Tournaments Details Information Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1927/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1944/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The 2022-23 PokÃ©mon Trading Card Game Asia Championship Series begins! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1944/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1950/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Championship Point system starts with the 2022-23 PokÃ©mon Trading Card Game Asia Championship Series Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1950/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1955/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Now on Display! PokÃ©mon Trading Card Game: Online Illustration Exhibition Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/1955/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/1968/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: PokÃ©mon GO Launch Campaign! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/1968/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2008/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: PokÃ©mon GO Showdown 2022 at Sunway Pyramid Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2008/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2117/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Championship Point system starts with the 2022-23 PokÃ©mon Trading Card Game Asia Championship Series Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2117/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2122/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Championship Point system starts with the 2022-23 PokÃ©mon Trading Card Game Asia Championship Series Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2122/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2202/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Release of the PokÃ©mon Trading Card Game! Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2202/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2233/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Introducing PokÃ©mon TCG: Sword & ShieldâLost Origin Accessories Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2233/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2256/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game: Sword & ShieldâLost Origin Expansion Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2256/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2367/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: PokÃ©mon GO Showdown 2022 TCG Tournament Details Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2367/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2386/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG 25th Year Exhibition at MY TOWN Shopping Center Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2386/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2413/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG 25th Year Exhibition @ AEON Mall Bukit Tinggi Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2413/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2419/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Flashback to PokÃ©mon Championships 2021-22 Trading Card Game Division Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2419/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2424/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Flashback to PokÃ©mon Championships 2021-22 Trading Card Game Division Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2424/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2427/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Flashback to PokÃ©mon Championships 2021-22 Trading Card Game Division Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2427/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2500/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2022 PokÃ©mon World Championships Quick Interview Summary Column",
+      "url": "https://asia.pokemon-card.com/ph/archives/2500/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2522/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "POKÃMON TCG: POKÃMON GO PREMIER DECK HOLDER COLLECTIONâDRAGONITE VSTAR Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2522/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2531/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG October 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2531/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2536/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG October 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2536/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2541/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG October 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2541/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2576/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Deoxys V and Zeraora V Battle Deck Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2576/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2593/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG October 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2593/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2654/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Regional League Registration Open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2654/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2681/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Regional League Singapore September 2022 Recap Column",
+      "url": "https://asia.pokemon-card.com/ph/archives/2681/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2724/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: PokÃ©mon GO Showdown 2022 Recap Column",
+      "url": "https://asia.pokemon-card.com/ph/archives/2724/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2784/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "POKÃMON TCG: SWORD & SHIELD ULTRA-PREMIUM COLLECTIONâCHARIZARD Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2784/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2799/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG November 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2799/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2809/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG November 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2809/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2813/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG November 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2813/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2816/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG November 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2816/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2824/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Important Announcement regarding Championship Points Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2824/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2847/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apology: Regarding the malfunction of the program assigning Championship Points Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2847/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2849/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apology: Regarding the malfunction of the program assigning Championship Points Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2849/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2851/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apology: Regarding the malfunction of the program assigning Championship Points Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2851/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2853/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apology: Regarding the malfunction of the program assigning Championship Points Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/2853/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2885/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Launch Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2885/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2900/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Asia EN Open 2022 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2900/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2914/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Release PokÃ©mon TCG Accessories Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2914/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2923/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Scarlet and PokÃ©mon Violet Launch Event Roadshow at Paradigm Mall Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/2923/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/2927/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game: Sword & ShieldâSilver Tempest Expansion Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/2927/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3153/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Regional League Malaysia October 2022 Recap Column",
+      "url": "https://asia.pokemon-card.com/ph/archives/3153/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3246/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Clear File Collectionï¼ Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/3246/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3253/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Clear File Collectionï¼ Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/3253/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3255/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Clear File Collection! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/3255/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3288/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG December 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3288/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3292/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG December 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3292/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3295/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG December 2022 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3295/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3308/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Scarlet and PokÃ©mon Violet Launch Event Roadshow at AEON Mall Tebrau City Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3308/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3311/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Asia EN Open 2022 Registration Result Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3311/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3370/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Regarding the banning of using Alolan Vulpix card sleeves in some tournaments Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3370/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3377/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG January 2023 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3377/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3380/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG January 2023 Town League Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3380/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3391/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Academia University Invasion Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3391/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3410/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2023 PokÃ©mon TCG Standard Format Rotation and PokÃ©mon Tool Errata Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3410/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3449/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet Brings Changes to the PokÃ©mon Trading Card Game Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3449/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3462/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet Brings Changes to the PokÃ©mon Trading Card Game Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3462/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3464/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet Brings Changes to the PokÃ©mon Trading Card Game Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3464/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3466/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet Brings Changes to the PokÃ©mon Trading Card Game Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3466/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3507/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game: Sword & Shieldã¼ Crown Zenith Expansion Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3507/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3520/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Release PokÃ©mon TCG Accessories Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3520/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3533/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Asia EN Open 2022 Winnerâs Deck Column",
+      "url": "https://asia.pokemon-card.com/ph/archives/3533/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3539/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PRECIOUS COLLECTOR BOX SWORD & SHIELD, Available Now! Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3539/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3575/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Scarlet and PokÃ©mon Violet Launch Event Roadshow at Sunway Pyramid Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3575/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3597/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League February 2023 Singapore Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3597/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3613/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League February 2023 Hong Kong English Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3613/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3616/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League February 2023 Philippines Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3616/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3619/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League February 2023 Malaysia Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3619/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3734/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Regional League 2022-23 Philippines Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3734/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3742/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Eevee Challenge is coming this March 2023 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3742/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3803/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2022 PokÃ©mon TCG World Championships Deck, Available Now! Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3803/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3814/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League March 2023 Hong Kong English Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3814/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3829/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League March 2023 Malaysia Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3829/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3831/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League March 2023 Philippines Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3831/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3834/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League March 2023 Singapore Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3834/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3843/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Regional League 2022-23 Singapore Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3843/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3862/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Regional League 2022-23 Malaysia Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3862/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3867/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Regional League 2022-23 Hong Kong English Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3867/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3873/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet Launch Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3873/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3897/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apology for preregistration deadline malfunction Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3897/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3909/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet Launch Campaign! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/3909/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3918/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet New Expansion Battle is coming this April 2023 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3918/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3926/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League April 2023 Hong Kong English Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3926/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3928/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League April 2023 Malaysia Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3928/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3930/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League April 2023 Philippines Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3930/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3932/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mark Your Calendar! PokÃ©mon TCG Town League April 2023 Singapore Schedule Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3932/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3939/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Championships 2022-23 Philippines Trading Card Game Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/3939/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3956/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game: Scarlet & Violet Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3956/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3973/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Release PokÃ©mon TCG Accessories Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3973/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3980/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Plush Deck Case Pikachu, Available Now! Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/3980/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/3983/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Upcoming Floor Rules Update Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/3983/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4004/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Floor Rules Effective on Monday, May 1st Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4004/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4014/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Championships 2022-23 Hong Kong English Trading Card Game Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4014/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4030/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Championships 2022-23 Malaysia Trading Card Game Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4030/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4062/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Championships 2022-23 Singapore Trading Card Game Event Outline Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4062/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4080/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Correction regarding Prizes for the PokÃ©mon Championships Singapore 2022-23 Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4080/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4084/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Correction regarding Prizes for the PokÃ©mon Championships Malaysia 2022-23 Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4084/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4087/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Correction regarding Prizes for the PokÃ©mon Championships Philippines 2022-23 Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4087/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4090/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Correction regarding Prizes for the PokÃ©mon Championships Hong Kong English 2022-23 Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4090/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4099/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Number of players advancing to Top Cut in the PokÃ©mon TCG Division Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4099/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4112/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Asia EN Open 2023 Summer Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4112/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4129/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG â FUNMATCH Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4129/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4139/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâPaldea Evolved New Expansion Battle is coming this June 2023 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4139/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4247/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Philippines U-17 Tournament Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4247/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4332/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2023 PokÃ©mon World Championships Pika Fiesta! Campaign website is now live! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4332/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4344/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game: Scarlet & VioletâObsidian Flames Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/4344/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4388/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâObsidian Flames New Expansion Battle is coming this August 2023 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4388/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4407/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "WCS2023 Pika Fiesta Post images of yourself enjoying PokÃ©monï¼ Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/4407/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4416/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "âPikachuâ Promo card distribution set for Fall 2023! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/4416/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4440/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Asia EN Open 2023 Summer Winnerâs Deck Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4440/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4481/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Update to the Floor Rules for the start of the 2023-24 PokÃ©mon Trading Card Game Asia Championship Series Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/4481/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4507/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Starting Up the 2023-24 PokÃ©mon Trading Card Game Asia Championship Series! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4507/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4532/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Starting Up the 2023-24 PokÃ©mon Trading Card Game Asia Championship Series! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4532/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4535/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Starting Up the 2023-24 PokÃ©mon Trading Card Game Asia Championship Series! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4535/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4537/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Starting Up the 2023-24 PokÃ©mon Trading Card Game Asia Championship Series! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4537/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4560/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game Regional League Registration Open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4560/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4564/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game Regional League coming on October 1 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4564/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4626/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game Regional League Registration Open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4626/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4681/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game Regional League Registration Open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4681/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4684/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "On-the-day Registration for the PokÃ©mon Trading Card Game Regional League Malaysia (Oct 2023) Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4684/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4765/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4765/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4788/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâParadox Rift New Expansion Battle is coming this November 2023 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4788/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4808/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2023PokeÌmon TCG Academia Bootcamp Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4808/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4947/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Magnet Present Campaign at 7 Eleven Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/4947/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4958/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game Regional League Registration Open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/4958/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/4990/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Announcing the winners of the 2023 PokÃ©mon World Championships Pika Fiesta! hashtag campaign!! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/4990/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5001/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Tutorial Event on NOV 19th! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5001/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5026/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game Regional League coming on December 17 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5026/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5044/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Clear File Collection! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/5044/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5049/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Clear File Collection! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/5049/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5051/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Clear File Collection! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/5051/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5076/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Learn How to Play PokÃ©mon Trading Card Game! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5076/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5082/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Showdown 2024 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5082/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5113/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Recap of the 2023 PokÃ©mon TCG Academia Bootcamp Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5113/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5132/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the PokÃ©mon Regional League 2023-24 Singapore Vol.2! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5132/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5214/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Updates to the Penalties Chart Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/5214/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5232/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the PokÃ©mon Regional League 2023-24 Philippines Vol.2! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5232/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5255/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2024 PokÃ©mon TCG Academia Intercollege Cup Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5255/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5370/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the PokÃ©mon Regional League 2023-24 Malaysia Vol.3! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5370/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5386/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the PokÃ©mon Regional League 2023-24 Hong Kong English Vol.3! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5386/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5404/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the PokÃ©mon Regional League 2023-24 Philippines Vol.3! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5404/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5413/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5413/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5420/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the PokÃ©mon Regional League 2023-24 Singapore Vol.3! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5420/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5453/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâTemporal Forces New Expansion Battle is coming this March 2024 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5453/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5487/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2024 PokÃ©mon TCG Academia Intercollege Cup Winnerâs Deck Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5487/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5656/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5656/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5659/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5659/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5661/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5661/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5664/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5664/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5695/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The details of the invite limit to the 2024 PokÃ©mon World Championships Trading Card Game Division Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5695/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5698/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The details of the invite limit to the 2024 PokÃ©mon World Championships Trading Card Game Division Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5698/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5701/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The details of the invite limit to the 2024 PokÃ©mon World Championships Trading Card Game Division Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5701/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5704/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The details of the invite limit to the 2024 PokÃ©mon World Championships Trading Card Game Division Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5704/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5735/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâTwilight Masquerade New Expansion Battle is coming this May 2024 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5735/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5780/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration Period Extension for the PokÃ©mon Championships 2023-24 Malaysia TCG Division Masters Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/5780/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5801/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Philippines U-17 Tournament (2024) Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5801/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5880/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5880/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5886/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Pikachu Promo Campaign Play in a Gym Event and get a Pikachu Promo Card! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/5886/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5888/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Get ready for the 2024-25 PokÃ©mon Asia Championship Series! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5888/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5916/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Request to correct user information and/or register a new account where required Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/5916/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5920/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Request to correct user information and/or register a new account where required Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/5920/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5923/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Request to correct user information and/or register a new account where required Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/5923/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5938/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâStellar Crown New Expansion Battle is coming this September 2024 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5938/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5940/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New GYM Promo Cards Released Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5940/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/5942/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2024 PokÃ©mon TCG Academia: Fairview Open Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/5942/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6020/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "7-Eleven Promo Card Get a FREE PokÃ©mon 7-Eleven Promo Card at select 7-Eleven stores Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6020/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6026/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Buddy Up: Share the joy of the PokÃ©mon TCG! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6026/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6051/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2024 PokÃ©mon TCG Academia: Roadshow Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6051/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6069/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Promo Card Present Campaign at 7-Eleven Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6069/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6109/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Update to the Trainers Website Terms of Use Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/6109/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6145/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "7-Eleven Promo Card Get a FREE PokÃ©mon 7-Eleven Promo Card at 7-Cafe ! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6145/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6157/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open for the Premier Ball League TCG Division! ã2024-25 PokÃ©mon Asia Championship Series ã Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6157/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6159/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open for the Premier Ball League TCG Division! ã2024-25 PokÃ©mon Asia Championship Series ã Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6159/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6194/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Academia: Bootcamp & Intercollege Cup Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6194/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6203/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Regarding the use of English cards in events in Hong Kong and Macau from October 1st, 2024 onwards Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/6203/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6266/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6266/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6319/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâSurging Sparks New Expansion Battle is coming this November 2024 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6319/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6399/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Play Lab Tournament Vol. 1 Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6399/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6441/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Free PokÃ©mon TCG Clear File with Purchase Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6441/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6448/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Free PokÃ©mon TCG Clear File with Purchase Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6448/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6450/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Free PokÃ©mon TCG Clear File with Purchase Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6450/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6468/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Regarding GYM Promo Cards Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6468/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6483/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2024 PokÃ©mon TCG Academia Series Recap Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6483/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6518/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Showdown 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6518/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6618/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Buddy Up: Share the joy of PokÃ©mon TCG! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6618/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6621/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Recap: PokÃ©mon Play Lab Tournament Vol. 1 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6621/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6669/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6669/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6689/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet â Journey Together Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6689/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6693/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet â Journey Together Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6693/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6695/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet â Journey Together Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6695/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6706/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The new âPokÃ©mon TCG: MEGA Evolutionâ series Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6706/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6721/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâJourney Together New Expansion Battle is coming this March 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6721/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6812/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Recap: PokÃ©mon TCG Showdown 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6812/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6885/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6885/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6903/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violet â Destined Rivals New Expansion Battle is coming this May 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/6903/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6921/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet â Destined Rivals Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6921/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6932/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet â Destined Rivals Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6932/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6934/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet â Destined Rivals Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/6934/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6955/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Buddy Up: Share the Joy of PokÃ©mon TCG! Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6955/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6969/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: GYM Stamp Trail Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/6969/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/6983/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Regarding GYM Promo Cards Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/6983/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7071/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7071/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7091/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/7091/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7093/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/7093/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7095/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution Release Promo Card Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/7095/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7139/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2025 PokÃ©mon TCG Academia: University Invasion Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7139/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7146/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Distribution of Celebratory Fanfare will begin shortly Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7146/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7169/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: GYM Stamp Trail Campaign",
+      "url": "https://asia.pokemon-card.com/ph/archives/7169/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7180/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution New Expansion Battle is coming this September 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7180/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7289/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Showdown 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7289/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7311/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7311/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7336/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Academia (Philippines) Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7336/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7358/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution â Phantasmal Flames New Expansion Battle is coming this November 2025 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7358/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7396/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Showdown 2026 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7396/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7448/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Recap: PokÃ©mon TCG Showdown 2026 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7448/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7547/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7547/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7610/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution â Perfect Order New Expansion Battle is coming this March 2026 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7610/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7688/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7688/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7691/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution â Chaos Rising New Expansion Battle is coming this May 2026 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7691/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7727/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Release of New GYM Promo Cards Product",
+      "url": "https://asia.pokemon-card.com/ph/archives/7727/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7730/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Update: The issue preventing some Basic Energy cards from being registered has now been fixed Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/7730/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7752/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Regarding an error in the artwork of a card from the PokÃ©mon TCG: Mega EvolutionâChaos Rising expansion Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/7752/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7758/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7758/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7772/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Mega Evolution â Pitch Black New Expansion Battle is coming this July 2026 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7772/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7781/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon TCG Academia: Roadshow Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7781/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7820/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Your PokÃ©mon trainer journey is about to begin! Are you ready? Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7820/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7822/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Now accepting account information change requests for either Full Name or Date of Birth Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/7822/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7845/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Academia 2026 (Philippines) Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7845/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7879/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Game On! Promo Card and Sticker Distribution Starting September 1st! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7879/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7879/#article-menu2": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Regarding changes to the distribution schedule for the PokÃ©mon Game On! logo sticker Other",
+      "url": "https://asia.pokemon-card.com/ph/archives/7879/#article-menu2"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/7979/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon TCG Academia: Roadshow Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/7979/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8170/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2025-26 PokÃ©mon Asia Championship Series: Information on the Special Prizes for players with 30 LP and above Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8170/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8208/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon TCG Academia: Roadshow (October) Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8208/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8279/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: GYM Campaign 2026 Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8279/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8317/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Announcing the PokÃ©mon Team Masters 2027 in SEOUL competition! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8317/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8436/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Ultra Ball League Season 1 is open! Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8436/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8439/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Build & Battle Box Pre-Release Event Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8439/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/archives/8537/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Notice of Cancellation: 2026 PokÃ©mon TCG Academia: Roadshow Event",
+      "url": "https://asia.pokemon-card.com/ph/archives/8537/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/event/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Launching the PokÃ©mon Game On! initiative! Event",
+      "url": "https://asia.pokemon-card.com/ph/event/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_10/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 10th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_10/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_11/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 11th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_11/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_12/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 12th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_12/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_6/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Announcement of the 6th Certification Exam Event",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_6/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_7/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 7th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_7/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_8/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 8th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_8/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/ph/exam_details_9/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 9th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/ph/exam_details_9/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/archive/special/card/certificationsystem/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Apply your knowledge and skills on PokÃ©mon TCG with pride as an Official Judge or Event Organizer! Event",
+      "url": "https://asia.pokemon-card.com/sg/archive/special/card/certificationsystem/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/archive/special/card/exam_details_5/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 5th Certification Exam has begun! Event",
+      "url": "https://asia.pokemon-card.com/sg/archive/special/card/exam_details_5/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/archive/special/card/new-trainer-journey/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trading Card Game New Trainer Journey Event",
+      "url": "https://asia.pokemon-card.com/sg/archive/special/card/new-trainer-journey/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/archive/topics/event/pokemon_tcg_town_league_at_kavdean_den_aug_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League at Kavdean Den (AUG 2022) Event",
+      "url": "https://asia.pokemon-card.com/sg/archive/topics/event/pokemon_tcg_town_league_at_kavdean_den_aug_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/archive/topics/event/pokemon_tcg_town_league_at_project_ext_aug_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League at Project EXT (AUG 2022) Event",
+      "url": "https://asia.pokemon-card.com/sg/archive/topics/event/pokemon_tcg_town_league_at_project_ext_aug_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG Town League will be held late July 2022 Event",
+      "url": "https://asia.pokemon-card.com/sg/archive/topics/event/pokemon_tcg_town_league_will_be_held_late_july_2022.html"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/event/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Launching the PokÃ©mon Game On! initiative! Event",
+      "url": "https://asia.pokemon-card.com/sg/event/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/exam_details_7/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 7th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/sg/exam_details_7/"
+    },
+    "pokemon_asia_news|https://asia.pokemon-card.com/sg/exam_details_8/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Application for the 8th Certification Exam has begun! Other",
+      "url": "https://asia.pokemon-card.com/sg/exam_details_8/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/hk_en/game/master_ball/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Master Ball League Hong Kong TCG Divisionã2024-25 PokÃ©mon Asia Championship Seriesã info was just announced! Check the details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/hk_en/game/master_ball/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/hk_en/invitation/cardgame/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "[Trading Card Game Division] 2025 PokÃ©mon World Championships Invitations Details Officially Announced! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/hk_en/invitation/cardgame/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/my/cardgame/master_ball/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Master Ball League Malaysia TCG Divisionã2024-25 PokÃ©mon Asia Championship Seriesã info was just announced! Check the details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/my/cardgame/master_ball/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/my/invitation/cardgame/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "[Trading Card Game Division] 2025 PokÃ©mon World Championships Invitations Details Officially Announced! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/my/invitation/cardgame/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/ph/cardgame/master_ball/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Master Ball League Philippines TCG Divisionã2024-25 PokÃ©mon Asia Championship Seriesã info was just announced! Check the details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/ph/cardgame/master_ball/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/ph/invitation/cardgame/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "[Trading Card Game Division] 2025 PokÃ©mon World Championships Invitations Details Officially Announced! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/ph/invitation/cardgame/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/sg/cardgame/master_ball/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New Master Ball League Singapore TCG Divisionã2024-25 PokÃ©mon Asia Championship Seriesã info was just announced! Check the details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/sg/cardgame/master_ball/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2024-25/sg/invitation/cardgame/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "[Trading Card Game Division] 2025 PokÃ©mon World Championships Invitations Details Officially Announced! Event",
+      "url": "https://pacs.portal-pokemon.com/2024-25/sg/invitation/cardgame/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2025-26 PokÃ©mon Asia Championship Series WEB Site Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/mbl/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open for the Master Ball League! More details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/mbl/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/mbl/detail/?id=my_mbl_live-stream": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Watch the Master Ball League Live Stream! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/mbl/detail/?id=my_mbl_live-stream"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/mbl/detail/?id=my_tcg_the-waiting-list-registration": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Waiting List Registration for the 2025-26 Malaysia Master Ball League Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/mbl/detail/?id=my_tcg_the-waiting-list-registration"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/pbl/the-waiting-list-registration/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Announcement Regarding the Waiting List Registration Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/pbl/the-waiting-list-registration/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/teaser/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New information on the 2025-26 PokÃ©mon Asia Championship Series is now available! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/teaser/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/teaser/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open now! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/teaser/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/my/topics/detail/?id=my_worlds-2026": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon World Championships! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/my/topics/detail/?id=my_worlds-2026"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2025-26 PokÃ©mon Asia Championship Series WEB Site Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/mbl/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open for the Master Ball League! More details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/mbl/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/mbl/detail/?id=ph_mbl_live-stream": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Watch the Master Ball League Live Stream! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/mbl/detail/?id=ph_mbl_live-stream"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/mbl/detail/?id=ph_tcg_the-waiting-list-registration": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Waiting List Registration for the 2025-26 Philippines Master Ball League Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/mbl/detail/?id=ph_tcg_the-waiting-list-registration"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/pbl/the-waiting-list-registration/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Announcement Regarding the Waiting List Registration Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/pbl/the-waiting-list-registration/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/teaser/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New information on the 2025-26 PokÃ©mon Asia Championship Series is now available! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/teaser/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/teaser/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open now! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/teaser/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/ph/topics/detail/?id=ph_worlds-2026": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon World Championships! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/ph/topics/detail/?id=ph_worlds-2026"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/sg/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2025-26 PokÃ©mon Asia Championship Series WEB Site Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/sg/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/sg/mbl/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration is open for the Master Ball League! More details here! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/sg/mbl/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/sg/pbl/the-waiting-list-registration/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Announcement Regarding the Waiting List Registration Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/sg/pbl/the-waiting-list-registration/?utm_source=tr-website&utm_medium=referral&utm_campaign=pacs-2025-26"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/sg/teaser/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "New information on the 2025-26 PokÃ©mon Asia Championship Series is now available! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/sg/teaser/"
+    },
+    "pokemon_asia_news|https://pacs.portal-pokemon.com/2025-26/sg/topics/detail/?id=sg_worlds-2026": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon World Championships! Event",
+      "url": "https://pacs.portal-pokemon.com/2025-26/sg/topics/detail/?id=sg_worlds-2026"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/hk_EN/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The PokÃ©mon Champions 2023-24 Hong Kong website is now open! Event",
+      "url": "https://rcs.portal-pokemon.com/2024/hk_EN/"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/hk_EN/cardgame/index.html#p-wcs-spots": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Spots for 2024 PokÃ©mon World Championships Event",
+      "url": "https://rcs.portal-pokemon.com/2024/hk_EN/cardgame/index.html#p-wcs-spots"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/my/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The PokÃ©mon Champions 2023-24 Malaysia website is now open! Event",
+      "url": "https://rcs.portal-pokemon.com/2024/my/"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/my/cardgame/index.html#p-wcs-spots": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Spots for 2024 PokÃ©mon World Championships Event",
+      "url": "https://rcs.portal-pokemon.com/2024/my/cardgame/index.html#p-wcs-spots"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/ph/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The PokÃ©mon Champions 2023-24 Philippines website is now open! Event",
+      "url": "https://rcs.portal-pokemon.com/2024/ph/"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/ph/cardgame/index.html#p-wcs-spots": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Spots for 2024 PokÃ©mon World Championships Event",
+      "url": "https://rcs.portal-pokemon.com/2024/ph/cardgame/index.html#p-wcs-spots"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/sg/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The PokÃ©mon Champions 2023-24 Singapore website is now open! Event",
+      "url": "https://rcs.portal-pokemon.com/2024/sg/"
+    },
+    "pokemon_asia_news|https://rcs.portal-pokemon.com/2024/sg/cardgame/index.html#p-wcs-spots": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Spots for 2024 PokÃ©mon World Championships Event",
+      "url": "https://rcs.portal-pokemon.com/2024/sg/cardgame/index.html#p-wcs-spots"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/151/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & Violetâ151, Arriving September 22 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/151/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/30th-celebration/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "30th-celebration, arriving on September 16 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/30th-celebration/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/ascended-heroes/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Ascended-Heroes , arriving on January 30 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/ascended-heroes/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/black-white/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâBlack-White, arriving on July 18 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/black-white/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/destined-rivals/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâDestined Rivals, arriving on May 30 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/destined-rivals/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/journey-together/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâJourney Together , arriving on March 28 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/journey-together/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/mega-evolution/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Mega-Evolution, arriving on September 26 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/mega-evolution/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/paldea-evolved/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâPaldea Evolved, Arriving June 9 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/paldea-evolved/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/paldean-fates/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâPaldean Fates , Arriving January 26 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/paldean-fates/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/paradox-rift/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG: Scarlet & VioletâParadox Rift , Arriving November 3 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/paradox-rift/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/perfect-order/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Perfect-Order , arriving on March 27 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/perfect-order/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/phantasmal-flames/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Phantasmal-Flames, arriving on November 14 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/phantasmal-flames/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/pitch-black/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Pitch-Black, arriving on July 17 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/pitch-black/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/prismatic-evolutions/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâPrismatic Evolutions, arriving on January 17 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/prismatic-evolutions/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/shrouded-fable/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâShrouded Fable , arriving on August 2 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/shrouded-fable/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/stellar-crown/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâStellar Crown , arriving on September 7 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/stellar-crown/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/surging-sparks/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâSurging Sparks , arriving on November 8 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/surging-sparks/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/temporal-forces/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & Violet-Temporal Forces, arriving on March 22 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/temporal-forces/"
+    },
+    "pokemon_asia_news|https://tcg.pokemon.com/en-us/expansions/twilight-masquerade/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Scarlet & VioletâTwilight Masquerade , arriving on May 24 Product",
+      "url": "https://tcg.pokemon.com/en-us/expansions/twilight-masquerade/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/my/2026-27/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Let the 2026-27 PokÃ©mon Asia Championship Series begin! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/my/2026-27/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/my/2026-27/great-ball-league/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Great Ball League is open! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/my/2026-27/great-ball-league/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/my/2026-27/premier-ball-league/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Premier Ball League TCG category is open! New info for the VGC category! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/my/2026-27/premier-ball-league/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/ph/2026-27/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Let the 2026-27 PokÃ©mon Asia Championship Series begin! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/ph/2026-27/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/ph/2026-27/great-ball-league/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Great Ball League is open! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/ph/2026-27/great-ball-league/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/ph/2026-27/premier-ball-league/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Premier Ball League TCG category is open! New info for the VGC category! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/ph/2026-27/premier-ball-league/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/sg/2026-27/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Let the 2026-27 PokÃ©mon Asia Championship Series begin! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/sg/2026-27/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/sg/2026-27/great-ball-league/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Great Ball League is open! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/sg/2026-27/great-ball-league/"
+    },
+    "pokemon_asia_news|https://trainers-asia.portal-pokemon.com/sg/2026-27/premier-ball-league/": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Registration for the Premier Ball League TCG category is open! New info for the VGC category! Event",
+      "url": "https://trainers-asia.portal-pokemon.com/sg/2026-27/premier-ball-league/"
+    },
+    "pokemon_asia_news|https://www.facebook.com/113785633734501/posts/1354606593334817": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Trainers Facebook Launch Campaign! Event",
+      "url": "https://www.facebook.com/113785633734501/posts/1354606593334817"
+    },
+    "pokemon_asia_news|https://www.facebook.com/1303635325098611/posts/1342012114594265": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon Trainers Facebook Other",
+      "url": "https://www.facebook.com/1303635325098611/posts/1342012114594265"
+    },
+    "pokemon_asia_news|https://www.pokemon.com/us/pokemon-news/2024-pokemon-tcg-standard-format-rotation-announcement": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Standard format rotation for 2024 competitive play will go into effect on April 5, 2024. Other",
+      "url": "https://www.pokemon.com/us/pokemon-news/2024-pokemon-tcg-standard-format-rotation-announcement"
+    },
+    "pokemon_asia_news|https://www.pokemon.com/us/pokemon-news/2025-pokemon-tcg-standard-format-rotation-announcement": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "The Standard format rotation for 2025 competitive play will go into effect on April 11, 2025. Other",
+      "url": "https://www.pokemon.com/us/pokemon-news/2025-pokemon-tcg-standard-format-rotation-announcement"
+    },
+    "pokemon_asia_news|https://www.pokemon.com/us/pokemon-news/2026-pokemon-tcg-standard-format-rotation-announcement": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "2026 PokÃ©mon TCG Standard Format Rotation Announcement Other",
+      "url": "https://www.pokemon.com/us/pokemon-news/2026-pokemon-tcg-standard-format-rotation-announcement"
+    },
+    "pokemon_asia_news|https://www.pokemon.com/us/pokemon-news/errata-for-minior-scarlet-violet-paradox-rift-and-venusaur-snivy-gx-sun-moon-cosmic-eclipse-in-the-pokemon-tcg": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Errata for Minior ( Scarlet & VioletâParadox Rift ) and Venusaur & Snivy-GX ( Sun & MoonâCosmic Eclipse ) in the PokÃ©mon TCG Other",
+      "url": "https://www.pokemon.com/us/pokemon-news/errata-for-minior-scarlet-violet-paradox-rift-and-venusaur-snivy-gx-sun-moon-cosmic-eclipse-in-the-pokemon-tcg"
+    },
+    "pokemon_asia_news|https://www.youtube.com/watch?v=HqTjxTiG-aI": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "PokÃ©mon TCG â 30th Anniversary Global Synced Release Other",
+      "url": "https://www.youtube.com/watch?v=HqTjxTiG-aI"
+    },
+    "pokemon_asia_news|https://youtu.be/CSIqEaK7ouQ": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Dive into Scarlet & VioletâPaldea Evolved with this new video! Product",
+      "url": "https://youtu.be/CSIqEaK7ouQ"
+    },
+    "pokemon_asia_news|https://youtu.be/whSPLn9swJU": {
+      "first_seen": "2026-10-22T23:48:06+00:00",
+      "published": "",
+      "store": "Official Pokémon TCG Asia English / Philippines news",
+      "title": "Learn How to Play the PokÃ©mon Card Game in 9 Minutes! ï½ Scarlet and Violet Series Other",
+      "url": "https://youtu.be/whSPLn9swJU"
+    },
     "toy_kingdom|https://www.toykingdom.com.ph/blogs/event/pokemon-trading-card-game-online-restock": {
       "first_seen": "2026-10-22T23:32:07+00:00",
       "published": "2026-09-29T22:59:02+08:00",
@@ -9,21 +2536,121 @@
     }
   },
   "initialized_feeds": {
+    "https://asia.pokemon-card.com/ph/info/": true,
     "https://toysrus.com.ph/blogs/events.atom": true,
     "https://www.toykingdom.com.ph/blogs/event.atom": true,
     "https://www.toykingdom.com.ph/blogs/news.atom": true
   },
   "initialized_stores": {
+    "green_gate_hobbies": true,
+    "hobby_arena": true,
+    "jpstr": true,
     "toy_kingdom": true,
     "toys_r_us": true
   },
+  "official_source_health": {
+    "pokemon_asia_news": true
+  },
   "products": {
+    "green_gate_hobbies|pokemon-phantasmal-flames": {
+      "arrival_date": null,
+      "available": false,
+      "first_seen": "2026-10-22T23:47:58+00:00",
+      "handle": "pokemon-phantasmal-flames",
+      "incoming_signal": "NONE",
+      "preorder": false,
+      "price": "599.00",
+      "signal_text": "Pokemon TCG: Mega Evolution Phantasmal Flames  ",
+      "source": "Store search suggestions",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokemon TCG: Mega Evolution Phantasmal Flames",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-phantasmal-flames"
+    },
+    "green_gate_hobbies|pokemon-tcg-mega-evolution-perfect-order-me03-booster-pack": {
+      "arrival_date": null,
+      "available": false,
+      "first_seen": "2026-10-22T23:47:58+00:00",
+      "handle": "pokemon-tcg-mega-evolution-perfect-order-me03-booster-pack",
+      "incoming_signal": "NONE",
+      "preorder": false,
+      "price": "350.00",
+      "signal_text": "Pokemon TCG Mega Evolution Perfect Order (ME03) - Booster Pack Pokémon TCG: Mega Evolution – Perfect Order (ME03) Booster Pack The Mega Evolution – Perfect Order (ME03) Booster Pack is part of a modern Pokémon Trading Card Game expansion that brings back the powerful Mega Evolution mechanic. Designed for both collectors and competitive players, each pack offers a chance to discover rare and visually striking cards. What’s Inside 10 randomized cards per booster pack A mix of: Pokémon cards Trainer cards Energy cards Potential to pull: Rare, Ultra Rare, and Secret Rare cards Special illustration variants Expansion Highlights Reintroduces Mega Evolution Pokémon with enhanced abilities and gameplay impact Features a variety of fan-favorite Pokémon in powerful forms Contains 100+ cards across the full set Includes collectible full-art and high-rarity cards ",
+      "source": "Store search suggestions",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokemon TCG Mega Evolution Perfect Order (ME03) - Booster Pack",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-mega-evolution-perfect-order-me03-booster-pack"
+    },
+    "green_gate_hobbies|pokemon-tcg-mega-evolution-pitch-black-me05-booster-pack": {
+      "arrival_date": null,
+      "available": false,
+      "first_seen": "2026-10-22T23:47:58+00:00",
+      "handle": "pokemon-tcg-mega-evolution-pitch-black-me05-booster-pack",
+      "incoming_signal": "NONE",
+      "preorder": false,
+      "price": "350.00",
+      "signal_text": "Pokemon TCG Mega Evolution Pitch Black (ME05) - Booster Pack Dive into the darkness with the Pokémon TCG: Mega Evolution—Pitch Black expansion! Each booster pack contains a random assortment of cards featuring powerful Pokémon, including exciting new Mega Evolution Pokémon. With every pack offering the chance to discover Pokémon ex, Trainer cards, and other cards from the Pitch Black expansion, there’s always something new to uncover. Product Details Game: Pokémon Trading Card Game Set: Mega Evolution—Pitch Black Language: English Contents: 10 random Pokémon TCG cards per booster pack Condition: Brand New & Sealed Please note: Card contents are randomly assorted. Pulls and specific cards are not guaranteed. Product images are for reference and may vary from the actual packaging. ",
+      "source": "Store search suggestions",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokemon TCG Mega Evolution Pitch Black (ME05) - Booster Pack",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-mega-evolution-pitch-black-me05-booster-pack"
+    },
+    "green_gate_hobbies|pokemon-tcg-poke-ball-tin-blue": {
+      "arrival_date": null,
+      "available": false,
+      "first_seen": "2026-10-22T23:47:58+00:00",
+      "handle": "pokemon-tcg-poke-ball-tin-blue",
+      "incoming_signal": "NONE",
+      "preorder": false,
+      "price": "1500.00",
+      "signal_text": "Pokémon TCG: Poké Ball Tin - Great Ball Pokémon TCG: Poké Ball Tin What’s inside a Poké Ball? The answer is Pokémon TCG cards, of course! Each of these cool, collectible tins opens to reveal three Pokémon Trading Card Game booster packs along with two sheets of stickers that can be used to add a touch of Pokémon flair wherever it’s needed. The Pokémon TCG: Poké Ball Tin includes: 3 Pokémon TCG booster packs 2 sticker sheets t:ptcg_sealed",
+      "source": "Store search suggestions",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokémon TCG: Poké Ball Tin - Great Ball",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-poke-ball-tin-blue"
+    },
+    "green_gate_hobbies|pokemon-tcg-poke-ball-tin-red": {
+      "arrival_date": null,
+      "available": false,
+      "first_seen": "2026-10-22T23:47:58+00:00",
+      "handle": "pokemon-tcg-poke-ball-tin-red",
+      "incoming_signal": "NONE",
+      "preorder": false,
+      "price": "1500.00",
+      "signal_text": "Pokémon TCG: Poké Ball Tin - Repeat Ball Pokémon TCG: Poké Ball Tin What’s inside a Poké Ball? The answer is Pokémon TCG cards, of course! Each of these cool, collectible tins opens to reveal three Pokémon Trading Card Game booster packs along with two sheets of stickers that can be used to add a touch of Pokémon flair wherever it’s needed. The Pokémon TCG: Poké Ball Tin includes: 3 Pokémon TCG booster packs 2 sticker sheets t:ptcg_sealed",
+      "source": "Store search suggestions",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokémon TCG: Poké Ball Tin - Repeat Ball",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-poke-ball-tin-red"
+    },
+    "green_gate_hobbies|weiss-schwarz-english-goddess-of-victory-nikke-vol-2-booster-pack": {
+      "arrival_date": null,
+      "available": false,
+      "first_seen": "2026-10-22T23:47:58+00:00",
+      "handle": "weiss-schwarz-english-goddess-of-victory-nikke-vol-2-booster-pack",
+      "incoming_signal": "NONE",
+      "preorder": false,
+      "price": "10500.00",
+      "signal_text": "Pokemon TCG - Ascended Heroes - Focused Fighters Premium Collection Pokémon TCG – Ascended Heroes: Focused Fighters Premium Collection Get ready to battle with the Pokémon TCG: Mega Evolution—Ascended Heroes Focused Fighters Premium Collection ! This collection features a selection of booster packs and exclusive promo cards, making it a great addition for collectors and players. It Includes: 14 Pokemon TCG: Mega Evolution-Ascended Heroes booster packs 2 foil promo cards featuring Mega Hawlucha ex and Team Rocket's Mewtwo ex 2 foil promo cards featuring N's Zekrom and N's Reshiram 1 oversize foild card featuring Mega Hawlucha ex Expand your Pokémon TCG collection with the Focused Fighters Premium Collection! ",
+      "source": "Store search suggestions",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokemon TCG - Ascended Heroes - Focused Fighters Premium Collection",
+      "url": "https://shop.greengatehobbies.com/products/weiss-schwarz-english-goddess-of-victory-nikke-vol-2-booster-pack"
+    },
     "toy_kingdom|funism-pokemon-flocking-series-collection": {
+      "arrival_date": null,
       "available": true,
       "first_seen": "2026-10-22T23:32:05+00:00",
       "handle": "funism-pokemon-flocking-series-collection",
+      "incoming_signal": "NONE",
       "preorder": false,
       "price": "599.00",
+      "signal_text": "Funism Pokemon Flocking Series Collection Official Licensed Merchandise: Authentic collectible figures created by Funism featuring popular Generation 1 to Generation 9 Pokémon characters. Premium Flocked Texture: Designed with a unique, high-quality fuzzy felt coating that gives each figure a soft, plush-like tactile finish. Compact Display Size: Each miniature statue stands at approximately 3.75 inches (10 cm) tall, making them ideal for desktop, shelf, or PC case decoration. Blister Card Packaging: Individually sealed on stylized, color-coded backing cards featuring specific character artwork and modern typography for clean in-box display. Diverse Six-Piece Set: Features a curated lineup of fan-favorite pocket monsters including Pikachu, Eevee, Jigglypuff, Psyduck, Pachirisu, and Pawmi. Color and packaging design may vary. Action Figures, Boys, Boys Toys, Funism, New Arrival, Shop by Age_2-4 YEARS OLD, Toy Kingdom, Toys & Games",
       "source": "Store search suggestions",
       "store": "Toy Kingdom",
       "store_key": "toy_kingdom",
@@ -32,7 +2659,11 @@
     }
   },
   "schema_version": 1,
+  "source_report_sent": true,
   "store_health": {
+    "green_gate_hobbies": true,
+    "hobby_arena": true,
+    "jpstr": true,
     "toy_kingdom": true,
     "toys_r_us": true
   },
