@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cloud-run Pokémon TCG stock watcher for Toy Kingdom PH and Toys"R"Us PH.
+"""Cloud-run Pokémon TCG drop radar for public Philippine retailer/news pages.
 
 Designed for GitHub Actions: no local machine, browser, or Discord bot process needed.
 """
@@ -49,11 +49,13 @@ STORES: list[dict[str, Any]] = [
             "https://www.toykingdom.com.ph/blogs/event.atom",
             "https://www.toykingdom.com.ph/blogs/news.atom",
         ],
+        "html_urls": [],
         "collection_url": "https://www.toykingdom.com.ph/collections/pokemon",
+        "coverage": "Shopify-style public product JSON/search suggestions, collection HTML fallback, public event/news feeds",
     },
     {
         "key": "toys_r_us",
-        "name": "Toys\"R\"Us",
+        "name": "Toys“R”Us Philippines",
         "base": "https://toysrus.com.ph",
         "catalog_urls": [
             ("Pokémon collection", "https://toysrus.com.ph/collections/pokemon/products.json?limit=250&page=1", "https://toysrus.com.ph/collections/pokemon"),
@@ -66,8 +68,56 @@ STORES: list[dict[str, Any]] = [
             "https://toysrus.com.ph/blogs/events.atom",
             "https://toysrus.com.ph/blogs/news.atom",
         ],
+        "html_urls": [],
         "collection_url": "https://toysrus.com.ph/collections/pokemon",
+        "coverage": "Shopify-style public product JSON/search suggestions, collection HTML fallback, public event/news feeds",
     },
+    {
+        "key": "green_gate_hobbies",
+        "name": "Green Gate Hobbies",
+        "base": "https://shop.greengatehobbies.com",
+        "catalog_urls": [
+            ("Pokémon TCG pre-orders", "https://shop.greengatehobbies.com/collections/ptcg-pre-orders/products.json?limit=250&page=1", "https://shop.greengatehobbies.com/collections/ptcg-pre-orders"),
+        ],
+        "suggest_url": "https://shop.greengatehobbies.com/search/suggest.json",
+        "feeds": [],
+        "html_urls": [("Pokémon TCG pre-orders", "https://shop.greengatehobbies.com/collections/ptcg-pre-orders")],
+        "collection_url": "https://shop.greengatehobbies.com/collections/ptcg-pre-orders",
+        "coverage": "Public Pokémon TCG pre-order Shopify-style collection JSON and collection HTML fallback",
+    },
+    {
+        "key": "jpstr",
+        "name": "JPSTR PH",
+        "base": "https://jpstr.ph",
+        "catalog_urls": [],
+        "suggest_url": None,
+        "feeds": [],
+        "html_urls": [
+            ("Pre-order listings", "https://jpstr.ph/preorders"),
+            ("On-hand product listings", "https://jpstr.ph/"),
+        ],
+        "collection_url": "https://jpstr.ph/preorders",
+        "coverage": "Public HTML listing/detail links only; login-only details are not accessed",
+    },
+    {
+        "key": "hobby_arena",
+        "name": "Hobby Arena",
+        "base": "https://www.hobbyarena.ph",
+        "catalog_urls": [],
+        "suggest_url": None,
+        "feeds": [],
+        "html_urls": [("Homepage featured products/pre-orders", "https://www.hobbyarena.ph/")],
+        "collection_url": "https://www.hobbyarena.ph/",
+        "coverage": "Public homepage HTML product links only; if the site renders listings only with JavaScript, results may be limited",
+    },
+]
+
+OFFICIAL_NEWS_SOURCES: list[dict[str, str]] = [
+    {
+        "key": "pokemon_asia_news",
+        "name": "Official Pokémon TCG Asia English / Philippines news",
+        "url": "https://asia.pokemon-card.com/ph/info/",
+    }
 ]
 
 POKEMON_RE = re.compile(r"pok[eé]mon", re.IGNORECASE)
@@ -80,10 +130,22 @@ CARD_TERMS = (
 PREORDER_TERMS = (
     "pre-order", "pre order", "preorder", "preorders", "pre-orders", "reserve now",
     "reservation", "coming soon", "expected release", "release date", "down payment",
+    "expected arrival", "estimated arrival", "est. arrival", "incoming", "in transit",
 )
 ANNOUNCEMENT_TERMS = (
     "restock", "stock drop", "drop", "pre-order", "preorder", "pre order", "release",
     "trading card", "tcg", "booster", "elite trainer", "30th celebration", "stock up",
+)
+IN_TRANSIT_PATTERNS = (
+    r"\bin transit\b", r"\binbound shipment\b", r"\ben route to (?:our|the) (?:warehouse|store)\b",
+    r"\bshipment (?:is )?incoming\b", r"\bshipping to us\b", r"\bdispatched by (?:the )?distributor\b",
+    r"\bshipped by (?:the )?distributor\b",
+)
+UPCOMING_PATTERNS = (
+    r"\bpre[- ]?orders?\b", r"\bcoming soon\b", r"\bincoming\b", r"\bexpected arrival\b",
+    r"\best(?:imated)?\.? arrival\b", r"\barrival date\b", r"\best(?:imated)?\.? release\b",
+    r"\brelease date\b", r"\barriving\b", r"\beta\s*[:：]", r"\bsubject to allocation\b",
+    r"\barrived at (?:our|the) (?:warehouse|store)\b",
 )
 
 
@@ -112,7 +174,36 @@ def is_tcg_product(title: str, description: str = "", tags: Any = None) -> bool:
 
 def is_preorder(text: str) -> bool:
     normalized = normalize_text(text)
-    return any(term in normalized for term in PREORDER_TERMS)
+    return any(term in normalized for term in (
+        "pre-order", "pre order", "preorder", "reserve now", "reservation", "down payment"
+    ))
+
+
+def incoming_signal(text: str) -> str:
+    """Classify only what the public text explicitly says; never infer private logistics."""
+    normalized = normalize_text(text)
+    if any(re.search(pattern, normalized, re.I) for pattern in IN_TRANSIT_PATTERNS):
+        return "IN_TRANSIT"
+    if any(re.search(pattern, normalized, re.I) for pattern in UPCOMING_PATTERNS):
+        return "UPCOMING_OR_PREORDER"
+    return "NONE"
+
+
+def extract_arrival_date(text: str) -> str | None:
+    """Return a date phrase from a listing, without inventing a year or timezone."""
+    value = clean_text(text)
+    date_phrase = r"([A-Za-z]{3,9}[ ]+\d{4}|[A-Za-z]{3,9}[ ]+\d{1,2}(?!\d)(?:,?[ ]+\d{4})?|\d{4}-\d{2}-\d{2})"
+    patterns = (
+        r"\b(?:expected|estimated|est\.?|estd\.?)[ ]+(?:arrival|release)[ ]*[:：-]?[ ]*" + date_phrase,
+        r"\b(?:arrival|release)[ ]+date[ ]*[:：-]?[ ]*(?:estimated?\.?[ ]+|est\.?[ ]+)?" + date_phrase,
+        r"\b(?:est\.?[ ]+arrival|est\.?[ ]+release|arriving|release)[ ]*[:：-]?[ ]*" + date_phrase,
+        r"\b(\d{4}-\d{2}-\d{2})\b",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, value, re.I)
+        if match:
+            return re.sub(r"\s+", " ", match.group(1)).strip(" ,.")[:80]
+    return None
 
 
 def is_relevant_announcement(title: str, summary: str = "", url: str = "") -> bool:
@@ -200,6 +291,15 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
         price_text = f"{parsed_direct:.2f}" if parsed_direct is not None else None
 
     full_text = " ".join([title, description, clean_text(tags)])
+    signal = incoming_signal(full_text)
+    # Availability must not be inferred from the words "pre-order" alone: expired or
+    # closed listings often still contain those words.
+    normalized_full = normalize_text(full_text)
+    if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", normalized_full, re.I):
+        available = False
+    elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to cart|buy now|in stock|on hand)\b", normalized_full, re.I):
+        if available is None:
+            available = True
     return {
         "store_key": store["key"],
         "store": store["name"],
@@ -209,6 +309,9 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
         "available": available,
         "price": price_text,
         "preorder": is_preorder(full_text),
+        "incoming_signal": signal,
+        "arrival_date": extract_arrival_date(full_text),
+        "signal_text": full_text[:1800],
         "source": source_name,
     }
 
@@ -229,6 +332,11 @@ def merge_product(existing: dict[str, Any] | None, incoming: dict[str, Any]) -> 
         merged["preorder"] = True
     elif "preorder" not in merged:
         merged["preorder"] = incoming.get("preorder", False)
+    for field in ("incoming_signal", "arrival_date", "signal_text"):
+        if incoming.get(field):
+            merged[field] = incoming[field]
+        elif field not in merged:
+            merged[field] = incoming.get(field)
     return merged
 
 
@@ -269,8 +377,11 @@ def products_from_json_response(data: Any) -> list[dict[str, Any]] | None:
 def parse_html_product_cards(store: dict[str, Any], page_url: str, source_name: str, content: str) -> list[dict[str, Any]]:
     soup = BeautifulSoup(content, "html.parser")
     records: dict[str, dict[str, Any]] = {}
-    for anchor in soup.select('a[href*="/products/"]'):
-        href = urljoin(page_url, anchor.get("href", ""))
+    for anchor in soup.select('a[href]'):
+        raw_href = anchor.get("href", "")
+        if not re.search(r"/(?:products?|listings)/[^/?#]+", raw_href, re.I):
+            continue
+        href = urljoin(page_url, raw_href)
         if urlparse(href).netloc != urlparse(store["base"]).netloc:
             continue
         handle = urlparse(href).path.rstrip("/").split("/")[-1]
@@ -290,12 +401,12 @@ def parse_html_product_cards(store: dict[str, Any], page_url: str, source_name: 
             title = clean_text(img.get("alt") if img else "")
         card_text = clean_text(parent.get_text(" ", strip=True))
         if not title:
-            match = re.search(r"/products/([^/?#]+)", href)
+            match = re.search(r"/(?:products?|listings)/([^/?#]+)", href)
             title = match.group(1).replace("-", " ") if match else ""
         available: bool | None = None
-        if re.search(r"\b(sold out|out of stock|unavailable)\b", card_text, re.I):
+        if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", card_text, re.I):
             available = False
-        elif re.search(r"\b(add to cart|pre-order|preorder|buy now)\b", card_text, re.I):
+        elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to cart|buy now|in stock|on hand)\b", card_text, re.I):
             available = True
         price_match = re.search(r"(?:₱|PHP\s*)\s*[\d,]+(?:\.\d{2})?", card_text, re.I)
         raw = {
@@ -369,17 +480,36 @@ def scrape_search_suggestions(session: requests.Session, store: dict[str, Any]) 
 
 def scrape_store_products(session: requests.Session, store: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], bool]:
     found: dict[str, dict[str, Any]] = {}
-    catalog_success = False
-    for endpoint in store["catalog_urls"]:
+    source_successes: list[bool] = []
+    for endpoint in store.get("catalog_urls", []):
         products, success = scrape_catalog_url(session, store, endpoint)
-        catalog_success = catalog_success or success
+        source_successes.append(success)
         for product in products:
             found[product["handle"]] = merge_product(found.get(product["handle"]), product)
-    suggestions, suggest_success = scrape_search_suggestions(session, store)
-    catalog_success = catalog_success or suggest_success
-    for product in suggestions:
-        found[product["handle"]] = merge_product(found.get(product["handle"]), product)
-    return found, catalog_success
+
+    if store.get("suggest_url"):
+        suggestions, suggest_success = scrape_search_suggestions(session, store)
+        source_successes.append(suggest_success)
+        for product in suggestions:
+            found[product["handle"]] = merge_product(found.get(product["handle"]), product)
+
+    # Extra public HTML pages are used for retailers that do not expose a known
+    # Shopify-style JSON catalogue. This parses visible server-rendered product
+    # links only; it does not execute browser JavaScript or bypass logins.
+    for source_name, page_url in store.get("html_urls", []):
+        response = get_response(session, page_url)
+        if response is None:
+            source_successes.append(False)
+            continue
+        page_products = parse_html_product_cards(store, page_url, source_name, response.text)
+        source_successes.append(True)
+        for product in page_products:
+            found[product["handle"]] = merge_product(found.get(product["handle"]), product)
+        if not page_products:
+            LOG.warning("Fetched %s but found no public HTML product links matching the Pokémon TCG filter; JavaScript-only listings may not be visible", page_url)
+
+    # A source is healthy if at least one of its configured public paths could be read.
+    return found, any(source_successes)
 
 
 def entry_text(element: ET.Element, names: tuple[str, ...]) -> str:
@@ -440,6 +570,53 @@ def scrape_announcements(session: requests.Session, store: dict[str, Any]) -> tu
     return list(all_items.values()), feed_success
 
 
+def parse_official_product_news(content: str, page_url: str, source: dict[str, str]) -> list[dict[str, str]]:
+    """Parse public product/release entries from the official Pokémon TCG news page.
+
+    This labels official release news as product/release information, not store stock.
+    It deliberately skips tournaments, registrations, and general campaigns.
+    """
+    soup = BeautifulSoup(content, "html.parser")
+    product_terms = (
+        "arriving", "new expansion", "expansion battle", "release promo", "new promo cards",
+        "product availability", "product release", "arriving on", "pokemon tcg: ",
+        "pokemon trading card game",
+    )
+    results: dict[str, dict[str, str]] = {}
+    for anchor in soup.select("a[href]"):
+        title = clean_text(anchor.get_text(" ", strip=True))
+        href = urljoin(page_url, anchor.get("href", ""))
+        if not title or href.rstrip("/") == page_url.rstrip("/"):
+            continue
+        parent = anchor
+        for _ in range(3):
+            if parent.parent is None:
+                break
+            parent = parent.parent
+            if parent.name in ("li", "article"):
+                break
+        context = clean_text(parent.get_text(" ", strip=True))
+        combined = normalize_text(title + " " + context)
+        is_product_item = any(term in combined for term in product_terms)
+        # Site is the official Pokémon TCG news hub. Require product/release language,
+        # so league sign-ups and general tournament notices do not become stock alerts.
+        if not is_product_item:
+            continue
+        if any(term in combined for term in ("registration", "league season", "championship series", "academia:", "roadshow", "tournament")) and not any(term in combined for term in ("arriving", "new expansion", "release promo", "product availability", "new promo cards")):
+            continue
+        results[href] = {
+            "store_key": source["key"],
+            "store": source["name"],
+            "title": title[:250],
+            "url": href,
+            "published": "",
+            "summary": context[:1000],
+            "feed": page_url,
+            "official_product_news": "true",
+        }
+    return list(results.values())
+
+
 def default_state() -> dict[str, Any]:
     return {
         "schema_version": 1,
@@ -449,6 +626,8 @@ def default_state() -> dict[str, Any]:
         "products": {},
         "initialized_feeds": {},
         "announcements": {},
+        "source_report_sent": False,
+        "official_source_health": {},
     }
 
 
@@ -461,7 +640,7 @@ def load_state() -> dict[str, Any]:
             raise ValueError("state root is not an object")
         base = default_state()
         base.update(value)
-        for key in ("initialized_stores", "store_health", "products", "initialized_feeds", "announcements"):
+        for key in ("initialized_stores", "store_health", "products", "initialized_feeds", "announcements", "official_source_health"):
             if not isinstance(base.get(key), dict):
                 base[key] = {}
         return base
@@ -503,37 +682,58 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
     status = stock_status(product.get("available"))
     price_text = format_price(product.get("price"))
     title_prefix = {
-        "preorder": "🧾 PRE-ORDER LISTING",
-        "new_in_stock": "🆕 NEW LISTING — ORDERABLE",
-        "new_unavailable": "🕵️ NEW LISTING — NOT ORDERABLE YET",
-        "new_unknown": "🆕 NEW PRODUCT LISTING",
-        "restock": "🚨 RESTOCK / POSSIBLE STEALTH DROP",
-        "preorder_flag": "📦 PRE-ORDER DETAILS DETECTED",
-        "price_drop": "💸 PRICE DROP",
+        "preorder": "📅 PRE-ORDER / UPCOMING TCG SIGNAL — VERIFY STATUS",
+        "new_in_stock": "🟢 NEW TCG LISTING MARKED ORDERABLE",
+        "new_unavailable": "🕵️ NEW TCG LISTING — EARLY / UNCONFIRMED SIGNAL",
+        "new_unknown": "🕵️ NEW TCG LISTING — AVAILABILITY UNKNOWN",
+        "restock": "🚨 POSSIBLE STEALTH DROP — LISTING CHANGED TO ORDERABLE",
+        "preorder_flag": "📅 PRE-ORDER DETAILS JUST APPEARED",
+        "in_transit": "🚚 IN-TRANSIT CLAIM FOUND ON RETAILER PAGE",
+        "upcoming": "📦 UPCOMING / EXPECTED-ARRIVAL SIGNAL FOUND",
+        "price_drop": "💸 TCG PRICE DROP",
     }.get(kind, "🔔 Pokémon TCG update")
-    detail_lines = [f"**Retailer:** {product.get('store', 'Unknown')}", f"**Price:** {price_text}", f"**Availability:** {status}"]
+    detail_lines = [
+        f"**Retailer/source:** {product.get('store', 'Unknown')}",
+        f"**Price shown:** {price_text}",
+        f"**Availability:** {status}",
+    ]
     if old and kind == "price_drop":
         detail_lines.append(f"**Previous price:** {format_price(old.get('price'))}")
     if product.get("preorder"):
-        detail_lines.append("**Pre-order signals:** wording on the listing suggests a pre-order or reservation.")
-    detail_lines.append(f"**Detection source:** {product.get('source', 'public catalogue/search page')}")
+        detail_lines.append("**Pre-order wording:** found on the public listing; this alone does not prove the preorder is still open.")
+    signal = product.get("incoming_signal")
+    if signal == "IN_TRANSIT":
+        detail_lines.append("**Incoming-stock evidence:** the page contains explicit in-transit / shipment wording.")
+    elif signal == "UPCOMING_OR_PREORDER":
+        detail_lines.append("**Upcoming-stock evidence:** the page contains pre-order, expected-arrival, release-date, or incoming wording.")
+    if product.get("arrival_date"):
+        detail_lines.append(f"**Date phrase shown by source:** {product['arrival_date']}")
+    if product.get("signal_text"):
+        detail_lines.append(f"**Evidence excerpt:** {product['signal_text'][:500]}")
+    detail_lines.append(f"**Detection method:** {product.get('source', 'public catalogue/search page')}")
+    detail_lines.append("**Important:** This is a public-page signal, not access to a retailer's private warehouse or distributor shipment records.")
     return {
         "title": f"{title_prefix}: {product.get('title', 'Pokémon TCG product')}"[:256],
         "url": product.get("url"),
         "description": "\n".join(detail_lines)[:4000],
-        "color": 0xE67E22 if kind in ("restock", "new_in_stock", "preorder") else 0x3498DB,
+        "color": 0xE67E22 if kind in ("restock", "new_in_stock", "preorder", "in_transit", "upcoming") else 0x3498DB,
     }
 
 
 def announcement_alert(item: dict[str, str]) -> dict[str, Any]:
-    description = f"**Retailer:** {item.get('store', 'Unknown')}\n"
+    description = f"**Source:** {item.get('store', 'Unknown')}\n"
     if item.get("published"):
         description += f"**Published:** {item['published']}\n"
     if item.get("summary"):
-        description += f"\n{item['summary'][:2500]}"
-    description += "\n\nThis is a public retailer-feed match; open the original post to verify details."
+        description += f"\n{item['summary'][:2200]}"
+    if item.get("official_product_news") == "true":
+        title_prefix = "🟣 OFFICIAL POKÉMON TCG PRODUCT / RELEASE NEWS"
+        description += "\n\nThis is an official product/release announcement. It does NOT confirm that any Philippine retailer currently has stock."
+    else:
+        title_prefix = "📣 RETAILER-PUBLISHED TCG DROP / PRE-ORDER ANNOUNCEMENT"
+        description += "\n\nThis confirms a retailer announcement was published; open the original post to verify the date, scope, and current availability."
     return {
-        "title": f"📣 OFFICIAL-PAGE ANNOUNCEMENT: {item.get('title', 'Pokémon TCG update')}"[:256],
+        "title": f"{title_prefix}: {item.get('title', 'Pokémon TCG update')}"[:256],
         "url": item.get("url"),
         "description": description[:4000],
         "color": 0x5865F2,
@@ -622,7 +822,8 @@ def main() -> int:
         already_initialized = state["initialized_stores"].get(store["key"]) is True
         if not already_initialized and healthy:
             baseline_current_stock.extend(
-                product for product in products.values() if product.get("available") is True
+                product for product in products.values()
+                if product.get("available") is True or product.get("incoming_signal") in ("IN_TRANSIT", "UPCOMING_OR_PREORDER")
             )
         if not healthy:
             LOG.warning("No product catalogue/search endpoint was available for %s", store["name"])
@@ -644,7 +845,11 @@ def main() -> int:
 
             if old is None:
                 product["first_seen"] = utc_now_iso()
-                if product.get("preorder"):
+                if product.get("incoming_signal") == "IN_TRANSIT":
+                    product_alerts.append(product_alert("in_transit", product))
+                elif product.get("incoming_signal") == "UPCOMING_OR_PREORDER":
+                    product_alerts.append(product_alert("upcoming", product))
+                elif product.get("preorder"):
                     product_alerts.append(product_alert("preorder", product))
                 elif product.get("available") is True:
                     product_alerts.append(product_alert("new_in_stock", product))
@@ -655,9 +860,16 @@ def main() -> int:
                 state["products"][key] = product
                 continue
 
-            if old.get("available") is not True and product.get("available") is True:
-                # Covers a confirmed restock (False -> True) and a listing whose
-                # public availability was previously unknown (None -> True).
+            old_signal = old.get("incoming_signal")
+            new_signal = product.get("incoming_signal")
+            # Only report a newly observed signal when the previous state already had
+            # this field, avoiding false alarms on migration from the earlier watcher.
+            if "incoming_signal" in old and old_signal != "IN_TRANSIT" and new_signal == "IN_TRANSIT":
+                product_alerts.append(product_alert("in_transit", product, old))
+            elif "incoming_signal" in old and old_signal not in ("IN_TRANSIT", "UPCOMING_OR_PREORDER") and new_signal == "UPCOMING_OR_PREORDER":
+                product_alerts.append(product_alert("upcoming", product, old))
+            elif old.get("available") is not True and product.get("available") is True:
+                # Public page changed to an orderable state; this could be a restock/stealth drop.
                 product_alerts.append(product_alert("restock", product, old))
             elif old.get("preorder") is not True and product.get("preorder") is True:
                 product_alerts.append(product_alert("preorder_flag", product, old))
@@ -696,6 +908,32 @@ def main() -> int:
                     announcement_alerts.append(announcement_alert(item))
             state["initialized_feeds"][feed_url] = True
 
+    # Official Pokémon TCG Asia / Philippines public product-news page.
+    official_news_counts: dict[str, int] = {}
+    for source in OFFICIAL_NEWS_SOURCES:
+        response = get_response(session, source["url"])
+        healthy = response is not None
+        prior_health = state["official_source_health"].get(source["key"])
+        state["official_source_health"][source["key"]] = healthy
+        if response is None:
+            LOG.warning("Official news page could not be read: %s", source["url"])
+            continue
+        items = parse_official_product_news(response.text, source["url"], source)
+        official_news_counts[source["key"]] = len(items)
+        page_already_initialized = state["initialized_feeds"].get(source["url"]) is True
+        LOG.info("Official news page fetched: %s product/release item(s) matched", len(items))
+        for item in items:
+            key = announcement_state_key(source["key"], item["url"])
+            if key in state["announcements"]:
+                continue
+            state["announcements"][key] = {
+                "store": source["name"], "title": item["title"], "url": item["url"],
+                "published": item.get("published", ""), "first_seen": utc_now_iso(),
+            }
+            if page_already_initialized:
+                announcement_alerts.append(announcement_alert(item))
+        state["initialized_feeds"][source["url"]] = True
+
     # Cap saved history, keeping the most recently added observations.
     state["products"] = dict(sorted(
         state["products"].items(),
@@ -730,19 +968,22 @@ def main() -> int:
                 continue
             seen_snapshot.add(identity)
             price = format_price(product.get("price"))
-            digest_lines.append(f"• **{product.get('store', 'Retailer')}** — [{product.get('title', 'Pokémon TCG product')}]({product.get('url')}) ({price})")
+            signal = product.get("incoming_signal", "NONE")
+            label = "IN TRANSIT CLAIM" if signal == "IN_TRANSIT" else ("UPCOMING / PRE-ORDER" if signal == "UPCOMING_OR_PREORDER" else "ORDERABLE")
+            date_text = f" — {product.get('arrival_date')}" if product.get("arrival_date") else ""
+            digest_lines.append(f"• **{label} · {product.get('store', 'Retailer')}** — [{product.get('title', 'Pokémon TCG product')}]({product.get('url')}) ({price}){date_text}")
             if len(digest_lines) >= 16:
                 break
         total_snapshot = len({(str(p.get("store_key", "")), str(p.get("handle", ""))) for p in baseline_current_stock})
         if total_snapshot > len(digest_lines):
-            digest_lines.append(f"… plus {total_snapshot - len(digest_lines)} other currently orderable listing(s); open the retailer collection links to review them.")
-        snapshot_block = "\n\n**Current orderable listing snapshot**\n" + "\n".join(digest_lines) if digest_lines else "\n\nNo TCG products were marked orderable in the first scan, or the retailer did not expose availability."
+            digest_lines.append(f"… plus {total_snapshot - len(digest_lines)} other orderable/upcoming public listing(s); open the source pages to review them.")
+        snapshot_block = "\n\n**Current public orderable / upcoming listing snapshot**\n" + "\n".join(digest_lines) if digest_lines else "\n\nNo TCG products were marked orderable or upcoming in the first scan, or the retailer did not expose those signals."
         welcome = {
             "title": "✅ Pokémon PH Stock Watch is online",
             "description": (
                 "The first scan is now saved as a baseline, so existing listings won't all ping you as new drops. "
-                "Future new listings, newly detected pre-orders, unavailable → orderable changes, price cuts, "
-                "and matching public retailer blog/event posts can trigger alerts.\n\n"
+                "Future new TCG listings, newly orderable products, retailer-published pre-order/arrival wording, "
+                "explicit in-transit wording, price cuts, retailer announcements, and official TCG product news can trigger alerts.\n\n"
                 + "\n".join(rows)
                 + snapshot_block
                 + "\n\nThe watcher checks on a roughly five-minute GitHub Actions schedule. Scheduled jobs can be delayed; this is not a guaranteed instant-stock feed."
@@ -751,6 +992,37 @@ def main() -> int:
         }
         send_discord(session, [welcome])
         state["welcome_sent"] = True
+
+    # One-time report after upgrading the watcher. Distinguishes a reachable page from
+    # a source that actually yielded TCG records, and shows a few currently public incoming signals.
+    if not state.get("source_report_sent"):
+        report_lines = ["This upgraded watcher filters to Pokémon Trading Card Game (TCG) products. Source reachability does not guarantee complete inventory coverage."]
+        for store in STORES:
+            count, available_count, healthy = store_counts.get(store["key"], (0, 0, False))
+            health = "page(s) fetched" if healthy else "NOT REACHABLE this run"
+            report_lines.append(f"**{store['name']}:** {count} TCG item(s) parsed; {available_count} marked orderable; {health}.")
+            if healthy and count == 0 and store.get("html_urls"):
+                report_lines.append("  _No matching product links were parsed from this public HTML page; listings may be dynamically rendered and may need a site-specific adapter._")
+        for source in OFFICIAL_NEWS_SOURCES:
+            health = state["official_source_health"].get(source["key"]) is True
+            matched = official_news_counts.get(source["key"], 0)
+            report_lines.append(f"**{source['name']}:** {'page fetched' if health else 'NOT REACHABLE this run'}; {matched} product/release item(s) matched; news only, not retailer stock.")
+        incoming_records = [p for p in state["products"].values() if p.get("incoming_signal") in ("IN_TRANSIT", "UPCOMING_OR_PREORDER")]
+        incoming_records.sort(key=lambda p: (0 if p.get("incoming_signal") == "IN_TRANSIT" else 1, p.get("store", ""), p.get("title", "")))
+        if incoming_records:
+            report_lines.append("\n**Existing public incoming/pre-order signals (not necessarily new drops):**")
+            for product in incoming_records[:8]:
+                kind = "IN TRANSIT claim" if product.get("incoming_signal") == "IN_TRANSIT" else "upcoming/pre-order"
+                date_text = f" · {product.get('arrival_date')}" if product.get("arrival_date") else ""
+                report_lines.append(f"• **{kind} · {product.get('store', 'Source')}** — [{product.get('title', 'Pokémon TCG product')}]({product.get('url')}){date_text}")
+        report_lines.append("\n**Limits:** only publicly visible page text and links are checked. Private distributor/warehouse shipment data is not accessible. A pre-order/release date is not proof a shipment is physically in transit.")
+        source_report = {
+            "title": "🛰️ Pokémon TCG Drop Radar — source coverage report",
+            "description": "\n".join(report_lines)[:4000],
+            "color": 0x5865F2,
+        }
+        send_discord(session, [source_report])
+        state["source_report_sent"] = True
 
     save_state(state)
     LOG.info("Scan complete: %s product(s) visible, %s currently marked orderable; %s product alert(s), %s announcement alert(s).",
