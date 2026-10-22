@@ -1,9 +1,40 @@
 {
+  "announcements": {
+    "toy_kingdom|https://www.toykingdom.com.ph/blogs/event/pokemon-trading-card-game-online-restock": {
+      "first_seen": "2026-10-22T23:32:07+00:00",
+      "published": "2026-09-29T22:59:02+08:00",
+      "store": "Toy Kingdom",
+      "title": "Pokemon Trading Card Game Restock Online",
+      "url": "https://www.toykingdom.com.ph/blogs/event/pokemon-trading-card-game-online-restock"
+    }
+  },
+  "initialized_feeds": {
+    "https://toysrus.com.ph/blogs/events.atom": true,
+    "https://www.toykingdom.com.ph/blogs/event.atom": true,
+    "https://www.toykingdom.com.ph/blogs/news.atom": true
+  },
+  "initialized_stores": {
+    "toy_kingdom": true,
+    "toys_r_us": true
+  },
+  "products": {
+    "toy_kingdom|funism-pokemon-flocking-series-collection": {
+      "available": true,
+      "first_seen": "2026-10-22T23:32:05+00:00",
+      "handle": "funism-pokemon-flocking-series-collection",
+      "preorder": false,
+      "price": "599.00",
+      "source": "Store search suggestions",
+      "store": "Toy Kingdom",
+      "store_key": "toy_kingdom",
+      "title": "Funism Pokemon Flocking Series Collection",
+      "url": "https://www.toykingdom.com.ph/products/funism-pokemon-flocking-series-collection"
+    }
+  },
   "schema_version": 1,
-  "welcome_sent": false,
-  "initialized_stores": {},
-  "store_health": {},
-  "products": {},
-  "initialized_feeds": {},
-  "announcements": {}
+  "store_health": {
+    "toy_kingdom": true,
+    "toys_r_us": true
+  },
+  "welcome_sent": true
 }
