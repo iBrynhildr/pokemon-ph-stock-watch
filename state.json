@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "welcome_sent": false,
+  "initialized_stores": {},
+  "store_health": {},
+  "products": {},
+  "initialized_feeds": {},
+  "announcements": {}
+}
