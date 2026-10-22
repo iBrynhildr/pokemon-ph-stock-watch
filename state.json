@@ -2548,6 +2548,12 @@
     "toy_kingdom": true,
     "toys_r_us": true
   },
+  "metrics": {
+    "total_explicit_in_transit_signals": 0,
+    "total_new_orderable_listings": 0,
+    "total_preorder_signals": 0,
+    "total_restock_signals": 0
+  },
   "official_source_health": {
     "pokemon_asia_news": true
   },
@@ -2660,6 +2666,7 @@
   },
   "schema_version": 1,
   "source_report_sent": true,
+  "source_report_version": 2,
   "store_health": {
     "green_gate_hobbies": true,
     "hobby_arena": true,
