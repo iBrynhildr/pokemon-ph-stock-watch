@@ -1,0 +1,67 @@
+
+name: Pokemon PH Stock Watch
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pokemon-ph-stock-watch
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Check Pokémon stock
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          STATE_PATH: state.json
+          LOG_LEVEL: INFO
+        run: python watcher.py
+
+      - name: Save state and keep workflow active
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          from datetime import date, timedelta
+          from pathlib import Path
+
+          marker = Path('.keepalive-date')
+          today = date.today()
+          try:
+              last = date.fromisoformat(marker.read_text().strip())
+          except (OSError, ValueError):
+              last = None
+
+          if last is None or today - last >= timedelta(days=40):
+              marker.write_text(today.isoformat() + '\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state.json .keepalive-date
+          if ! git diff --cached --quiet; then
+            git commit -m "Update stock watcher state [skip ci]"
+            git push
+          fi
