@@ -627,7 +627,14 @@ def default_state() -> dict[str, Any]:
         "initialized_feeds": {},
         "announcements": {},
         "source_report_sent": False,
+        "source_report_version": 0,
         "official_source_health": {},
+        "metrics": {
+            "total_restock_signals": 0,
+            "total_new_orderable_listings": 0,
+            "total_preorder_signals": 0,
+            "total_explicit_in_transit_signals": 0,
+        },
     }
 
 
@@ -640,6 +647,10 @@ def load_state() -> dict[str, Any]:
             raise ValueError("state root is not an object")
         base = default_state()
         base.update(value)
+        stored_metrics = value.get("metrics", {})
+        if not isinstance(stored_metrics, dict):
+            stored_metrics = {}
+        base["metrics"].update(stored_metrics)
         for key in ("initialized_stores", "store_health", "products", "initialized_feeds", "announcements", "official_source_health"):
             if not isinstance(base.get(key), dict):
                 base[key] = {}
@@ -679,64 +690,83 @@ def stock_status(available: bool | None) -> str:
 
 
 def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Build a compact, scannable Discord embed for one TCG product signal."""
     status = stock_status(product.get("available"))
     price_text = format_price(product.get("price"))
     title_prefix = {
-        "preorder": "📅 PRE-ORDER / UPCOMING TCG SIGNAL — VERIFY STATUS",
-        "new_in_stock": "🟢 NEW TCG LISTING MARKED ORDERABLE",
-        "new_unavailable": "🕵️ NEW TCG LISTING — EARLY / UNCONFIRMED SIGNAL",
-        "new_unknown": "🕵️ NEW TCG LISTING — AVAILABILITY UNKNOWN",
-        "restock": "🚨 POSSIBLE STEALTH DROP — LISTING CHANGED TO ORDERABLE",
-        "preorder_flag": "📅 PRE-ORDER DETAILS JUST APPEARED",
-        "in_transit": "🚚 IN-TRANSIT CLAIM FOUND ON RETAILER PAGE",
-        "upcoming": "📦 UPCOMING / EXPECTED-ARRIVAL SIGNAL FOUND",
+        "preorder": "📅 PRE-ORDER / UPCOMING TCG SIGNAL",
+        "new_in_stock": "🟢 NEW TCG LISTING — ORDERABLE",
+        "new_unavailable": "🕵️ POSSIBLE STEALTH DROP — NEW LISTING",
+        "new_unknown": "🕵️ POSSIBLE STEALTH DROP — AVAILABILITY UNKNOWN",
+        "restock": "🚨 POSSIBLE STEALTH DROP — RESTOCK SIGNAL",
+        "preorder_flag": "📅 PRE-ORDER SIGNAL DETECTED",
+        "in_transit": "🚚 RETAILER SAYS STOCK IS IN TRANSIT",
+        "upcoming": "📦 UPCOMING TCG STOCK SIGNAL",
         "price_drop": "💸 TCG PRICE DROP",
-    }.get(kind, "🔔 Pokémon TCG update")
-    detail_lines = [
-        f"**Retailer/source:** {product.get('store', 'Unknown')}",
-        f"**Price shown:** {price_text}",
-        f"**Availability:** {status}",
-    ]
-    if old and kind == "price_drop":
-        detail_lines.append(f"**Previous price:** {format_price(old.get('price'))}")
-    if product.get("preorder"):
-        detail_lines.append("**Pre-order wording:** found on the public listing; this alone does not prove the preorder is still open.")
+    }.get(kind, "🔔 POKÉMON TCG UPDATE")
+
     signal = product.get("incoming_signal")
     if signal == "IN_TRANSIT":
-        detail_lines.append("**Incoming-stock evidence:** the page contains explicit in-transit / shipment wording.")
-    elif signal == "UPCOMING_OR_PREORDER":
-        detail_lines.append("**Upcoming-stock evidence:** the page contains pre-order, expected-arrival, release-date, or incoming wording.")
-    if product.get("arrival_date"):
-        detail_lines.append(f"**Date phrase shown by source:** {product['arrival_date']}")
+        incoming_text = "Explicit in-transit/shipment wording found"
+    elif signal == "UPCOMING_OR_PREORDER" or product.get("preorder"):
+        incoming_text = "Pre-order / upcoming wording found; shipment not confirmed"
+    else:
+        incoming_text = "No public incoming-stock wording found"
+
+    description_parts = []
+    if old and kind == "price_drop":
+        description_parts.append(f"**Previous price:** {format_price(old.get('price'))}")
     if product.get("signal_text"):
-        detail_lines.append(f"**Evidence excerpt:** {product['signal_text'][:500]}")
-    detail_lines.append(f"**Detection method:** {product.get('source', 'public catalogue/search page')}")
-    detail_lines.append("**Important:** This is a public-page signal, not access to a retailer's private warehouse or distributor shipment records.")
+        description_parts.append(f"**Evidence from public page:** {product['signal_text'][:650]}")
+    description_parts.append("This is a public-page signal, not access to private distributor or warehouse systems.")
+    url = product.get("url") or ""
+    source_value = f"[Open product page]({url})" if url else "Product link not provided by source"
+    fields = [
+        {"name": "Retailer", "value": str(product.get("store", "Unknown retailer"))[:1024], "inline": True},
+        {"name": "Price shown", "value": price_text[:1024], "inline": True},
+        {"name": "Availability", "value": status[:1024], "inline": False},
+        {"name": "Upcoming / shipment signal", "value": incoming_text, "inline": False},
+        {"name": "ETA / release date", "value": str(product.get("arrival_date") or "Not published by source")[:1024], "inline": True},
+        {"name": "Branch-level stock", "value": "Not published by monitored page", "inline": True},
+        {"name": "Total units", "value": "Not published by monitored page", "inline": True},
+        {"name": "Source", "value": source_value[:1024], "inline": False},
+    ]
+    if kind in ("restock", "new_in_stock"):
+        color = 0xE74C3C if kind == "restock" else 0x2ECC71
+    elif kind in ("in_transit", "upcoming", "preorder", "preorder_flag"):
+        color = 0xF1C40F
+    elif kind == "price_drop":
+        color = 0x3498DB
+    else:
+        color = 0x9B59B6
     return {
         "title": f"{title_prefix}: {product.get('title', 'Pokémon TCG product')}"[:256],
-        "url": product.get("url"),
-        "description": "\n".join(detail_lines)[:4000],
-        "color": 0xE67E22 if kind in ("restock", "new_in_stock", "preorder", "in_transit", "upcoming") else 0x3498DB,
+        "url": url or None,
+        "description": "\n\n".join(description_parts)[:4000],
+        "fields": fields,
+        "color": color,
     }
 
 
 def announcement_alert(item: dict[str, str]) -> dict[str, Any]:
-    description = f"**Source:** {item.get('store', 'Unknown')}\n"
-    if item.get("published"):
-        description += f"**Published:** {item['published']}\n"
-    if item.get("summary"):
-        description += f"\n{item['summary'][:2200]}"
-    if item.get("official_product_news") == "true":
-        title_prefix = "🟣 OFFICIAL POKÉMON TCG PRODUCT / RELEASE NEWS"
-        description += "\n\nThis is an official product/release announcement. It does NOT confirm that any Philippine retailer currently has stock."
-    else:
-        title_prefix = "📣 RETAILER-PUBLISHED TCG DROP / PRE-ORDER ANNOUNCEMENT"
-        description += "\n\nThis confirms a retailer announcement was published; open the original post to verify the date, scope, and current availability."
+    is_official = item.get("official_product_news") == "true"
+    title_prefix = "🟣 OFFICIAL POKÉMON TCG PRODUCT / RELEASE NEWS" if is_official else "📣 RETAILER-PUBLISHED TCG ANNOUNCEMENT"
+    note = (
+        "Official product/release news; this does not confirm Philippine retail stock."
+        if is_official else
+        "A retailer announcement was published. Open the original post to verify date, preorder status, and availability."
+    )
+    fields = [
+        {"name": "Source", "value": item.get("store", "Unknown source")[:1024], "inline": True},
+        {"name": "Published", "value": item.get("published") or "Date not provided in parsed page", "inline": True},
+        {"name": "What this confirms", "value": note, "inline": False},
+    ]
     return {
         "title": f"{title_prefix}: {item.get('title', 'Pokémon TCG update')}"[:256],
         "url": item.get("url"),
-        "description": description[:4000],
-        "color": 0x5865F2,
+        "description": (item.get("summary") or "Open the source link for announcement details.")[:1200],
+        "fields": fields,
+        "color": 0x8E44AD if is_official else 0x5865F2,
     }
 
 
@@ -800,11 +830,14 @@ def main() -> int:
     total_products = 0
     total_available = 0
     store_counts: dict[str, tuple[int, int, bool]] = {}
+    current_products_by_store: dict[str, list[dict[str, Any]]] = {}
     baseline_current_stock: list[dict[str, Any]] = []
+    run_metrics = {"restock": 0, "new_orderable": 0, "preorder": 0, "upcoming": 0, "in_transit": 0}
 
     # Catalogue checks: detect new listings, pre-order listings, restocks and price cuts.
     for store in STORES:
         products, healthy = scrape_store_products(session, store)
+        current_products_by_store[store["key"]] = list(products.values())
         store_counts[store["key"]] = (
             len(products),
             sum(1 for p in products.values() if p.get("available") is True),
@@ -847,12 +880,18 @@ def main() -> int:
                 product["first_seen"] = utc_now_iso()
                 if product.get("incoming_signal") == "IN_TRANSIT":
                     product_alerts.append(product_alert("in_transit", product))
+                    run_metrics["in_transit"] += 1
                 elif product.get("incoming_signal") == "UPCOMING_OR_PREORDER":
                     product_alerts.append(product_alert("upcoming", product))
+                    run_metrics["upcoming"] += 1
+                    if product.get("preorder"):
+                        run_metrics["preorder"] += 1
                 elif product.get("preorder"):
                     product_alerts.append(product_alert("preorder", product))
+                    run_metrics["preorder"] += 1
                 elif product.get("available") is True:
                     product_alerts.append(product_alert("new_in_stock", product))
+                    run_metrics["new_orderable"] += 1
                 elif product.get("available") is False:
                     product_alerts.append(product_alert("new_unavailable", product))
                 else:
@@ -866,13 +905,19 @@ def main() -> int:
             # this field, avoiding false alarms on migration from the earlier watcher.
             if "incoming_signal" in old and old_signal != "IN_TRANSIT" and new_signal == "IN_TRANSIT":
                 product_alerts.append(product_alert("in_transit", product, old))
+                run_metrics["in_transit"] += 1
             elif "incoming_signal" in old and old_signal not in ("IN_TRANSIT", "UPCOMING_OR_PREORDER") and new_signal == "UPCOMING_OR_PREORDER":
                 product_alerts.append(product_alert("upcoming", product, old))
+                run_metrics["upcoming"] += 1
+                if product.get("preorder"):
+                    run_metrics["preorder"] += 1
             elif old.get("available") is not True and product.get("available") is True:
                 # Public page changed to an orderable state; this could be a restock/stealth drop.
                 product_alerts.append(product_alert("restock", product, old))
+                run_metrics["restock"] += 1
             elif old.get("preorder") is not True and product.get("preorder") is True:
                 product_alerts.append(product_alert("preorder_flag", product, old))
+                run_metrics["preorder"] += 1
             elif decimal_greater(old.get("price"), product.get("price")):
                 product_alerts.append(product_alert("price_drop", product, old))
 
@@ -934,6 +979,17 @@ def main() -> int:
                 announcement_alerts.append(announcement_alert(item))
         state["initialized_feeds"][source["url"]] = True
 
+    # Keep cumulative counts across GitHub Actions runs. These are detected signals,
+    # not physical unit counts and not a branch-by-branch inventory total.
+    metrics = state.setdefault("metrics", {})
+    for key, value in {
+        "total_restock_signals": run_metrics["restock"],
+        "total_new_orderable_listings": run_metrics["new_orderable"],
+        "total_preorder_signals": run_metrics["preorder"],
+        "total_explicit_in_transit_signals": run_metrics["in_transit"],
+    }.items():
+        metrics[key] = int(metrics.get(key, 0) or 0) + value
+
     # Cap saved history, keeping the most recently added observations.
     state["products"] = dict(sorted(
         state["products"].items(),
@@ -993,36 +1049,133 @@ def main() -> int:
         send_discord(session, [welcome])
         state["welcome_sent"] = True
 
-    # One-time report after upgrading the watcher. Distinguishes a reachable page from
-    # a source that actually yielded TCG records, and shows a few currently public incoming signals.
-    if not state.get("source_report_sent"):
-        report_lines = ["This upgraded watcher filters to Pokémon Trading Card Game (TCG) products. Source reachability does not guarantee complete inventory coverage."]
+    # Versioned source report: resend once after the readable/color-coded report upgrade.
+    # Use Discord fields and separate embeds so source health is easy to scan.
+    if int(state.get("source_report_version", 0) or 0) < 2:
+        scan_products = [p for items in current_products_by_store.values() for p in items]
+        scan_tcg_count = len(scan_products)
+        scan_orderable = sum(1 for p in scan_products if p.get("available") is True)
+        scan_preorder = sum(1 for p in scan_products if p.get("preorder") or p.get("incoming_signal") == "UPCOMING_OR_PREORDER")
+        scan_transit = sum(1 for p in scan_products if p.get("incoming_signal") == "IN_TRANSIT")
+        reachable_retailers = sum(1 for _, _, healthy in store_counts.values() if healthy)
+        known_retailers = len(STORES)
+        restock_total = int(metrics.get("total_restock_signals", 0) or 0)
+        now_text = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+
+        summary = {
+            "title": "🛰️ Pokémon TCG Drop Radar · Scan Summary",
+            "description": (
+                f"**Scan time:** {now_text}\n"
+                f"**Retailer coverage:** {reachable_retailers}/{known_retailers} sources responded on this run\n\n"
+                "This report covers Pokémon TCG products only. A page being reachable does not guarantee its entire catalogue was exposed to the watcher."
+            ),
+            "color": 0x5865F2,
+            "fields": [
+                {"name": "TCG listings parsed", "value": str(scan_tcg_count), "inline": True},
+                {"name": "Marked orderable", "value": str(scan_orderable), "inline": True},
+                {"name": "Preorder / upcoming signals", "value": str(scan_preorder), "inline": True},
+                {"name": "Explicit in-transit claims", "value": str(scan_transit), "inline": True},
+                {"name": "Restock signals this scan", "value": str(run_metrics["restock"]), "inline": True},
+                {"name": "Restock signals detected since tracking began", "value": str(restock_total), "inline": True},
+                {"name": "Physical units / branch totals", "value": "Not available unless retailer publishes them", "inline": False},
+            ],
+            "footer": {"text": "Counts are public-page signals, not guaranteed stock or inventory quantities."},
+        }
+        report_embeds: list[dict[str, Any]] = [summary]
+
         for store in STORES:
             count, available_count, healthy = store_counts.get(store["key"], (0, 0, False))
-            health = "page(s) fetched" if healthy else "NOT REACHABLE this run"
-            report_lines.append(f"**{store['name']}:** {count} TCG item(s) parsed; {available_count} marked orderable; {health}.")
-            if healthy and count == 0 and store.get("html_urls"):
-                report_lines.append("  _No matching product links were parsed from this public HTML page; listings may be dynamically rendered and may need a site-specific adapter._")
+            items = current_products_by_store.get(store["key"], [])
+            upcoming_count = sum(1 for p in items if p.get("preorder") or p.get("incoming_signal") == "UPCOMING_OR_PREORDER")
+            transit_count = sum(1 for p in items if p.get("incoming_signal") == "IN_TRANSIT")
+            eta_count = sum(1 for p in items if p.get("arrival_date"))
+            if not healthy:
+                status_label, color = "🔴 NOT REACHABLE on this scan", 0xE74C3C
+            elif count == 0:
+                status_label, color = "🟡 PAGE RESPONDED · NO TCG ITEMS PARSED", 0xF1C40F
+            else:
+                status_label, color = "🟢 TCG LISTINGS PARSED", 0x2ECC71
+            report_embeds.append({
+                "title": f"{('🟢' if healthy and count else '🟡' if healthy else '🔴')} {store['name']}",
+                "url": store.get("collection_url"),
+                "description": f"**Status:** {status_label}\n**Coverage method:** {store.get('coverage', 'Public page checks only')}",
+                "color": color,
+                "fields": [
+                    {"name": "TCG listings parsed", "value": str(count), "inline": True},
+                    {"name": "Marked orderable", "value": str(available_count), "inline": True},
+                    {"name": "Preorder / upcoming", "value": str(upcoming_count), "inline": True},
+                    {"name": "Explicit in-transit claims", "value": str(transit_count), "inline": True},
+                    {"name": "Listings with a date phrase", "value": str(eta_count), "inline": True},
+                    {"name": "Branch-by-branch stock", "value": "Not published by this adapter", "inline": True},
+                    {"name": "Physical unit count", "value": "Not exposed by monitored public page", "inline": False},
+                ],
+                "footer": {"text": "0 parsed listings does not mean the store has zero stock; its page may need a different adapter."},
+            })
+
         for source in OFFICIAL_NEWS_SOURCES:
-            health = state["official_source_health"].get(source["key"]) is True
+            healthy = state["official_source_health"].get(source["key"]) is True
             matched = official_news_counts.get(source["key"], 0)
-            report_lines.append(f"**{source['name']}:** {'page fetched' if health else 'NOT REACHABLE this run'}; {matched} product/release item(s) matched; news only, not retailer stock.")
-        incoming_records = [p for p in state["products"].values() if p.get("incoming_signal") in ("IN_TRANSIT", "UPCOMING_OR_PREORDER")]
-        incoming_records.sort(key=lambda p: (0 if p.get("incoming_signal") == "IN_TRANSIT" else 1, p.get("store", ""), p.get("title", "")))
-        if incoming_records:
-            report_lines.append("\n**Existing public incoming/pre-order signals (not necessarily new drops):**")
-            for product in incoming_records[:8]:
-                kind = "IN TRANSIT claim" if product.get("incoming_signal") == "IN_TRANSIT" else "upcoming/pre-order"
-                date_text = f" · {product.get('arrival_date')}" if product.get("arrival_date") else ""
-                report_lines.append(f"• **{kind} · {product.get('store', 'Source')}** — [{product.get('title', 'Pokémon TCG product')}]({product.get('url')}){date_text}")
-        report_lines.append("\n**Limits:** only publicly visible page text and links are checked. Private distributor/warehouse shipment data is not accessible. A pre-order/release date is not proof a shipment is physically in transit.")
-        source_report = {
-            "title": "🛰️ Pokémon TCG Drop Radar — source coverage report",
-            "description": "\n".join(report_lines)[:4000],
-            "color": 0x5865F2,
-        }
-        send_discord(session, [source_report])
+            report_embeds.append({
+                "title": "🟣 Official Pokémon TCG Asia news",
+                "url": source["url"],
+                "description": (
+                    f"**Status:** {'🟢 Page fetched' if healthy else '🔴 Not reachable this scan'}\n"
+                    f"**Product/release news links matched:** {matched}\n\n"
+                    "Official news can help identify upcoming sets, but it does not confirm Philippine retailer stock or branch allocation."
+                ),
+                "color": 0x8E44AD,
+                "fields": [
+                    {"name": "Counts as local stock?", "value": "No — announcement/news source only", "inline": True},
+                    {"name": "Branch availability", "value": "Not provided by official news page", "inline": True},
+                ],
+            })
+
+        incoming_items = [p for p in scan_products if p.get("incoming_signal") in ("IN_TRANSIT", "UPCOMING_OR_PREORDER") or p.get("preorder")]
+        incoming_items.sort(key=lambda p: (0 if p.get("incoming_signal") == "IN_TRANSIT" else 1, str(p.get("store", "")), str(p.get("title", "")).casefold()))
+        if incoming_items:
+            lines = []
+            for product in incoming_items[:12]:
+                signal = product.get("incoming_signal")
+                if signal == "IN_TRANSIT":
+                    label = "🚚 IN TRANSIT (explicit wording)"
+                elif product.get("preorder"):
+                    label = "📅 PREORDER / UPCOMING"
+                else:
+                    label = "📦 UPCOMING SIGNAL"
+                eta = product.get("arrival_date") or "ETA not published"
+                link = product.get("url") or ""
+                title = str(product.get("title", "Pokémon TCG product"))[:120]
+                store_name = str(product.get("store", "Retailer"))
+                link_title = f"[{title}]({link})" if link else title
+                lines.append(f"**{label}** · {store_name}\n{link_title}\n**ETA/release date:** {eta} · **Branch allocation:** not published")
+            remaining = len(incoming_items) - min(len(incoming_items), 12)
+            if remaining:
+                lines.append(f"…plus {remaining} additional matching listing(s).")
+            report_embeds.append({
+                "title": "📦 Upcoming stock & shipment clues",
+                "description": "\n\n".join(lines)[:4000],
+                "color": 0xF39C12,
+                "footer": {"text": "An ETA/release date is shown only when parsed from public text. Preorder wording is not proof that a shipment is in transit."},
+            })
+        else:
+            report_embeds.append({
+                "title": "📦 Upcoming stock & shipment clues",
+                "description": "No public preorder, expected-arrival, or explicit in-transit signals matched the current scan. This does not rule out unpublished incoming inventory.",
+                "color": 0x95A5A6,
+            })
+
+        report_embeds.append({
+            "title": "ℹ️ How to read the numbers",
+            "description": (
+                "**Total restocks:** the watcher can count detected public-page transitions from unavailable/unknown to orderable, across scans. It cannot count physical units sold/restocked unless the retailer publishes a quantity.\n\n"
+                "**Branches:** current adapters do not provide reliable branch-by-branch stock. Branch names and quantities will not be guessed.\n\n"
+                "**Arrival dates:** displayed only when a retailer page explicitly provides a date phrase. ‘In transit’ is used only when the page explicitly says shipment/in-transit; it does not generate an invented ETA."
+            ),
+            "color": 0x34495E,
+        })
+        send_discord(session, report_embeds, content="🛰️ **Pokémon TCG Drop Radar — readable source report**\nColor key: 🟢 listings parsed · 🟡 page responded but no TCG listings parsed · 🔴 page unavailable · 🟣 official news only")
         state["source_report_sent"] = True
+        state["source_report_version"] = 2
 
     save_state(state)
     LOG.info("Scan complete: %s product(s) visible, %s currently marked orderable; %s product alert(s), %s announcement alert(s).",
