@@ -207,6 +207,13 @@ STORES: list[dict[str, Any]] = [
     },
 ]
 
+# Public retailer Facebook pages. Only publicly served HTML is read; this does not log in,
+# bypass access controls, or use private APIs. Meta may still rate-limit or hide posts.
+SOCIAL_PAGE_SOURCES: list[dict[str, str]] = [
+    {"key": "gameone_facebook", "name": "Game One PH Facebook", "url": "https://www.facebook.com/gameoneph/"},
+    {"key": "gameline_facebook", "name": "GameLine Philippines Facebook", "url": "https://www.facebook.com/gameline.ph/"},
+]
+
 OFFICIAL_NEWS_SOURCES: list[dict[str, str]] = [
     {
         "key": "pokemon_asia_news",
@@ -1870,6 +1877,79 @@ def scrape_announcements(session: requests.Session, store: dict[str, Any]) -> tu
     return list(all_items.values()), feed_success
 
 
+def parse_public_facebook_posts(page_html: str, page_url: str, source: dict[str, str]) -> list[dict[str, str]]:
+    """Extract relevant post links/text from public Facebook HTML when Facebook exposes it."""
+    soup = BeautifulSoup(page_html or "", "html.parser")
+    page_text = normalize_text(soup.get_text(" ", strip=True))
+    post_anchors: dict[str, dict[str, str]] = {}
+    post_path = re.compile(r"/(?:[^/]+/posts/\d+|permalink\.php|photo(?:\.php)?|videos/\d+|reel/\d+)", re.I)
+
+    for anchor in soup.find_all("a", href=True):
+        href = html.unescape(str(anchor.get("href", "")).strip())
+        absolute = urljoin("https://www.facebook.com/", href)
+        parsed = urlparse(absolute)
+        if _canonical_host(absolute) != "facebook.com" or not post_path.search(parsed.path):
+            continue
+        if re.search(r"/posts/\d+", parsed.path, re.I):
+            stable_url = f"https://www.facebook.com{parsed.path}"
+        else:
+            stable_url = absolute
+        node = anchor
+        context = ""
+        for _ in range(6):
+            if node is None:
+                break
+            candidate = clean_text(node.get_text(" ", strip=True))
+            if len(candidate) > len(context):
+                context = candidate
+            if len(candidate) >= 80:
+                break
+            node = getattr(node, "parent", None)
+        anchor_text = clean_text(anchor.get_text(" ", strip=True))
+        if len(context) < len(anchor_text):
+            context = anchor_text
+        generic_link_label = bool(re.fullmatch(
+            r"(?:view|see|read|watch|open)?\\s*(?:the )?(?:post|more|video|photo|on facebook)?\\s*",
+            anchor_text, re.I,
+        )) or anchor_text.casefold() in {"facebook", "view post", "see more", "read more", "watch video"}
+        title = (context[:250] if generic_link_label else anchor_text) or context[:180]
+        summary = context[:1000]
+        if not summary or not is_relevant_announcement(title, summary, stable_url):
+            continue
+        if not is_tcg_release_in_window(title, summary):
+            continue
+        post_anchors[stable_url] = {
+            "store_key": source["key"], "store": source["name"],
+            "title": title[:250] or "Pokémon TCG retailer announcement",
+            "url": stable_url, "published": "", "summary": summary, "feed": page_url,
+        }
+
+    if not post_anchors and any(term in page_text for term in (
+        "log in to facebook", "log into facebook", "you must log in", "temporarily blocked",
+        "content isn't available right now", "this content isn't available",
+    )):
+        LOG.warning("Facebook page %s returned a login/block shell; public posts could not be parsed this run", page_url)
+    return list(post_anchors.values())
+
+
+def scrape_public_facebook_page(session: requests.Session, source: dict[str, str]) -> tuple[list[dict[str, str]], bool]:
+    response = get_response(session, source["url"])
+    if response is None:
+        return [], False
+    items = parse_public_facebook_posts(response.text, source["url"], source)
+    soup = BeautifulSoup(response.text or "", "html.parser")
+    page_text = normalize_text(soup.get_text(" ", strip=True))
+    login_shell = any(term in page_text for term in (
+        "log in to facebook", "log into facebook", "you must log in", "temporarily blocked",
+        "content isn't available right now", "this content isn't available",
+    ))
+    has_post_links = bool(soup.find("a", href=re.compile(r"/(?:[^/]+/posts/|permalink\.php)", re.I)))
+    usable = bool(items) or (not login_shell and has_post_links)
+    LOG.info("Facebook source summary — %s: %s relevant post(s) parsed; public HTML usable=%s",
+             source["name"], len(items), usable)
+    return items, usable
+
+
 def parse_official_release_schedule(content: str, page_url: str, source: dict[str, str], today: date | None = None) -> list[dict[str, str]]:
     """Read explicitly dated Pokémon TCG entries from the official press release schedule.
 
@@ -2670,6 +2750,32 @@ def main() -> int:
                 if feed_already_initialized:
                     announcement_alerts.append(announcement_alert(item))
             state["initialized_feeds"][feed_url] = True
+
+    # Public Facebook page posts from Game One PH and GameLine. Facebook may serve login/block
+    # shells despite public visibility; do not pretend those runs had full coverage.
+    for source in SOCIAL_PAGE_SOURCES:
+        items, usable = scrape_public_facebook_page(session, source)
+        items = [
+            item for item in items
+            if not is_excluded_accessory_product(str(item.get("title", "")))
+            and is_tcg_release_in_window(str(item.get("title", "")), str(item.get("summary", "")))
+        ]
+        source_url = source["url"]
+        source_already_initialized = state["initialized_feeds"].get(source_url) is True
+        if not usable:
+            LOG.warning("Facebook source is not reliably readable this run: %s", source_url)
+            continue
+        for item in items:
+            key = announcement_state_key(source["key"], item["url"])
+            if key in state["announcements"]:
+                continue
+            state["announcements"][key] = {
+                "store": source["name"], "title": item["title"], "url": item["url"],
+                "published": item.get("published", ""), "first_seen": utc_now_iso(),
+            }
+            if source_already_initialized:
+                announcement_alerts.append(announcement_alert(item))
+        state["initialized_feeds"][source_url] = True
 
     # Official public sources: Asia/Philippines news, global release schedule, and official release articles.
     official_news_counts: dict[str, int] = {}
