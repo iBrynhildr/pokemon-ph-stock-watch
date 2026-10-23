@@ -197,6 +197,12 @@ KNOWN_TCG_SETS: tuple[tuple[str, str], ...] = tuple(sorted([
     ("first partner collection series 2", "First Partner Illustration Collection—Series 2"),
     ("first partner collection series 1", "First Partner Illustration Collection—Series 1"),
     ("mega greninja ex league battle deck", "Mega Greninja ex League Battle Deck"),
+    ("30th celebration knock out collection", "30th Celebration Knock Out Collection"),
+    ("30th celebration knockout collection", "30th Celebration Knock Out Collection"),
+    ("30th celebration knock out collection", "30th Celebration Knock Out Collection"),
+    ("30th celebration knockout collection", "30th Celebration Knock Out Collection"),
+    ("30th celebration binder collection", "30th Celebration Binder Collection"),
+    ("30th celebration figure collection mew mewtwo", "30th Celebration Figure Collection—Mew & Mewtwo"),
     ("30th celebration booster bundle", "30th Celebration Booster Bundle"),
     ("30th celebration ultra premium collection", "30th Celebration Ultra-Premium Collection"),
     ("30th celebration ditto premium collection", "30th Celebration Ditto Premium Collection"),
@@ -279,6 +285,7 @@ PRODUCT_TYPE_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("Booster Bundle", ("booster bundle", "bundle of booster")),
     ("Build & Battle Box", ("build & battle", "build and battle")),
     ("Premium Collection", ("premium collection",)),
+    ("Knock Out Collection", ("knock out collection", "knockout collection")),
     ("Collection Box", ("collection box", "special collection", "collection set")),
     ("Booster Pack", ("booster pack", "single booster", "booster (")),
     ("Blister Pack", ("3-pack blister", "three-pack blister", "blister pack", "checklane blister", "blister")),
@@ -511,6 +518,12 @@ def is_paid_event_listing(title: str, description: str = "", url: str = "") -> b
 
 
 def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: str) -> dict[str, Any] | None:
+    # User-requested exclusion; GameXtreme is not currently configured as a source.
+    if normalize_text(str(store.get("name", ""))).replace(" ", "") == "gamextreme":
+        return None
+    # User-requested exclusion; GameXtreme is not currently configured as a source.
+    if normalize_text(str(store.get("name", ""))).replace(" ", "") == "gamextreme":
+        return None
     title = clean_text(raw.get("title") or raw.get("name"))
     description = clean_text(raw.get("body_html") or raw.get("descriptionHtml") or raw.get("description") or raw.get("body"))
     tags = raw.get("tags", [])
