@@ -13,11 +13,11 @@ import re
 import sys
 import time
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import quote, urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -37,6 +37,9 @@ MAX_DISCORD_EMBEDS = 10
 MAX_DISCORD_EMBED_CHARS = 5_500
 MAX_STATE_PRODUCTS = 2500
 MAX_STATE_ANNOUNCEMENTS = 500
+
+# Explicit user-requested retailer exclusions; do not re-add these to source adapters.
+EXCLUDED_RETAILER_DOMAINS = {"gamextreme.ph", "www.gamextreme.ph"}
 
 STORES: list[dict[str, Any]] = [
     {
@@ -110,8 +113,10 @@ STORES: list[dict[str, Any]] = [
             ("Pokémon TCG collection", "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection"),
             ("Pokémon company collection", "https://ecommerce.datablitz.com.ph/collections/the-pokemon-company-international-inc/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/the-pokemon-company-international-inc"),
             ("Trading card collection", "https://ecommerce.datablitz.com.ph/collections/trading-card/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/trading-card"),
+            ("Knock Out Collection products", "https://ecommerce.datablitz.com.ph/collections/pokemon-trading-card-game-knock-out-collection/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/pokemon-trading-card-game-knock-out-collection"),
         ],
         "suggest_url": "https://ecommerce.datablitz.com.ph/search/suggest.json",
+        "suggest_queries": ["pokemon", "pokemon tcg", "30th celebration"],
         "feeds": [],
         "html_urls": [],
         "collection_url": "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection",
@@ -127,12 +132,30 @@ STORES: list[dict[str, Any]] = [
             ("Latest catalogue page", "https://gameline.ph/products.json?limit=250&page=1", "https://gameline.ph/collections/pokemon"),
         ],
         "suggest_url": "https://gameline.ph/search/suggest.json",
+        "suggest_queries": ["pokemon", "pokemon tcg", "30th celebration"],
         "feeds": [],
         "html_urls": [
-            ("Public Pokémon TCG product listings", "https://gameline.ph/search?q=pokemon+tcg&type=product"),
+            ("Public Pokémon TCG product search", "https://gameline.ph/search?q=pokemon+tcg&type=product"),
+            ("Public Pokémon product search", "https://gameline.ph/search?q=pokemon&type=product"),
         ],
         "collection_url": "https://gameline.ph/collections/pokemon",
         "coverage": "Public product JSON/search suggestions and server-rendered product links; coverage depends on public catalogue endpoints",
+    },
+    {
+        "key": "arken",
+        "name": "ARKEN",
+        "base": "https://arken.ph",
+        "catalog_urls": [],
+        "suggest_url": None,
+        "feeds": [],
+        "html_urls": [
+            ("Public Pokémon TCG category", "https://arken.ph/shop/cardzone/pokemon-trading-card-game-en/"),
+        ],
+        "detail_urls": [
+            ("30th Celebration Knock Out Collection preorder page", "https://arken.ph/shop/cardzone/pokemon-trading-card-game-en/pokemon-tcg-30th-celebration-knock-out-collection/"),
+        ],
+        "collection_url": "https://arken.ph/shop/cardzone/pokemon-trading-card-game-en/",
+        "coverage": "Public WooCommerce-style Pokémon TCG category plus a directly monitored 30th Celebration Knock Out Collection product page; only publicly visible product status is read",
     },
     {
         "key": "hobby_arena",
@@ -152,7 +175,20 @@ OFFICIAL_NEWS_SOURCES: list[dict[str, str]] = [
         "key": "pokemon_asia_news",
         "name": "Official Pokémon TCG Asia English / Philippines news",
         "url": "https://asia.pokemon-card.com/ph/info/",
-    }
+        "kind": "asia_news",
+    },
+    {
+        "key": "pokemon_global_news_archive",
+        "name": "Official Pokémon.com TCG news and product articles",
+        "url": "https://www.pokemon.com/us/articles",
+        "kind": "article_archive",
+    },
+    {
+        "key": "pokemon_global_release_schedule",
+        "name": "Official Pokémon TCG global product release schedule",
+        "url": "https://press.pokemon.com/en/Items/Schedule/Pokemon-Trading-Card-Game?types=3",
+        "kind": "release_schedule",
+    },
 ]
 
 POKEMON_RE = re.compile(r"pok[eé]mon", re.IGNORECASE)
@@ -161,6 +197,27 @@ CARD_TERMS = (
     "booster", "elite trainer", " etb", "blister", "premium collection",
     "ultra-premium", "ultra premium", "battle deck", "trainer toolkit",
     "pokemon card", "pokemon cards", "card game", "build & battle", "build and battle",
+    "knock out collection", "knockout collection", "figure collection", "poster collection",
+    "tech sticker collection", "binder collection", "card set", "deck crafter's collection",
+    "deck crafters collection", "special deck set",
+)
+# Certain sealed TCG products are sometimes titled without the words Pokémon or TCG.
+# These exact product-name markers let the watcher retain those listings while keeping
+# general Pokémon toys/figures outside the TCG filter.
+KNOWN_TCG_PRODUCT_MARKERS = (
+    "30th celebration knock out collection", "30th celebration knockout collection",
+    "30th celebration elite trainer box", "30th celebration pokemon center elite trainer box",
+    "30th celebration poster collection", "30th celebration tech sticker collection",
+    "30th celebration pokemon ex box", "30th celebration ex box", "30th celebration booster bundle",
+    "30th celebration battle deck", "30th celebration mini tin", "30th celebration ex tin",
+    "30th celebration ditto premium collection", "30th celebration ultra-premium collection",
+    "30th celebration ultra premium collection", "30th celebration figure collection",
+    "30th celebration binder collection",
+    "30th celebration card set", "mega 30th celebration card set",
+    "deck crafter's collection", "deck crafters collection",
+    "mega evolution delta reign", "delta reign build & battle", "delta reign build and battle",
+    "mega greninja ex league battle deck", "first partner illustration collection",
+    "focused fighters premium collection", "special deck set with mega feraligatr",
 )
 PREORDER_TERMS = (
     "pre-order", "pre order", "preorder", "preorders", "pre-orders", "reserve now",
@@ -197,17 +254,27 @@ KNOWN_TCG_SETS: tuple[tuple[str, str], ...] = tuple(sorted([
     ("first partner collection series 2", "First Partner Illustration Collection—Series 2"),
     ("first partner collection series 1", "First Partner Illustration Collection—Series 1"),
     ("mega greninja ex league battle deck", "Mega Greninja ex League Battle Deck"),
-    ("30th celebration knock out collection", "30th Celebration Knock Out Collection"),
-    ("30th celebration knockout collection", "30th Celebration Knock Out Collection"),
-    ("30th celebration knock out collection", "30th Celebration Knock Out Collection"),
-    ("30th celebration knockout collection", "30th Celebration Knock Out Collection"),
-    ("30th celebration binder collection", "30th Celebration Binder Collection"),
-    ("30th celebration figure collection mew mewtwo", "30th Celebration Figure Collection—Mew & Mewtwo"),
     ("30th celebration booster bundle", "30th Celebration Booster Bundle"),
     ("30th celebration ultra premium collection", "30th Celebration Ultra-Premium Collection"),
     ("30th celebration ditto premium collection", "30th Celebration Ditto Premium Collection"),
+    ("30th celebration figure collection mew and mewtwo", "30th Celebration Figure Collection—Mew & Mewtwo"),
+    ("30th celebration figure collection", "30th Celebration Figure Collection"),
+    ("30th celebration ultra premium collection day and night", "30th Celebration Ultra-Premium Collection—Day & Night"),
+    ("30th celebration ultra premium collection", "30th Celebration Ultra-Premium Collection"),
+    ("30th celebration elite trainer box", "30th Celebration Elite Trainer Box"),
+    ("30th celebration pokemon center elite trainer box", "30th Celebration Pokémon Center Elite Trainer Box"),
+    ("30th celebration poster collection", "30th Celebration Poster Collection"),
+    ("30th celebration tech sticker collection", "30th Celebration Tech Sticker Collection"),
+    ("30th celebration knock out collection", "30th Celebration Knock Out Collection"),
+    ("30th celebration knockout collection", "30th Celebration Knock Out Collection"),
+    ("30th celebration pokemon ex box", "30th Celebration Pokémon ex Box"),
+    ("30th celebration ex box", "30th Celebration Pokémon ex Box"),
+    ("30th celebration binder collection", "30th Celebration Binder Collection"),
+    ("30th celebration battle deck espeon ex umbreon ex", "30th Celebration Battle Deck—Espeon ex & Umbreon ex"),
     ("30th celebration battle deck", "30th Celebration Battle Deck"),
     ("30th celebration mini tin", "30th Celebration Mini Tin"),
+    ("30th celebration booster bundle", "30th Celebration Booster Bundle"),
+    ("30th celebration ex tin", "30th Celebration ex Tin"),
     ("30th celebration tin", "30th Celebration Tin"),
     ("delta reign", "Mega Evolution—Delta Reign"),
     ("aura seeker", "Japanese Pokémon TCG—Aura Seeker"),
@@ -279,13 +346,20 @@ KNOWN_TCG_SETS: tuple[tuple[str, str], ...] = tuple(sorted([
 ], key=lambda pair: len(pair[0]), reverse=True))
 
 PRODUCT_TYPE_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("Knock Out Collection", ("knock out collection", "knockout collection")),
+    ("Deck Crafter's Collection", ("deck crafter's collection", "deck crafters collection")),
     ("Ultra-Premium Collection", ("ultra-premium collection", "ultra premium collection", "upc")),
     ("Elite Trainer Box (ETB)", ("elite trainer box", " etb", "etb ")),
     ("Booster Display / Booster Box", ("booster display", "booster box", "booster box display", "display box")),
     ("Booster Bundle", ("booster bundle", "bundle of booster")),
     ("Build & Battle Box", ("build & battle", "build and battle")),
+    ("Figure Collection", ("figure collection",)),
+    ("Poster Collection", ("poster collection",)),
+    ("Tech Sticker Collection", ("tech sticker collection",)),
+    ("Binder Collection", ("binder collection",)),
+    ("Card Set / Illustration Collection", ("card set", "illustration collection", "first partner collection")),
+    ("Ditto Premium Collection", ("ditto premium collection",)),
     ("Premium Collection", ("premium collection",)),
-    ("Knock Out Collection", ("knock out collection", "knockout collection")),
     ("Collection Box", ("collection box", "special collection", "collection set")),
     ("Booster Pack", ("booster pack", "single booster", "booster (")),
     ("Blister Pack", ("3-pack blister", "three-pack blister", "blister pack", "checklane blister", "blister")),
@@ -317,7 +391,9 @@ def clean_text(value: Any) -> str:
     if isinstance(value, list):
         value = ", ".join(str(x) for x in value)
     text_value = html.unescape(str(value))
-    text_value = BeautifulSoup(text_value, "html.parser").get_text(" ", strip=True)
+    # Avoid treating ordinary URL-containing text as markup; parse only if it looks like HTML.
+    if re.search(r"</?[A-Za-z][^>]*>", text_value):
+        text_value = BeautifulSoup(text_value, "html.parser").get_text(" ", strip=True)
     return re.sub(r"\s+", " ", text_value).strip()
 
 
@@ -327,7 +403,9 @@ def normalize_text(value: str) -> str:
 
 def is_tcg_product(title: str, description: str = "", tags: Any = None) -> bool:
     combined = normalize_text(" ".join([title or "", description or "", clean_text(tags)]))
-    return bool(POKEMON_RE.search(combined) and any(term in combined for term in CARD_TERMS))
+    if POKEMON_RE.search(combined) and any(term in combined for term in CARD_TERMS):
+        return True
+    return any(marker in combined for marker in KNOWN_TCG_PRODUCT_MARKERS)
 
 
 def is_preorder(text: str) -> bool:
@@ -439,11 +517,44 @@ def lifecycle_status(product: dict[str, Any]) -> tuple[str, int, str]:
     return "UNKNOWN / NOT EXPOSED", 0x95A5A6, "The public page does not expose enough information to confirm stock status."
 
 
+def preorder_status_bucket(product: dict[str, Any] | None) -> str | None:
+    """Classify a public preorder status for transition alerts, conservatively."""
+    if not product:
+        return None
+    text_value = normalize_text(str(product.get("signal_text", "")))
+    has_preorder_context = bool(product.get("preorder")) or any(
+        term in text_value for term in ("pre-order", "pre order", "preorder", "down payment", "reservation")
+    )
+    if not has_preorder_context:
+        return None
+    if any(re.search(pattern, text_value, re.I) for pattern in CLOSED_STATUS_PATTERNS) or product.get("available") is False:
+        return "CLOSED / UNAVAILABLE"
+    if product.get("available") is True:
+        return "OPEN / ORDERABLE"
+    return "STATUS UNCLEAR"
+
+
+def extract_date_from_text(text_value: str) -> date | None:
+    """Parse a month/day/year release date when explicitly present in public text."""
+    value = clean_text(text_value)
+    match = re.search(
+        r"\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+([0-9]{1,2}),?\s+([0-9]{4})\b",
+        value, re.I,
+    )
+    if not match:
+        return None
+    try:
+        return datetime.strptime(f"{match.group(1)} {match.group(2)} {match.group(3)}", "%B %d %Y").date()
+    except ValueError:
+        return None
+
+
 def extract_arrival_date(text: str) -> str | None:
     """Return a date phrase from a listing, without inventing a year or timezone."""
     value = clean_text(text)
     date_phrase = r"([A-Za-z]{3,9}[ ]+\d{4}|[A-Za-z]{3,9}[ ]+\d{1,2}(?!\d)(?:,?[ ]+\d{4})?|\d{4}-\d{2}-\d{2})"
     patterns = (
+        r"\bavailable(?: on| from)?[ ]*[:：-]?[ ]*" + date_phrase,
         r"\b(?:expected|estimated|est\.?|estd\.?)[ ]+(?:arrival|release)[ ]*[:：-]?[ ]*" + date_phrase,
         r"\b(?:arrival|release)[ ]+date[ ]*[:：-]?[ ]*(?:estimated?\.?[ ]+|est\.?[ ]+)?" + date_phrase,
         r"\b(?:est\.?[ ]+arrival|est\.?[ ]+release|arriving|release)[ ]*[:：-]?[ ]*" + date_phrase,
@@ -518,11 +629,9 @@ def is_paid_event_listing(title: str, description: str = "", url: str = "") -> b
 
 
 def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: str) -> dict[str, Any] | None:
-    # User-requested exclusion; GameXtreme is not currently configured as a source.
-    if normalize_text(str(store.get("name", ""))).replace(" ", "") == "gamextreme":
-        return None
-    # User-requested exclusion; GameXtreme is not currently configured as a source.
-    if normalize_text(str(store.get("name", ""))).replace(" ", "") == "gamextreme":
+    store_domain = urlparse(str(store.get("base", ""))).netloc.casefold()
+    if store_domain in EXCLUDED_RETAILER_DOMAINS:
+        LOG.debug("Ignoring explicitly excluded retailer domain: %s", store_domain)
         return None
     title = clean_text(raw.get("title") or raw.get("name"))
     description = clean_text(raw.get("body_html") or raw.get("descriptionHtml") or raw.get("description") or raw.get("body"))
@@ -663,35 +772,132 @@ def products_from_json_response(data: Any) -> list[dict[str, Any]] | None:
     return None
 
 
+def _jsonld_product_objects(value: Any) -> list[dict[str, Any]]:
+    """Recursively find Product nodes in JSON-LD graphs and ItemLists."""
+    found: list[dict[str, Any]] = []
+    if isinstance(value, dict):
+        kind = value.get("@type", [])
+        kinds = [kind] if isinstance(kind, str) else kind if isinstance(kind, list) else []
+        if any(str(item).casefold() in ("product", "productmodel", "productgroup") for item in kinds):
+            found.append(value)
+        for key, child in value.items():
+            if key in ("@context",):
+                continue
+            found.extend(_jsonld_product_objects(child))
+    elif isinstance(value, list):
+        for child in value:
+            found.extend(_jsonld_product_objects(child))
+    return found
+
+
+def parse_jsonld_product_records(store: dict[str, Any], page_url: str, source_name: str, content: str) -> list[dict[str, Any]]:
+    """Extract public Product structured-data records when product cards omit readable links."""
+    soup = BeautifulSoup(content, "html.parser")
+    records: dict[str, dict[str, Any]] = {}
+    base_domain = urlparse(store["base"]).netloc.casefold()
+    for script in soup.select('script[type="application/ld+json"]'):
+        raw_json = script.string or script.get_text(" ", strip=True)
+        if not raw_json:
+            continue
+        try:
+            data = json.loads(raw_json)
+        except (ValueError, TypeError):
+            continue
+        for node in _jsonld_product_objects(data):
+            title = clean_text(node.get("name") or node.get("alternateName"))
+            if not title:
+                continue
+            raw_url = node.get("url") or node.get("@id") or ""
+            if isinstance(raw_url, dict):
+                raw_url = raw_url.get("@id", "")
+            absolute_url = urljoin(page_url, str(raw_url)) if raw_url else ""
+            if not absolute_url or urlparse(absolute_url).netloc.casefold() != base_domain:
+                continue
+            if not re.search(r"/(?:products?|listings?)/[^/?#]+", urlparse(absolute_url).path, re.I):
+                continue
+            offers = node.get("offers", {})
+            if isinstance(offers, list):
+                offers = offers[0] if offers else {}
+            if not isinstance(offers, dict):
+                offers = {}
+            availability_text = clean_text(offers.get("availability") or node.get("availability"))
+            available: bool | None = None
+            if re.search(r"instock|limitedavailability|preorder", availability_text, re.I):
+                available = True
+            elif re.search(r"outofstock|soldout|discontinued", availability_text, re.I):
+                available = False
+            price = offers.get("price") or offers.get("lowPrice") or node.get("price")
+            desc = clean_text(node.get("description"))
+            if availability_text:
+                desc = f"{desc} Public structured availability: {availability_text}".strip()
+            raw = {
+                "title": title,
+                "description": desc,
+                "handle": urlparse(absolute_url).path.rstrip("/").split("/")[-1],
+                "url": absolute_url,
+                "price": price,
+                "available": available,
+                "sku": node.get("sku"),
+            }
+            item = normalize_product(store, raw, source_name)
+            if item:
+                records[item["handle"]] = merge_product(records.get(item["handle"]), item)
+    return list(records.values())
+
+
+def _card_title(anchor: Any, card: Any, href: str) -> str:
+    title = clean_text(anchor.get_text(" ", strip=True))
+    if title:
+        return title
+    for selector in (
+        "h2", "h3", "h4", ".product-card__title", ".product-title", ".product__title",
+        ".product-name", ".card__heading", "[itemprop='name']", "[data-product-title]",
+    ):
+        node = card.select_one(selector) if hasattr(card, "select_one") else None
+        if node:
+            title = clean_text(node.get("content") or node.get("data-product-title") or node.get_text(" ", strip=True))
+            if title:
+                return title
+    img = anchor.find("img") or (card.find("img") if hasattr(card, "find") else None)
+    title = clean_text(img.get("alt") if img else "")
+    if title:
+        return title
+    match = re.search(r"/(?:products?|listings?)/([^/?#]+)", href)
+    return match.group(1).replace("-", " ") if match else ""
+
+
 def parse_html_product_cards(store: dict[str, Any], page_url: str, source_name: str, content: str) -> list[dict[str, Any]]:
     soup = BeautifulSoup(content, "html.parser")
     records: dict[str, dict[str, Any]] = {}
+    # Structured Product JSON-LD often survives even when the visible storefront uses client rendering.
+    for item in parse_jsonld_product_records(store, page_url, source_name, content):
+        records[item["handle"]] = merge_product(records.get(item["handle"]), item)
+
     for anchor in soup.select('a[href]'):
         raw_href = anchor.get("href", "")
-        if not re.search(r"/(?:products?|listings)/[^/?#]+", raw_href, re.I):
+        standard_product_path = re.search(r"/(?:products?|listings?)/[^/?#]+", raw_href, re.I)
+        arken_tcg_path = (
+            store.get("key") == "arken"
+            and re.search(r"/shop/cardzone/pokemon-trading-card-game-en/[^/?#]+", raw_href, re.I)
+        )
+        if not standard_product_path and not arken_tcg_path:
             continue
         href = urljoin(page_url, raw_href)
-        if urlparse(href).netloc != urlparse(store["base"]).netloc:
+        if urlparse(href).netloc.casefold() != urlparse(store["base"]).netloc.casefold():
             continue
         handle = urlparse(href).path.rstrip("/").split("/")[-1]
         if not handle:
             continue
         parent = anchor
-        # Product-card containers differ by theme; inspect a few ancestors only.
-        for _ in range(5):
+        for _ in range(7):
             if parent.parent is None:
                 break
             parent = parent.parent
-            if parent.name in ("article", "li") or any("product" in str(c).lower() or "card" in str(c).lower() for c in parent.get("class", [])):
+            classes = " ".join(str(c) for c in parent.get("class", []))
+            if parent.name in ("article", "li") or any(word in classes.casefold() for word in ("product", "card", "listing", "grid-item")):
                 break
-        title = clean_text(anchor.get_text(" ", strip=True))
-        if not title:
-            img = anchor.find("img")
-            title = clean_text(img.get("alt") if img else "")
+        title = _card_title(anchor, parent, href)
         card_text = clean_text(parent.get_text(" ", strip=True))
-        if not title:
-            match = re.search(r"/(?:products?|listings)/([^/?#]+)", href)
-            title = match.group(1).replace("-", " ") if match else ""
         available: bool | None = None
         if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", card_text, re.I):
             available = False
@@ -711,6 +917,66 @@ def parse_html_product_cards(store: dict[str, Any], page_url: str, source_name: 
             records[item["handle"]] = merge_product(records.get(item["handle"]), item)
     return list(records.values())
 
+def parse_html_product_detail_page(store: dict[str, Any], page_url: str, source_name: str, content: str) -> list[dict[str, Any]]:
+    """Parse one known public product detail page where category cards are not enough."""
+    soup = BeautifulSoup(content, "html.parser")
+    title_node = soup.find("h1") or soup.find("meta", property="og:title")
+    if title_node is None:
+        return []
+    title = clean_text(title_node.get("content") if title_node.name == "meta" else title_node.get_text(" ", strip=True))
+    if not title:
+        return []
+
+    description_parts: list[str] = []
+    for selector in (
+        ".woocommerce-product-details__short-description",
+        ".woocommerce-Tabs-panel--description",
+        "#tab-description",
+        ".summary",
+        "[itemprop='description']",
+        "meta[name='description']",
+    ):
+        for node in soup.select(selector):
+            text_value = clean_text(node.get("content") if node.name == "meta" else node.get_text(" ", strip=True))
+            if text_value and text_value not in description_parts:
+                description_parts.append(text_value)
+    description = " ".join(description_parts)
+    page_text = clean_text(soup.get_text(" ", strip=True))
+    if not description:
+        # Restrict fallback text to the product panel where possible, to avoid navigation noise.
+        main_node = soup.select_one(".product, .product-template, main, #primary") or soup.body
+        description = clean_text(main_node.get_text(" ", strip=True)) if main_node else page_text
+
+    price_value = None
+    for selector in (
+        "meta[property='product:price:amount']", "meta[itemprop='price']", "[itemprop='price']",
+        ".summary .price", ".product .price", ".woocommerce-Price-amount",
+    ):
+        node = soup.select_one(selector)
+        if node:
+            price_value = node.get("content") or node.get_text(" ", strip=True)
+            if price_value:
+                break
+    signal_text = f"{title} {description}"
+    available: bool | None = None
+    if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", signal_text, re.I):
+        available = False
+    elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to cart|buy now|in stock|on hand)\b", signal_text, re.I):
+        available = True
+
+    path_parts = [part for part in urlparse(page_url).path.rstrip("/").split("/") if part]
+    handle = path_parts[-1] if path_parts else page_url
+    raw = {
+        "title": title,
+        "handle": handle,
+        "url": page_url,
+        "description": description[:5000],
+        "available": available,
+        "price": price_value,
+    }
+    item = normalize_product(store, raw, source_name)
+    return [item] if item else []
+
 
 def scrape_catalog_url(session: requests.Session, store: dict[str, Any], endpoint: tuple[str, str, str]) -> tuple[list[dict[str, Any]], bool]:
     source_name, api_url, fallback_url = endpoint
@@ -725,7 +991,9 @@ def scrape_catalog_url(session: requests.Session, store: dict[str, Any], endpoin
                     item = normalize_product(store, raw, source_name)
                     if item:
                         normalized[item["handle"]] = merge_product(normalized.get(item["handle"]), item)
-                return list(normalized.values()), True
+                if normalized:
+                    return list(normalized.values()), True
+                LOG.debug("Catalogue JSON from %s returned no matching TCG products; trying public HTML fallback", api_url)
             LOG.warning("Unexpected catalogue JSON format from %s", api_url)
         except (ValueError, TypeError):
             LOG.warning("Non-JSON response from catalogue endpoint %s", api_url)
@@ -738,34 +1006,45 @@ def scrape_catalog_url(session: requests.Session, store: dict[str, Any], endpoin
 
 
 def scrape_search_suggestions(session: requests.Session, store: dict[str, Any]) -> tuple[list[dict[str, Any]], bool]:
-    params = {
-        "q": "pokemon",
-        "resources[type]": "product",
-        "resources[limit]": "25",
-        "resources[options][unavailable_products]": "show",
-    }
-    response = get_response(session, store["suggest_url"], params=params)
-    if response is None:
-        # An ordinary public search page is the fallback; a missing endpoint isn't fatal.
-        search_url = f"{store['base']}/search?q=pokemon&type=product"
+    queries = store.get("suggest_queries") or ["pokemon"]
+    normalized: dict[str, dict[str, Any]] = {}
+    had_success = False
+    for query in queries:
+        params = {
+            "q": str(query),
+            "resources[type]": "product",
+            "resources[limit]": "25",
+            "resources[options][unavailable_products]": "show",
+        }
+        response = get_response(session, store["suggest_url"], params=params)
+        if response is None:
+            continue
+        try:
+            data = response.json()
+        except ValueError:
+            continue
+        raw_products = products_from_json_response(data)
+        if raw_products is None:
+            continue
+        had_success = True
+        for raw in raw_products:
+            item = normalize_product(store, raw, f"Store search suggestions ({query})")
+            if item:
+                normalized[item["handle"]] = merge_product(normalized.get(item["handle"]), item)
+    if had_success:
+        return list(normalized.values()), True
+
+    # Last-resort public search HTML. Some storefronts return product cards only after a query.
+    for query in queries:
+        search_url = f"{store['base']}/search?q={quote(str(query))}&type=product"
         html_response = get_response(session, search_url)
         if html_response is None:
-            return [], False
-        return parse_html_product_cards(store, search_url, "Store search HTML fallback", html_response.text), True
-    try:
-        data = response.json()
-    except ValueError:
-        return [], False
-    raw_products = products_from_json_response(data)
-    if raw_products is None:
-        return [], False
-    normalized: dict[str, dict[str, Any]] = {}
-    for raw in raw_products:
-        item = normalize_product(store, raw, "Store search suggestions")
-        if item:
-            normalized[item["handle"]] = merge_product(normalized.get(item["handle"]), item)
-    return list(normalized.values()), True
-
+            continue
+        products = parse_html_product_cards(store, search_url, f"Store search HTML fallback ({query})", html_response.text)
+        if products:
+            normalized = {p["handle"]: merge_product(normalized.get(p["handle"]), p) for p in products}
+            return list(normalized.values()), True
+    return [], False
 
 def scrape_store_products(session: requests.Session, store: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], bool]:
     found: dict[str, dict[str, Any]] = {}
@@ -796,7 +1075,18 @@ def scrape_store_products(session: requests.Session, store: dict[str, Any]) -> t
             found[product["handle"]] = merge_product(found.get(product["handle"]), product)
         if not page_products:
             LOG.warning("Fetched %s but found no public HTML product links matching the Pokémon TCG filter; JavaScript-only listings may not be visible", page_url)
-
+    # Direct product details are useful for high-priority releases/preorders on stores
+    # whose category/product routing isn't compatible with the standard catalog parser.
+    for source_name, page_url in store.get("detail_urls", []):
+        response = get_response(session, page_url)
+        source_successes.append(response is not None)
+        if response is None:
+            continue
+        detail_products = parse_html_product_detail_page(store, page_url, source_name, response.text)
+        if not detail_products:
+            LOG.warning("Fetched %s but could not parse a matching public TCG product detail", page_url)
+        for product in detail_products:
+            found[product["handle"]] = merge_product(found.get(product["handle"]), product)
     # A source is healthy if at least one of its configured public paths could be read.
     return found, any(source_successes)
 
@@ -857,6 +1147,203 @@ def scrape_announcements(session: requests.Session, store: dict[str, Any]) -> tu
         for item in parse_feed_items(response.text, feed_url, store):
             all_items[item["url"]] = item
     return list(all_items.values()), feed_success
+
+
+def parse_official_release_schedule(content: str, page_url: str, source: dict[str, str], today: date | None = None) -> list[dict[str, str]]:
+    """Read explicitly dated Pokémon TCG entries from the official press release schedule.
+
+    Only a practical release window is returned: seven days in the past through 180 days
+    ahead. The resulting notices are global dates and never imply Philippine preorder stock.
+    """
+    today = today or datetime.now(timezone.utc).date()
+    soup = BeautifulSoup(content, "html.parser")
+    found: dict[str, dict[str, str]] = {}
+    for row in soup.select("tr"):
+        cells = row.find_all(["td", "th"], recursive=False) or row.find_all("td")
+        if len(cells) < 2:
+            continue
+        anchors = row.select("a[href]")
+        if not anchors:
+            continue
+        title = clean_text(anchors[0].get_text(" ", strip=True))
+        row_text = clean_text(row.get_text(" ", strip=True))
+        if not title or not is_tcg_product(title) or is_tournament_announcement(title):
+            continue
+        release_date = extract_date_from_text(row_text)
+        if release_date is None or release_date < today - timedelta(days=7) or release_date > today + timedelta(days=180):
+            continue
+        link = urljoin(page_url, anchors[0].get("href", ""))
+        if not link.startswith("https://press.pokemon.com/"):
+            link = page_url
+        key_url = link
+        item = {
+            "store_key": source["key"],
+            "store": source["name"],
+            "title": title[:250],
+            "url": key_url,
+            "published": "",
+            "release_date": release_date.strftime("%B %-d, %Y"),
+            "summary": f"Official global schedule release date: {release_date.strftime('%B %-d, %Y')}. This is not a confirmed Philippine retailer launch or preorder status.",
+            "feed": page_url,
+            "official_product_news": "true",
+            "official_source_type": "global_release_schedule",
+            "alert_on_first_scan": "true" if release_date >= today - timedelta(days=7) else "false",
+        }
+        found[key_url] = item
+    return list(found.values())
+
+
+def _article_date_near_anchor(anchor: Any) -> date | None:
+    node = anchor
+    for _ in range(5):
+        if node is None:
+            break
+        text_value = clean_text(node.get_text(" ", strip=True)) if hasattr(node, "get_text") else ""
+        parsed = extract_date_from_text(text_value)
+        if parsed and len(text_value) <= 500:
+            return parsed
+        node = getattr(node, "parent", None)
+    return None
+
+
+def discover_official_release_articles(content: str, page_url: str, source: dict[str, str], today: date | None = None) -> list[dict[str, str]]:
+    """Find recent official TCG product-release articles without following unrelated news."""
+    today = today or datetime.now(timezone.utc).date()
+    soup = BeautifulSoup(content, "html.parser")
+    patterns = (
+        "product release", "product showcase", "product lineup", "product line-up",
+        "new pokemon trading card game", "new pokemon tcg", "expansion brings", "expansion battle is coming",
+    )
+    found: dict[str, dict[str, str]] = {}
+    for anchor in soup.select("a[href]"):
+        title = clean_text(anchor.get_text(" ", strip=True))
+        href = urljoin(page_url, anchor.get("href", ""))
+        normalized_title = normalize_text(title)
+        if not title or "pokemon.com" not in urlparse(href).netloc.casefold():
+            continue
+        if not any(p in normalized_title for p in patterns):
+            continue
+        if "pocket" in normalized_title or is_tournament_announcement(title):
+            continue
+        if not re.search(r"/(?:us/)?(?:news|articles)/", urlparse(href).path, re.I):
+            continue
+        published_date = _article_date_near_anchor(anchor)
+        if published_date and published_date < today - timedelta(days=180):
+            continue
+        found[href] = {
+            "title": title[:250], "url": href,
+            "published": published_date.strftime("%B %-d, %Y") if published_date else "",
+        }
+    # Keep the most recent/relevant six article URLs. The article body is cached in state
+    # after its first fetch, so the five-minute stock loop doesn't repeatedly refetch static pages.
+    return list(found.values())[:6]
+
+
+def parse_official_release_article(content: str, article_url: str, source: dict[str, str], today: date | None = None) -> list[dict[str, str]]:
+    """Extract product headings and explicitly published dates from official TCG release articles."""
+    today = today or datetime.now(timezone.utc).date()
+    soup = BeautifulSoup(content, "html.parser")
+    root = soup.find("article") or soup.select_one("main") or soup.body or soup
+    headings = root.select("h2, h3, h4")
+    if not headings:
+        return []
+    result: dict[str, dict[str, str]] = {}
+    article_title = clean_text((soup.find("h1") or {}).get_text(" ", strip=True) if soup.find("h1") else "")
+    for heading in headings:
+        title = clean_text(heading.get_text(" ", strip=True))
+        if not title or normalize_text(title) == normalize_text(article_title):
+            continue
+        # The product heading itself should establish the TCG connection; nearby text can contain
+        # unrelated tournament wording and should not turn an event registration into a product.
+        if not is_tcg_product(title) or is_tournament_announcement(title):
+            continue
+        summary_parts: list[str] = []
+        for following in heading.find_all_next():
+            if following is not heading and following.name in ("h1", "h2", "h3", "h4"):
+                break
+            if following.name in ("p", "li"):
+                text_value = clean_text(following.get_text(" ", strip=True))
+                if text_value and text_value not in summary_parts:
+                    summary_parts.append(text_value)
+            if sum(len(part) for part in summary_parts) > 1200:
+                break
+        summary = " ".join(summary_parts)[:1200]
+        release_date = extract_date_from_text(summary) or extract_date_from_text(clean_text(heading.parent.get_text(" ", strip=True)))
+        if release_date and (release_date < today - timedelta(days=14) or release_date > today + timedelta(days=180)):
+            continue
+
+        heading_anchor = heading.find("a", href=True)
+        target_url = urljoin(article_url, heading_anchor.get("href", "")) if heading_anchor else article_url + "#" + re.sub(r"[^a-z0-9]+", "-", normalize_text(title)).strip("-")
+        full_summary = summary
+        if release_date:
+            date_text = release_date.strftime("%B %-d, %Y")
+            full_summary = (f"Official product article lists availability: {date_text}. " + summary).strip()
+        if not full_summary:
+            full_summary = "Official Pokémon TCG product information. Philippine preorder and retailer availability are not confirmed by this announcement."
+        item = {
+            "store_key": source["key"],
+            "store": source["name"],
+            "title": title[:250],
+            "url": target_url,
+            "published": "",
+            "release_date": release_date.strftime("%B %-d, %Y") if release_date else "",
+            "summary": full_summary[:1200],
+            "feed": article_url,
+            "official_product_news": "true",
+            "official_source_type": "global_release_article",
+            "alert_on_first_scan": "true" if release_date and release_date >= today else "false",
+        }
+        result[target_url] = item
+    return list(result.values())
+
+
+def scrape_official_source(session: requests.Session, source: dict[str, str], state: dict[str, Any] | None = None) -> tuple[list[dict[str, str]], bool]:
+    response = get_response(session, source["url"])
+    if response is None:
+        return [], False
+    kind = source.get("kind", "asia_news")
+    if kind == "release_schedule":
+        return parse_official_release_schedule(response.text, source["url"], source), True
+    if kind == "article_archive":
+        candidates = discover_official_release_articles(response.text, source["url"], source)
+        items: dict[str, dict[str, str]] = {}
+        cache: dict[str, list[dict[str, str]]] = {}
+        if state is not None:
+            existing_cache = state.setdefault("official_release_article_cache", {})
+            if isinstance(existing_cache, dict):
+                cache = existing_cache
+        for candidate in candidates:
+            cached = cache.get(candidate["url"])
+            if isinstance(cached, list):
+                for item in cached:
+                    if isinstance(item, dict) and item.get("url"):
+                        items[str(item["url"])] = item
+                continue
+            article_response = get_response(session, candidate["url"])
+            if article_response is None:
+                continue
+            article_items = parse_official_release_article(article_response.text, candidate["url"], source)
+            for item in article_items:
+                if not item.get("published"):
+                    item["published"] = candidate.get("published", "")
+            # Preserve an official release article even when the page has no product-level headings.
+            if not article_items:
+                normalized_title = normalize_text(candidate["title"])
+                if ("product release" in normalized_title or "product showcase" in normalized_title) and "pocket" not in normalized_title:
+                    item = {
+                        "store_key": source["key"], "store": source["name"],
+                        "title": candidate["title"], "url": candidate["url"],
+                        "published": candidate.get("published", ""),
+                        "summary": "Official Pokémon TCG release article. Open the original source for product and date details; this does not confirm Philippine retailer availability.",
+                        "feed": candidate["url"], "official_product_news": "true",
+                        "official_source_type": "global_release_article", "alert_on_first_scan": "false",
+                    }
+                    article_items = [item]
+            cache[candidate["url"]] = article_items
+            for item in article_items:
+                items[item["url"]] = item
+        return list(items.values()), True
+    return parse_official_product_news(response.text, source["url"], source), True
 
 
 def parse_official_product_news(content: str, page_url: str, source: dict[str, str]) -> list[dict[str, str]]:
@@ -925,6 +1412,7 @@ def default_state() -> dict[str, Any]:
         "source_report_sent": False,
         "source_report_version": 0,
         "official_source_health": {},
+        "official_release_article_cache": {},
         "metrics": {
             "total_restock_signals": 0,
             "total_new_orderable_listings": 0,
@@ -947,7 +1435,7 @@ def load_state() -> dict[str, Any]:
         if not isinstance(stored_metrics, dict):
             stored_metrics = {}
         base["metrics"].update(stored_metrics)
-        for key in ("initialized_stores", "store_health", "products", "initialized_feeds", "announcements", "official_source_health"):
+        for key in ("initialized_stores", "store_health", "products", "initialized_feeds", "announcements", "official_source_health", "official_release_article_cache"):
             if not isinstance(base.get(key), dict):
                 base[key] = {}
         return base
@@ -996,6 +1484,9 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
         "new_unknown": "🕵️ POSSIBLE STEALTH DROP — AVAILABILITY UNKNOWN",
         "restock": "🚨 POSSIBLE STEALTH DROP — RESTOCK SIGNAL",
         "preorder_flag": "📅 PRE-ORDER SIGNAL DETECTED",
+        "preorder_opened": "🟡 PRE-ORDER NOW OPEN",
+        "preorder_closed": "🔴 PRE-ORDER CLOSED / UNAVAILABLE",
+        "preorder_status_changed": "🔄 PRE-ORDER STATUS CHANGED",
         "in_transit": "🚚 RETAILER SAYS STOCK IS IN TRANSIT",
         "upcoming": "📦 UPCOMING TCG STOCK SIGNAL",
         "price_drop": "💸 TCG PRICE DROP",
@@ -1012,6 +1503,11 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
     description_parts = []
     if old and kind == "price_drop":
         description_parts.append(f"**Previous price:** {format_price(old.get('price'))}")
+    if old and kind in ("preorder_opened", "preorder_closed", "preorder_status_changed"):
+        previous_status = preorder_status_bucket(old) or "No prior preorder signal"
+        current_status = preorder_status_bucket(product) or "No longer marked as a preorder"
+        description_parts.append(f"**Preorder status change:** {previous_status} → {current_status}")
+        description_parts.append("Status change was inferred from public listing wording/availability; verify on the linked product page before ordering.")
     if product.get("signal_text"):
         description_parts.append(f"**Evidence from public page:** {product['signal_text'][:650]}")
     description_parts.append("This is a public-page signal, not access to private distributor or warehouse systems.")
@@ -1031,6 +1527,11 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
         {"name": "Total units", "value": "Not published by monitored page", "inline": True},
         {"name": "Source", "value": source_value[:1024], "inline": False},
     ]
+    if old and kind in ("preorder_opened", "preorder_closed", "preorder_status_changed"):
+        fields.extend([
+            {"name": "Previous preorder status", "value": preorder_status_bucket(old) or "No prior preorder signal", "inline": True},
+            {"name": "Current preorder status", "value": preorder_status_bucket(product) or "No longer marked as a preorder", "inline": True},
+        ])
     if kind == "restock":
         color = 0xE74C3C  # newly orderable transition worth checking immediately
     elif kind == "price_drop":
@@ -1051,16 +1552,19 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
 def announcement_alert(item: dict[str, str]) -> dict[str, Any]:
     is_official = item.get("official_product_news") == "true"
     title_prefix = "🟣 OFFICIAL POKÉMON TCG PRODUCT / RELEASE NEWS" if is_official else "📣 RETAILER-PUBLISHED TCG ANNOUNCEMENT"
-    note = (
-        "Official product/release news; this does not confirm Philippine retail stock."
-        if is_official else
-        "A retailer announcement was published. Open the original post to verify date, preorder status, and availability."
-    )
+    source_type = item.get("official_source_type", "")
+    if source_type == "global_release_schedule":
+        note = "Official global release schedule only. It is not confirmation of Philippine launch timing, local preorder availability, or store stock."
+    elif is_official:
+        note = "Official product/release news; this does not confirm Philippine retail stock or that local preorders are open."
+    else:
+        note = "A retailer announcement was published. Open the original post to verify date, preorder status, listed price, and availability."
+    release_date_label = "Official global release date" if source_type in ("global_release_schedule", "global_release_article") else "Release / ETA stated"
     fields = [
         {"name": "Set / expansion", "value": identify_set_name(item.get("title", "") + " " + item.get("summary", ""))[:1024], "inline": True},
         {"name": "Product format", "value": identify_product_type(item.get("title", ""), item.get("summary", ""))[:1024], "inline": True},
         {"name": "Source", "value": item.get("store", "Unknown source")[:1024], "inline": True},
-        {"name": "Published", "value": item.get("published") or "Date not provided in parsed page", "inline": True},
+        {"name": release_date_label if item.get("release_date") else "Published", "value": item.get("release_date") or item.get("published") or "Date not provided in parsed page", "inline": True},
         {"name": "What this confirms", "value": note, "inline": False},
     ]
     return {
@@ -1298,11 +1802,27 @@ def main() -> int:
 
             old_signal = old.get("incoming_signal")
             new_signal = product.get("incoming_signal")
-            # Only report a newly observed signal when the previous state already had
-            # this field, avoiding false alarms on migration from the earlier watcher.
+            old_preorder_status = preorder_status_bucket(old)
+            new_preorder_status = preorder_status_bucket(product)
+            if old_preorder_status is not None and new_preorder_status is None:
+                current_text = normalize_text(str(product.get("signal_text", "")))
+                if product.get("available") is False or any(re.search(pattern, current_text, re.I) for pattern in CLOSED_STATUS_PATTERNS):
+                    new_preorder_status = "CLOSED / UNAVAILABLE"
+                elif product.get("available") is True and any(re.search(pattern, current_text, re.I) for pattern in IN_STOCK_PATTERNS):
+                    new_preorder_status = "PRE-ORDER ENDED / ORDERABLE"
+            # Status changes take priority over generic restock signals so the Discord alert says
+            # explicitly when a preorder opens or closes instead of calling everything a restock.
             if "incoming_signal" in old and old_signal != "IN_TRANSIT" and new_signal == "IN_TRANSIT":
                 product_alerts.append(product_alert("in_transit", product, old))
                 run_metrics["in_transit"] += 1
+            elif old_preorder_status is not None and new_preorder_status is not None and old_preorder_status != new_preorder_status:
+                if new_preorder_status == "OPEN / ORDERABLE":
+                    product_alerts.append(product_alert("preorder_opened", product, old))
+                elif new_preorder_status == "CLOSED / UNAVAILABLE":
+                    product_alerts.append(product_alert("preorder_closed", product, old))
+                else:
+                    product_alerts.append(product_alert("preorder_status_changed", product, old))
+                run_metrics["preorder"] += 1
             elif "incoming_signal" in old and old_signal not in ("IN_TRANSIT", "UPCOMING_OR_PREORDER") and new_signal == "UPCOMING_OR_PREORDER":
                 product_alerts.append(product_alert("upcoming", product, old))
                 run_metrics["upcoming"] += 1
@@ -1310,8 +1830,12 @@ def main() -> int:
                     run_metrics["preorder"] += 1
             elif old.get("available") is not True and product.get("available") is True:
                 # Public page changed to an orderable state; this could be a restock/stealth drop.
-                product_alerts.append(product_alert("restock", product, old))
-                run_metrics["restock"] += 1
+                if new_preorder_status == "OPEN / ORDERABLE":
+                    product_alerts.append(product_alert("preorder_opened", product, old))
+                    run_metrics["preorder"] += 1
+                else:
+                    product_alerts.append(product_alert("restock", product, old))
+                    run_metrics["restock"] += 1
             elif old.get("preorder") is not True and product.get("preorder") is True:
                 product_alerts.append(product_alert("preorder_flag", product, old))
                 run_metrics["preorder"] += 1
@@ -1350,29 +1874,30 @@ def main() -> int:
                     announcement_alerts.append(announcement_alert(item))
             state["initialized_feeds"][feed_url] = True
 
-    # Official Pokémon TCG Asia / Philippines public product-news page.
+    # Official public sources: Asia/Philippines news, global release schedule, and official release articles.
     official_news_counts: dict[str, int] = {}
     for source in OFFICIAL_NEWS_SOURCES:
-        response = get_response(session, source["url"])
-        healthy = response is not None
+        items, healthy = scrape_official_source(session, source, state)
         prior_health = state["official_source_health"].get(source["key"])
         state["official_source_health"][source["key"]] = healthy
-        if response is None:
-            LOG.warning("Official news page could not be read: %s", source["url"])
+        if not healthy:
+            LOG.warning("Official release source could not be read: %s", source["url"])
             continue
-        items = parse_official_product_news(response.text, source["url"], source)
         official_news_counts[source["key"]] = len(items)
         page_already_initialized = state["initialized_feeds"].get(source["url"]) is True
-        LOG.info("Official news page fetched: %s product/release item(s) matched", len(items))
+        LOG.info("Official release source fetched (%s): %s relevant item(s) matched", source["key"], len(items))
         for item in items:
             key = announcement_state_key(source["key"], item["url"])
             if key in state["announcements"]:
                 continue
             state["announcements"][key] = {
                 "store": source["name"], "title": item["title"], "url": item["url"],
-                "published": item.get("published", ""), "first_seen": utc_now_iso(),
+                "published": item.get("published", ""), "release_date": item.get("release_date", ""),
+                "first_seen": utc_now_iso(),
             }
-            if page_already_initialized:
+            # New sources are baselined to avoid replaying old news. However, explicit future
+            # official release dates are useful immediately, so alert once when first discovered.
+            if page_already_initialized or item.get("alert_on_first_scan") == "true":
                 announcement_alerts.append(announcement_alert(item))
         state["initialized_feeds"][source["url"]] = True
 
@@ -1398,6 +1923,9 @@ def main() -> int:
         key=lambda pair: str(pair[1].get("first_seen", "")),
         reverse=True,
     )[:MAX_STATE_ANNOUNCEMENTS])
+    article_cache = state.get("official_release_article_cache", {})
+    if isinstance(article_cache, dict) and len(article_cache) > 30:
+        state["official_release_article_cache"] = dict(list(article_cache.items())[-30:])
 
     outbox = health_alerts + announcement_alerts + product_alerts
     if outbox:
@@ -1446,9 +1974,9 @@ def main() -> int:
         send_discord(session, [welcome])
         state["welcome_sent"] = True
 
-    # Versioned source report: resend when the lifecycle/set-status board is upgraded.
+    # Versioned source report: resend when source coverage/lifecycle tracking is upgraded.
     # Use Discord fields and separate embeds so source health is easy to scan.
-    if int(state.get("source_report_version", 0) or 0) < 3:
+    if int(state.get("source_report_version", 0) or 0) < 5:
         scan_products = [p for items in current_products_by_store.values() for p in items]
         scan_tcg_count = len(scan_products)
         scan_orderable = sum(1 for p in scan_products if p.get("available") is True)
@@ -1523,12 +2051,12 @@ def main() -> int:
             healthy = state["official_source_health"].get(source["key"]) is True
             matched = official_news_counts.get(source["key"], 0)
             report_embeds.append({
-                "title": "🟣 Official Pokémon TCG Asia news",
+                "title": f"🟣 {source['name']}",
                 "url": source["url"],
                 "description": (
                     f"**Status:** {'🟢 Page fetched' if healthy else '🔴 Not reachable this scan'}\n"
                     f"**Product/release news links matched:** {matched}\n\n"
-                    "Official news can help identify upcoming sets, but it does not confirm Philippine retailer stock or branch allocation."
+                    "Official release sources can identify sets, formats, and global dates. They do not confirm Philippine retailer stock, local preorder availability, or branch allocation."
                 ),
                 "color": 0x8E44AD,
                 "fields": [
@@ -1641,7 +2169,7 @@ def main() -> int:
         })
         send_discord(session, report_embeds, content="🛰️ **Pokémon TCG Drop Radar — readable source report**\nColor key: 🟢 listings parsed · 🟡 page responded but no TCG listings parsed · 🔴 page unavailable · 🟣 official news only")
         state["source_report_sent"] = True
-        state["source_report_version"] = 3
+        state["source_report_version"] = 5
 
     save_state(state)
     LOG.info("Scan complete: %s product(s) visible, %s currently marked orderable; %s product alert(s), %s announcement alert(s).",
