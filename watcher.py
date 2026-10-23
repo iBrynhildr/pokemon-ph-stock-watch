@@ -714,6 +714,82 @@ def identify_set_name(title: str, description: str = "") -> str:
     return not_found
 
 
+# Only alert on Pokémon TCG sets/products released from 2025 through the current year.
+# Longer names are checked first so a 2026 expansion such as Pitch Black is not
+# accidentally classified under the broader 2025 Mega Evolution set.
+SET_RELEASE_YEAR_ALIASES: tuple[tuple[str, int], ...] = tuple(sorted([
+    # 2026 sets and named TCG product releases
+    ("first partner illustration collection", 2026),
+    ("first partner collection", 2026),
+    ("focused fighters", 2026),
+    ("mega greninja ex league battle deck", 2026),
+    ("mega lucario ex league battle deck", 2026),
+    ("deck crafter's collection", 2026),
+    ("deck crafters collection", 2026),
+    ("30th celebration", 2026),
+    ("30th anniversary", 2026),
+    ("ascended heroes", 2026),
+    ("perfect order", 2026),
+    ("chaos rising", 2026),
+    ("pitch black", 2026),
+    ("delta reign", 2026),
+    ("aura seeker", 2026),
+    ("mega evolution", 2025),
+    # 2025 English-language sets
+    ("phantasmal flames", 2025),
+    ("destined rivals", 2025),
+    ("journey together", 2025),
+    ("prismatic evolutions", 2025),
+    ("black bolt", 2025),
+    ("white flare", 2025),
+    # 2025 Japanese-language sets/products that can appear in Philippine stores
+    ("battle partners", 2025),
+    ("heat wave arena", 2025),
+    ("glory of team rocket", 2025),
+    ("mega brave", 2025),
+    ("mega symphonia", 2025),
+    ("inferno x", 2025),
+    ("start deck 100 battle collection", 2025),
+], key=lambda pair: (pair[1], len(pair[0])), reverse=True))
+
+
+def tcg_set_release_year(set_name: str, title: str = "") -> int | None:
+    """Return a maintained release year for a named TCG set/product, else None.
+
+    This intentionally filters by the set/product's release year, not the retailer
+    listing date. A newly listed old set is still old; a 2025+ set can be restocked
+    even if the individual product page was created earlier.
+    """
+    normalized = normalize_text(f"{set_name or ''} {title or ''}")
+    normalized = normalized.replace("—", " ").replace("–", " ").replace("-", " ")
+    normalized = re.sub(r"[^a-z0-9& ]+", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    for phrase, year in SET_RELEASE_YEAR_ALIASES:
+        needle = normalize_text(phrase).replace("&", "and")
+        needle = re.sub(r"[^a-z0-9 ]+", " ", needle)
+        needle = re.sub(r"\s+", " ", needle).strip()
+        if re.search(r"(?<![a-z0-9])" + re.escape(needle) + r"(?![a-z0-9])", normalized):
+            return year
+    if re.search(r"\bworld championships? decks?\b", normalized):
+        year_match = re.search(r"\b(20\d{2})\b", normalized)
+        if year_match:
+            return int(year_match.group(1))
+    return None
+
+
+def is_tcg_release_in_window(title: str, description: str = "", release_date: str = "") -> bool:
+    """True only when a named TCG set/product has a 2025-through-current release year."""
+    set_name = identify_set_name(title, description)
+    year = tcg_set_release_year(set_name, title)
+    if year is None and release_date:
+        # The official schedule supplies an explicit product release date. Do not use
+        # a generic article publication date as a substitute for the set release year.
+        date_match = re.search(r"\b(20\d{2})\b", str(release_date))
+        if date_match and re.search(r"\b(?:pokemon|pokémon|tcg|trading card|booster|collection|deck|tin|blister)\b", normalize_text(title + " " + description)):
+            year = int(date_match.group(1))
+    return year is not None and 2025 <= year <= date.today().year
+
+
 def identify_product_type(title: str, description: str = "") -> str:
     """Best-effort classification of sealed Pokémon TCG product format."""
     normalized = normalize_text(f"{title} {description}")
@@ -916,6 +992,10 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
     matched_set_name = identify_set_name(title, description)
     if matched_set_name.startswith("Not explicit"):
         LOG.debug("Ignoring Pokémon TCG product without a specific set/release match: %s", title[:160])
+        return None
+    release_year = tcg_set_release_year(matched_set_name, title)
+    if release_year is None or not (2025 <= release_year <= date.today().year):
+        LOG.debug("Ignoring Pokémon TCG listing outside the 2025-present release window (year=%s): %s", release_year, title[:160])
         return None
     if is_paid_event_listing(title, description, str(raw.get("url") or raw.get("onlineStoreUrl") or "")):
         LOG.debug("Ignoring Pokémon TCG event/registration listing: %s", title[:160])
@@ -2453,6 +2533,10 @@ def main() -> int:
     # Official public retailer blog/event feeds. Each feed is baselined on its first successful read.
     for store in STORES:
         items, feed_health = scrape_announcements(session, store)
+        items = [
+            item for item in items
+            if is_tcg_release_in_window(str(item.get("title", "")), str(item.get("summary", "")))
+        ]
         for feed_url, success in feed_health.items():
             if not success:
                 continue
@@ -2478,7 +2562,15 @@ def main() -> int:
     official_news_counts: dict[str, int] = {}
     for source in OFFICIAL_NEWS_SOURCES:
         items, healthy = scrape_official_source(session, source, state)
-        items = [item for item in items if not is_excluded_accessory_product(str(item.get("title", "")))]
+        items = [
+            item for item in items
+            if not is_excluded_accessory_product(str(item.get("title", "")))
+            and is_tcg_release_in_window(
+                str(item.get("title", "")),
+                str(item.get("summary", "")),
+                str(item.get("release_date", "")),
+            )
+        ]
         prior_health = state["official_source_health"].get(source["key"])
         state["official_source_health"][source["key"]] = healthy
         if not healthy:
