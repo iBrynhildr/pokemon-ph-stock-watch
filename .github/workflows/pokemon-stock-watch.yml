@@ -1,10 +1,15 @@
-
 name: Pokemon PH Stock Watch
 
 on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
+    inputs:
+      send_test_notification:
+        description: "Send one Discord delivery test, even if there are no new stock alerts"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -16,7 +21,7 @@ concurrency:
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - name: Check out repository
@@ -30,16 +35,56 @@ jobs:
           cache-dependency-path: requirements.txt
 
       - name: Install dependencies
+        id: install_deps
         run: python -m pip install -r requirements.txt
 
-      - name: Check Pokémon stock
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-chromium-${{ hashFiles('requirements.txt') }}
+
+      - name: Install Chromium for JavaScript-rendered public pages
+        run: python -m playwright install chromium
+
+      - name: Send one-time Discord delivery test (manual opt-in)
+        if: ${{ always() && steps.install_deps.outcome == 'success' && github.event_name == 'workflow_dispatch' && inputs.send_test_notification }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python - <<'PY'
+          import os
+          import sys
+          import requests
+
+          url = os.environ.get("DISCORD_WEBHOOK_URL", "").strip()
+          if not url:
+              print("::error::DISCORD_WEBHOOK_URL secret is missing or empty.")
+              sys.exit(1)
+
+          payload = {
+              "content": "✅ **Pokémon PH Stock Watch — Discord delivery test**\nThis is a manual test from GitHub Actions, not a stock alert.",
+              "allowed_mentions": {"parse": []},
+          }
+          response = requests.post(url, json=payload, timeout=20)
+          if response.status_code not in (200, 204):
+              detail = (response.text or "(empty response)")[:1200]
+              print(f"::error::Discord test failed with HTTP {response.status_code}: {detail}")
+              sys.exit(1)
+          print(f"Discord delivery test succeeded (HTTP {response.status_code}).")
+          PY
+
+      - name: Check retailer catalogues and send Discord alerts
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           STATE_PATH: state.json
           LOG_LEVEL: INFO
+          BROWSER_FALLBACK_ENABLED: "true"
+          BROWSER_FALLBACK_MAX_PAGES: "10"
+          BROWSER_FALLBACK_TIMEOUT_MS: "12000"
         run: python watcher.py
 
-      - name: Save state and keep workflow active
+      - name: Persist state and keep workflow active
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
@@ -50,18 +95,35 @@ jobs:
 
           marker = Path('.keepalive-date')
           today = date.today()
+          last = None
           try:
-              last = date.fromisoformat(marker.read_text().strip())
+              last = date.fromisoformat(marker.read_text(encoding='utf-8').strip())
           except (OSError, ValueError):
-              last = None
-
+              pass
           if last is None or today - last >= timedelta(days=40):
-              marker.write_text(today.isoformat() + '\n')
+              marker.write_text(today.isoformat() + '\n', encoding='utf-8')
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add state.json .keepalive-date
           if ! git diff --cached --quiet; then
             git commit -m "Update stock watcher state [skip ci]"
-            git push
+            branch="${GITHUB_REF_NAME:-main}"
+            for attempt in 1 2 3; do
+              if git push origin "HEAD:${branch}"; then
+                echo "State pushed successfully."
+                exit 0
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "::error::Could not push state after 3 attempts. Check for a conflict in state.json or branch protection."
+                exit 1
+              fi
+              echo "Push rejected because remote main advanced; fetching and rebasing (attempt ${attempt}/3)."
+              git fetch origin "${branch}"
+              if ! git rebase "origin/${branch}"; then
+                git rebase --abort || true
+                echo "::error::State commit could not be rebased cleanly. Check whether state.json was changed by another run."
+                exit 1
+              fi
+            done
           fi
