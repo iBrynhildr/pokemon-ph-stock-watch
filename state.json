@@ -2527,6 +2527,38 @@
       "title": "Learn How to Play the PokÃ©mon Card Game in 9 Minutes! ï½ Scarlet and Violet Series Other",
       "url": "https://youtu.be/whSPLn9swJU"
     },
+    "pokemon_global_30th_celebration_announcement|https://pokemon.gamespress.com/MEDIA-ALERT-Pokemon-Unveils-New-Pokemon-Trading-Card-Game-30th-Celebra": {
+      "first_seen": "2026-10-23T02:14:33+00:00",
+      "published": "",
+      "release_date": "",
+      "store": "Official Pokémon TCG 30th Celebration announcement",
+      "title": "MEDIA ALERT: Pokémon Unveils New Pokémon Trading Card Game: 30th Celebration Expansion, Commemorating 30 Years of Iconic Game",
+      "url": "https://pokemon.gamespress.com/MEDIA-ALERT-Pokemon-Unveils-New-Pokemon-Trading-Card-Game-30th-Celebra"
+    },
+    "pokemon_global_delta_reign_announcement|https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex": {
+      "first_seen": "2026-10-23T02:14:32+00:00",
+      "published": "",
+      "release_date": "",
+      "store": "Official Pokémon TCG Mega Evolution—Delta Reign announcement",
+      "title": "MEDIA ALERT: New Pokémon Trading Card Game: Mega Evolution—Delta Reign Expansion Brings Mega Rayquaza ex Back to Battle",
+      "url": "https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex"
+    },
+    "pokemon_global_october_2026_products|https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026#pokemon-tcg-30th-celebration-battle-deck-espeon-ex-umbreon-ex": {
+      "first_seen": "2026-10-23T02:14:31+00:00",
+      "published": "",
+      "release_date": "October 30, 2026",
+      "store": "Official Pokémon.com October 2026 TCG product releases",
+      "title": "Pokémon TCG: 30th Celebration Battle Deck—Espeon ex & Umbreon ex",
+      "url": "https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026#pokemon-tcg-30th-celebration-battle-deck-espeon-ex-umbreon-ex"
+    },
+    "pokemon_global_october_2026_products|https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026#pokemon-tcg-deck-crafter-s-collection": {
+      "first_seen": "2026-10-23T02:14:31+00:00",
+      "published": "",
+      "release_date": "October 23, 2026",
+      "store": "Official Pokémon.com October 2026 TCG product releases",
+      "title": "Pokémon TCG: Deck Crafter’s Collection",
+      "url": "https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026#pokemon-tcg-deck-crafter-s-collection"
+    },
     "pokemon_global_release_schedule|https://press.pokemon.com/en/products/Pokemon-TCG-Mega-EvolutionDelta-Reign": {
       "first_seen": "2026-10-23T01:23:27+00:00",
       "published": "",
@@ -2545,8 +2577,11 @@
   },
   "initialized_feeds": {
     "https://asia.pokemon-card.com/ph/info/": true,
+    "https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex": true,
+    "https://pokemon.gamespress.com/MEDIA-ALERT-Pokemon-Unveils-New-Pokemon-Trading-Card-Game-30th-Celebra": true,
     "https://press.pokemon.com/en/Items/Schedule/Pokemon-Trading-Card-Game?types=3": true,
     "https://toysrus.com.ph/blogs/events.atom": true,
+    "https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026": true,
     "https://www.toykingdom.com.ph/blogs/event.atom": true,
     "https://www.toykingdom.com.ph/blogs/news.atom": true
   },
@@ -2569,7 +2604,10 @@
   "official_release_article_cache": {},
   "official_source_health": {
     "pokemon_asia_news": true,
+    "pokemon_global_30th_celebration_announcement": true,
+    "pokemon_global_delta_reign_announcement": true,
     "pokemon_global_news_archive": false,
+    "pokemon_global_october_2026_products": true,
     "pokemon_global_release_schedule": true
   },
   "products": {
