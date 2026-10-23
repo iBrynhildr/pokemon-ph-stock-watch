@@ -202,7 +202,7 @@ OFFICIAL_NEWS_SOURCES: list[dict[str, str]] = [
     {
         "key": "pokemon_global_news_archive",
         "name": "Official Pokémon.com TCG news and product articles",
-        "url": "https://www.pokemon.com/us/articles",
+        "url": "https://www.pokemon.com/articles",
         "kind": "article_archive",
     },
     {
@@ -454,10 +454,37 @@ NON_POKEMON_TCG_TITLE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# The user wants sealed/product TCG items, not standalone storage/accessory products.
+# Match the title only: a real ETB/collection may mention sleeves or a deck box in its contents.
+EXCLUDED_ACCESSORY_TITLE_RE = re.compile(
+    r"\b(?:card\s+)?sleeves?\b|\bdeck[\s-]*box(?:es)?\b|\bdeckbox(?:es)?\b",
+    re.IGNORECASE,
+)
+
+ARRIVED_AT_RETAILER_PATTERNS = (
+    r"\barrived at (?:our|the) (?:warehouse|store|branch|shop)\b",
+    r"\barrived in (?:our|the) (?:warehouse|store|branch|shop)\b",
+    r"\b(?:stock|shipment|delivery|products?) (?:has |have )?(?:just )?arrived\b",
+    r"\b(?:unloaded|offloaded) (?:at|into) (?:our|the) (?:warehouse|store|branch|shop)\b",
+    r"\b(?:unloaded|offloaded)\b.{0,80}\b(?:pokemon|tcg|warehouse|store|branch|stock|delivery|cartons?|boxes?)\b",
+    r"\b(?:we have|we've|we just|our team has) (?:just )?(?:unloaded|offloaded|received)\b",
+    r"\b(?:new )?stock (?:has |have )?(?:just )?landed\b",
+    r"\breceived (?:at |into )?(?:our|the) (?:warehouse|store|branch|shop)\b",
+)
+
+
+def is_excluded_accessory_product(title: str) -> bool:
+    """True only when the listing headline itself is an excluded accessory."""
+    return bool(EXCLUDED_ACCESSORY_TITLE_RE.search(normalize_text(title or "")))
+
 
 def is_tcg_product(title: str, description: str = "", tags: Any = None) -> bool:
     title_text = normalize_text(title or "")
     combined = normalize_text(" ".join([title or "", description or "", clean_text(tags)]))
+
+    # Exclude standalone sleeves/deck-box listings even when branded with Pokémon/TCG terms.
+    if is_excluded_accessory_product(title):
+        return False
 
     # Fail closed on an explicit non-Pokémon card-game product title. This avoids
     # letting generic catalogue descriptions or tags make Magic cards appear in
@@ -498,10 +525,12 @@ def is_tournament_announcement(title: str, summary: str = "", url: str = "") -> 
 
 
 def incoming_signal(text: str) -> str:
-    """Classify only what the public text explicitly says; never infer private logistics."""
+    """Classify only explicit public wording; never infer private logistics."""
     normalized = normalize_text(text)
     if any(re.search(pattern, normalized, re.I) for pattern in IN_TRANSIT_PATTERNS):
         return "IN_TRANSIT"
+    if any(re.search(pattern, normalized, re.I) for pattern in ARRIVED_AT_RETAILER_PATTERNS):
+        return "ARRIVED_AT_RETAILER"
     if any(re.search(pattern, normalized, re.I) for pattern in UPCOMING_PATTERNS):
         return "UPCOMING_OR_PREORDER"
     return "NONE"
@@ -548,6 +577,32 @@ def identify_product_type(title: str, description: str = "") -> str:
     return "Unknown product format"
 
 
+def purchase_channel_status(product: dict[str, Any]) -> str:
+    """Describe physical vs online availability only when the public page supports it."""
+    text_value = normalize_text(str(product.get("signal_text", "")))
+    in_store_patterns = (
+        r"\bin[- ]?store (?:only|stock|availability|purchase|pickup)\b",
+        r"\bavailable (?:at|in) (?:our |the )?(?:physical )?(?:stores?|branches|locations)\b",
+        r"\bphysical (?:store|branch) (?:stock|availability|available)\b",
+        r"\bstore pickup\b", r"\bpick ?up at (?:our |the )?(?:store|branch)\b",
+        r"\bon[- ]hand\b", r"\bon hand\b", r"\bwalk[- ]in purchase\b",
+    )
+    online_patterns = (
+        r"\badd to cart\b", r"\bbuy now\b", r"\border online\b",
+        r"\bonline (?:order|purchase|stock|availability|available)\b",
+        r"\bships? nationwide\b", r"\bcheckout\b",
+    )
+    physical = any(re.search(pattern, text_value, re.I) for pattern in in_store_patterns)
+    online = bool(product.get("available") is True) or any(re.search(pattern, text_value, re.I) for pattern in online_patterns)
+    if physical and online:
+        return "ONLINE ORDERABLE + PHYSICAL/IN-STORE SIGNAL"
+    if physical:
+        return "PHYSICAL / IN-STORE SIGNAL EXPLICITLY STATED"
+    if online:
+        return "ONLINE PRODUCT-PAGE ORDERABILITY"
+    return "PURCHASE CHANNEL NOT CONFIRMED"
+
+
 def lifecycle_status(product: dict[str, Any]) -> tuple[str, int, str]:
     """Return a conservative lifecycle status, embed color, and explanation.
 
@@ -560,6 +615,8 @@ def lifecycle_status(product: dict[str, Any]) -> tuple[str, int, str]:
     preorder = bool(product.get("preorder"))
     is_closed = any(re.search(pattern, text_value, re.I) for pattern in CLOSED_STATUS_PATTERNS)
 
+    if incoming == "ARRIVED_AT_RETAILER":
+        return "ARRIVED AT RETAILER / WAREHOUSE", 0x9B59B6, "The public text explicitly says stock arrived, was received, or was unloaded at a retailer/warehouse location."
     if incoming == "IN_TRANSIT":
         return "IN TRANSIT", 0x3498DB, "The public text explicitly mentions shipment/in-transit status."
     if preorder and is_closed:
@@ -618,9 +675,10 @@ def extract_arrival_date(text: str) -> str | None:
     value = clean_text(text)
     date_phrase = r"([A-Za-z]{3,9}[ ]+\d{4}|[A-Za-z]{3,9}[ ]+\d{1,2}(?!\d)(?:,?[ ]+\d{4})?|\d{4}-\d{2}-\d{2})"
     patterns = (
+        r"\bETA[ ]*[:：-]?[ ]*" + date_phrase,
         r"\bavailable(?: on| from)?[ ]*[:：-]?[ ]*" + date_phrase,
-        r"\b(?:expected|estimated|est\.?|estd\.?)[ ]+(?:arrival|release)[ ]*[:：-]?[ ]*" + date_phrase,
-        r"\b(?:arrival|release)[ ]+date[ ]*[:：-]?[ ]*(?:estimated?\.?[ ]+|est\.?[ ]+)?" + date_phrase,
+        r"\b(?:expected|estimated|est\.?|estd\.?)[ ]+(?:to arrive|arrival|delivery|release)[ ]*(?:on|by|date)?[ ]*[:：-]?[ ]*" + date_phrase,
+        r"\b(?:arrival|delivery|release)[ ]+(?:ETA|date)[ ]*[:：-]?[ ]*(?:estimated?\.?[ ]+|est\.?[ ]+)?" + date_phrase,
         r"\b(?:est\.?[ ]+arrival|est\.?[ ]+release|arriving|release)[ ]*[:：-]?[ ]*" + date_phrase,
         r"\b(\d{4}-\d{2}-\d{2})\b",
     )
@@ -632,7 +690,7 @@ def extract_arrival_date(text: str) -> str | None:
 
 
 def is_relevant_announcement(title: str, summary: str = "", url: str = "") -> bool:
-    if is_tournament_announcement(title, summary, url):
+    if is_excluded_accessory_product(title) or is_tournament_announcement(title, summary, url):
         return False
     text_value = normalize_text(" ".join([title, summary, url]))
     return bool(POKEMON_RE.search(text_value) and any(term in text_value for term in ANNOUNCEMENT_TERMS))
@@ -771,6 +829,7 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
     }
     product["set_name"] = identify_set_name(title)
     product["product_type"] = identify_product_type(title, description)
+    product["purchase_channel"] = purchase_channel_status(product)
     status, status_color, status_note = lifecycle_status(product)
     product["lifecycle_status"] = status
     product["lifecycle_color"] = status_color
@@ -794,7 +853,7 @@ def merge_product(existing: dict[str, Any] | None, incoming: dict[str, Any]) -> 
         merged["preorder"] = True
     elif "preorder" not in merged:
         merged["preorder"] = incoming.get("preorder", False)
-    for field in ("incoming_signal", "arrival_date", "signal_text", "set_name", "product_type", "lifecycle_status", "lifecycle_color", "lifecycle_note"):
+    for field in ("incoming_signal", "arrival_date", "signal_text", "set_name", "product_type", "purchase_channel", "lifecycle_status", "lifecycle_color", "lifecycle_note"):
         if incoming.get(field):
             merged[field] = incoming[field]
         elif field not in merged:
@@ -1439,6 +1498,8 @@ def discover_official_release_articles(content: str, page_url: str, source: dict
         normalized_title = normalize_text(title)
         if not title or "pokemon.com" not in urlparse(href).netloc.casefold():
             continue
+        if is_excluded_accessory_product(title):
+            continue
         if not any(p in normalized_title for p in patterns):
             continue
         if "pocket" in normalized_title or is_tournament_announcement(title):
@@ -1473,7 +1534,7 @@ def parse_official_release_article(content: str, article_url: str, source: dict[
             continue
         # The product heading itself should establish the TCG connection; nearby text can contain
         # unrelated tournament wording and should not turn an event registration into a product.
-        if not is_tcg_product(title) or is_tournament_announcement(title):
+        if is_excluded_accessory_product(title) or not is_tcg_product(title) or is_tournament_announcement(title):
             continue
         summary_parts: list[str] = []
         for following in heading.find_all_next():
@@ -1531,7 +1592,7 @@ def scrape_official_source(session: requests.Session, source: dict[str, str], st
             soup = BeautifulSoup(response.text, "html.parser")
             heading = soup.find("h1") or soup.find("title")
             title = clean_text(heading.get_text(" ", strip=True)) if heading else source["name"]
-            if title and (is_tcg_product(title) or "pokemon" in title.casefold()):
+            if title and not is_excluded_accessory_product(title) and (is_tcg_product(title) or "pokemon" in title.casefold()):
                 items = [{
                     "store_key": source["key"], "store": source["name"],
                     "title": title[:250], "url": source["url"], "published": "",
@@ -1606,7 +1667,7 @@ def parse_official_product_news(content: str, page_url: str, source: dict[str, s
             continue
         # Use the headline for classification; page-level/section-level context can contain
         # unrelated keywords from neighboring event cards and must not qualify this link.
-        if is_tournament_announcement(title):
+        if is_excluded_accessory_product(title) or is_tournament_announcement(title):
             continue
         title_normalized = normalize_text(title)
         if not any(term in title_normalized for term in product_terms):
@@ -1657,6 +1718,7 @@ def default_state() -> dict[str, Any]:
             "total_new_orderable_listings": 0,
             "total_preorder_signals": 0,
             "total_explicit_in_transit_signals": 0,
+            "total_explicit_retailer_arrival_signals": 0,
         },
     }
 
@@ -1719,7 +1781,7 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
     title_prefix = {
         "preorder": "📅 PRE-ORDER / UPCOMING TCG SIGNAL",
         "new_in_stock": "🟢 NEW TCG LISTING — ORDERABLE",
-        "new_unavailable": "🕵️ POSSIBLE STEALTH DROP — NEW LISTING",
+        "new_unavailable": "🕵️ POSSIBLE STEALTH DROP — NEW LISTING (NOT ORDERABLE YET)",
         "new_unknown": "🕵️ POSSIBLE STEALTH DROP — AVAILABILITY UNKNOWN",
         "restock": "🚨 POSSIBLE STEALTH DROP — RESTOCK SIGNAL",
         "preorder_flag": "📅 PRE-ORDER SIGNAL DETECTED",
@@ -1727,12 +1789,19 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
         "preorder_closed": "🔴 PRE-ORDER CLOSED / UNAVAILABLE",
         "preorder_status_changed": "🔄 PRE-ORDER STATUS CHANGED",
         "in_transit": "🚚 RETAILER SAYS STOCK IS IN TRANSIT",
+        "arrived_at_retailer": "📦 RETAILER REPORTS ARRIVAL / UNLOADED STOCK",
+        "status_unavailable": "🔴 TCG STATUS CHANGED — NOW UNAVAILABLE",
+        "status_changed": "🔄 TCG PRODUCT STATUS CHANGED",
+        "arrival_eta_changed": "🗓️ TCG ARRIVAL ETA PUBLISHED / CHANGED",
+        "purchase_channel_changed": "🏬 TCG PHYSICAL / ONLINE AVAILABILITY UPDATE",
         "upcoming": "📦 UPCOMING TCG STOCK SIGNAL",
         "price_drop": "💸 TCG PRICE DROP",
     }.get(kind, "🔔 POKÉMON TCG UPDATE")
 
     signal = product.get("incoming_signal")
-    if signal == "IN_TRANSIT":
+    if signal == "ARRIVED_AT_RETAILER":
+        incoming_text = "Explicit public wording says stock arrived, was received, or was unloaded; verify the linked source"
+    elif signal == "IN_TRANSIT":
         incoming_text = "Explicit in-transit/shipment wording found"
     elif signal == "UPCOMING_OR_PREORDER" or product.get("preorder"):
         incoming_text = "Pre-order / upcoming wording found; shipment not confirmed"
@@ -1742,6 +1811,20 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
     description_parts = []
     if old and kind == "price_drop":
         description_parts.append(f"**Previous price:** {format_price(old.get('price'))}")
+    if old and kind == "arrival_eta_changed":
+        previous_eta = str(old.get("arrival_date") or "No ETA previously published")
+        current_eta = str(product.get("arrival_date") or "ETA removed/not exposed")
+        description_parts.append(f"**Arrival ETA change:** {previous_eta} → {current_eta}")
+    if old and kind in ("status_unavailable", "status_changed"):
+        description_parts.append(
+            f"**Status change:** {old.get('lifecycle_status', stock_status(old.get('available')))} → "
+            f"{product.get('lifecycle_status', stock_status(product.get('available')))}"
+        )
+    if old and kind == "purchase_channel_changed":
+        description_parts.append(
+            f"**Purchase channel change:** {old.get('purchase_channel', purchase_channel_status(old))} → "
+            f"{product.get('purchase_channel', purchase_channel_status(product))}"
+        )
     if old and kind in ("preorder_opened", "preorder_closed", "preorder_status_changed"):
         previous_status = preorder_status_bucket(old) or "No prior preorder signal"
         current_status = preorder_status_bucket(product) or "No longer marked as a preorder"
@@ -1760,6 +1843,7 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
         {"name": "Product format", "value": str(product.get("product_type") or identify_product_type(str(product.get("title", "")), str(product.get("signal_text", ""))))[:1024], "inline": True},
         {"name": "Price shown", "value": price_text[:1024], "inline": True},
         {"name": "Availability detail", "value": status[:1024], "inline": True},
+        {"name": "Purchase channel", "value": str(product.get("purchase_channel") or purchase_channel_status(product))[:1024], "inline": True},
         {"name": "Upcoming / shipment signal", "value": incoming_text, "inline": False},
         {"name": "ETA / release date", "value": str(product.get("arrival_date") or "Not published by source")[:1024], "inline": True},
         {"name": "Branch-level stock", "value": "Not published by monitored page", "inline": True},
@@ -1775,7 +1859,7 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
         color = 0xE74C3C  # newly orderable transition worth checking immediately
     elif kind == "price_drop":
         color = 0x3498DB
-    elif kind in ("in_transit", "upcoming", "preorder", "preorder_flag"):
+    elif kind in ("in_transit", "arrived_at_retailer", "upcoming", "preorder", "preorder_flag", "arrival_eta_changed", "purchase_channel_changed"):
         color = lifecycle_color
     else:
         color = lifecycle_color
@@ -1972,7 +2056,7 @@ def main() -> int:
     store_counts: dict[str, tuple[int, int, bool]] = {}
     current_products_by_store: dict[str, list[dict[str, Any]]] = {}
     baseline_current_stock: list[dict[str, Any]] = []
-    run_metrics = {"restock": 0, "new_orderable": 0, "preorder": 0, "upcoming": 0, "in_transit": 0}
+    run_metrics = {"restock": 0, "new_orderable": 0, "preorder": 0, "upcoming": 0, "in_transit": 0, "arrived": 0}
 
     # Catalogue checks: detect new listings, pre-order listings, restocks and price cuts.
     for store in STORES:
@@ -1996,7 +2080,7 @@ def main() -> int:
         if not already_initialized and healthy:
             baseline_current_stock.extend(
                 product for product in products.values()
-                if product.get("available") is True or product.get("incoming_signal") in ("IN_TRANSIT", "UPCOMING_OR_PREORDER")
+                if product.get("available") is True or product.get("incoming_signal") in ("ARRIVED_AT_RETAILER", "IN_TRANSIT", "UPCOMING_OR_PREORDER")
             )
         if not healthy:
             LOG.warning("No product catalogue/search endpoint was available for %s", store["name"])
@@ -2018,11 +2102,19 @@ def main() -> int:
 
             if old is None:
                 product["first_seen"] = utc_now_iso()
-                if product.get("incoming_signal") == "IN_TRANSIT":
+                if product.get("incoming_signal") == "ARRIVED_AT_RETAILER":
+                    product_alerts.append(product_alert("arrived_at_retailer", product))
+                    run_metrics["arrived"] += 1
+                elif product.get("incoming_signal") == "IN_TRANSIT":
                     product_alerts.append(product_alert("in_transit", product))
                     run_metrics["in_transit"] += 1
                 elif product.get("incoming_signal") == "UPCOMING_OR_PREORDER":
-                    product_alerts.append(product_alert("upcoming", product))
+                    if product.get("preorder") and product.get("available") is True:
+                        product_alerts.append(product_alert("preorder_opened", product))
+                    elif product.get("preorder"):
+                        product_alerts.append(product_alert("preorder", product))
+                    else:
+                        product_alerts.append(product_alert("upcoming", product))
                     run_metrics["upcoming"] += 1
                     if product.get("preorder"):
                         run_metrics["preorder"] += 1
@@ -2051,9 +2143,15 @@ def main() -> int:
                     new_preorder_status = "PRE-ORDER ENDED / ORDERABLE"
             # Status changes take priority over generic restock signals so the Discord alert says
             # explicitly when a preorder opens or closes instead of calling everything a restock.
-            if "incoming_signal" in old and old_signal != "IN_TRANSIT" and new_signal == "IN_TRANSIT":
+            if old_signal != "ARRIVED_AT_RETAILER" and new_signal == "ARRIVED_AT_RETAILER":
+                product_alerts.append(product_alert("arrived_at_retailer", product, old))
+                run_metrics["arrived"] += 1
+            elif old_signal != "IN_TRANSIT" and new_signal == "IN_TRANSIT":
                 product_alerts.append(product_alert("in_transit", product, old))
                 run_metrics["in_transit"] += 1
+            elif new_preorder_status == "OPEN / ORDERABLE" and old_preorder_status != "OPEN / ORDERABLE":
+                product_alerts.append(product_alert("preorder_opened", product, old))
+                run_metrics["preorder"] += 1
             elif old_preorder_status is not None and new_preorder_status is not None and old_preorder_status != new_preorder_status:
                 if new_preorder_status == "OPEN / ORDERABLE":
                     product_alerts.append(product_alert("preorder_opened", product, old))
@@ -2075,9 +2173,21 @@ def main() -> int:
                 else:
                     product_alerts.append(product_alert("restock", product, old))
                     run_metrics["restock"] += 1
+            elif old.get("available") is True and product.get("available") is False:
+                product_alerts.append(product_alert("status_unavailable", product, old))
             elif old.get("preorder") is not True and product.get("preorder") is True:
                 product_alerts.append(product_alert("preorder_flag", product, old))
                 run_metrics["preorder"] += 1
+            elif product.get("arrival_date") and product.get("arrival_date") != old.get("arrival_date") and (
+                product.get("incoming_signal") in ("IN_TRANSIT", "ARRIVED_AT_RETAILER", "UPCOMING_OR_PREORDER") or product.get("preorder")
+            ):
+                product_alerts.append(product_alert("arrival_eta_changed", product, old))
+            elif old.get("purchase_channel") and product.get("purchase_channel") != old.get("purchase_channel") and (
+                "PHYSICAL/IN-STORE" in str(product.get("purchase_channel", ""))
+            ):
+                product_alerts.append(product_alert("purchase_channel_changed", product, old))
+            elif old.get("lifecycle_status") and product.get("lifecycle_status") != old.get("lifecycle_status"):
+                product_alerts.append(product_alert("status_changed", product, old))
             elif decimal_greater(old.get("price"), product.get("price")):
                 product_alerts.append(product_alert("price_drop", product, old))
 
@@ -2117,6 +2227,7 @@ def main() -> int:
     official_news_counts: dict[str, int] = {}
     for source in OFFICIAL_NEWS_SOURCES:
         items, healthy = scrape_official_source(session, source, state)
+        items = [item for item in items if not is_excluded_accessory_product(str(item.get("title", "")))]
         prior_health = state["official_source_health"].get(source["key"])
         state["official_source_health"][source["key"]] = healthy
         if not healthy:
@@ -2151,6 +2262,7 @@ def main() -> int:
         "total_new_orderable_listings": run_metrics["new_orderable"],
         "total_preorder_signals": run_metrics["preorder"],
         "total_explicit_in_transit_signals": run_metrics["in_transit"],
+        "total_explicit_retailer_arrival_signals": run_metrics["arrived"],
     }.items():
         metrics[key] = int(metrics.get(key, 0) or 0) + value
 
@@ -2192,7 +2304,14 @@ def main() -> int:
             seen_snapshot.add(identity)
             price = format_price(product.get("price"))
             signal = product.get("incoming_signal", "NONE")
-            label = "IN TRANSIT CLAIM" if signal == "IN_TRANSIT" else ("UPCOMING / PRE-ORDER" if signal == "UPCOMING_OR_PREORDER" else "ORDERABLE")
+            if signal == "ARRIVED_AT_RETAILER":
+                label = "ARRIVED / UNLOADED AT RETAILER"
+            elif signal == "IN_TRANSIT":
+                label = "IN TRANSIT CLAIM"
+            elif signal == "UPCOMING_OR_PREORDER":
+                label = "UPCOMING / PRE-ORDER"
+            else:
+                label = "ORDERABLE"
             date_text = f" — {product.get('arrival_date')}" if product.get("arrival_date") else ""
             digest_lines.append(f"• **{label} · {product.get('store', 'Retailer')}** — [{product.get('title', 'Pokémon TCG product')}]({product.get('url')}) ({price}){date_text}")
             if len(digest_lines) >= 16:
@@ -2224,6 +2343,7 @@ def main() -> int:
         scan_orderable = sum(1 for p in scan_products if p.get("available") is True)
         scan_preorder = sum(1 for p in scan_products if str(p.get("lifecycle_status", "")).startswith("PRE-ORDER"))
         scan_transit = sum(1 for p in scan_products if p.get("lifecycle_status") == "IN TRANSIT")
+        scan_arrived = sum(1 for p in scan_products if p.get("lifecycle_status") == "ARRIVED AT RETAILER / WAREHOUSE")
         scan_in_stock = sum(1 for p in scan_products if p.get("lifecycle_status") == "IN STOCK (explicit wording)")
         scan_live = sum(1 for p in scan_products if p.get("lifecycle_status") == "LIVE / ORDERABLE")
         scan_incoming = sum(1 for p in scan_products if p.get("lifecycle_status") == "INCOMING / UPCOMING")
@@ -2248,6 +2368,7 @@ def main() -> int:
                 {"name": "🟡 Pre-order statuses", "value": str(scan_preorder), "inline": True},
                 {"name": "🟠 Incoming / upcoming", "value": str(scan_incoming), "inline": True},
                 {"name": "🚚 In transit (explicit)", "value": str(scan_transit), "inline": True},
+                {"name": "📦 Arrived/unloaded (explicit)", "value": str(scan_arrived), "inline": True},
                 {"name": "🔴 Sold out / closed", "value": str(scan_soldout), "inline": True},
                 {"name": "Restock signals this scan", "value": str(run_metrics["restock"]), "inline": True},
                 {"name": "Restock signals detected since tracking began", "value": str(restock_total), "inline": True},
@@ -2262,6 +2383,7 @@ def main() -> int:
             items = current_products_by_store.get(store["key"], [])
             upcoming_count = sum(1 for p in items if str(p.get("lifecycle_status", "")).startswith("PRE-ORDER") or p.get("lifecycle_status") == "INCOMING / UPCOMING")
             transit_count = sum(1 for p in items if p.get("lifecycle_status") == "IN TRANSIT")
+            arrived_count = sum(1 for p in items if p.get("lifecycle_status") == "ARRIVED AT RETAILER / WAREHOUSE")
             in_stock_count = sum(1 for p in items if p.get("lifecycle_status") == "IN STOCK (explicit wording)")
             live_count = sum(1 for p in items if p.get("lifecycle_status") == "LIVE / ORDERABLE")
             eta_count = sum(1 for p in items if p.get("arrival_date"))
@@ -2282,6 +2404,7 @@ def main() -> int:
                     {"name": "🟢 Explicitly in stock", "value": str(in_stock_count), "inline": True},
                     {"name": "🟡 Pre-order / upcoming", "value": str(upcoming_count), "inline": True},
                     {"name": "🚚 Explicit in-transit", "value": str(transit_count), "inline": True},
+                    {"name": "📦 Reported retailer/warehouse arrival", "value": str(arrived_count), "inline": True},
                     {"name": "Listings with a date phrase", "value": str(eta_count), "inline": True},
                     {"name": "Branch-by-branch stock", "value": "Not published by this adapter", "inline": True},
                     {"name": "Physical unit count", "value": "Not exposed by monitored public page", "inline": False},
@@ -2310,16 +2433,17 @@ def main() -> int:
         # Product-level lifecycle board: show the exact listing/set and product format,
         # and don't equate a retailer's orderable flag with confirmed physical on-hand stock.
         lifecycle_rank = {
-            "IN TRANSIT": 0,
-            "PRE-ORDER OPEN": 1,
-            "PRE-ORDER — STATUS UNCLEAR": 2,
-            "PRE-ORDER — STATUS CLOSED/UNAVAILABLE": 3,
-            "INCOMING / UPCOMING": 4,
-            "IN STOCK (explicit wording)": 5,
-            "LIVE / ORDERABLE": 6,
-            "SOLD OUT / CLOSED": 7,
-            "PRE-ORDER CLOSED / SOLD OUT": 8,
-            "UNKNOWN / NOT EXPOSED": 9,
+            "ARRIVED AT RETAILER / WAREHOUSE": 0,
+            "IN TRANSIT": 1,
+            "PRE-ORDER OPEN": 2,
+            "PRE-ORDER — STATUS UNCLEAR": 3,
+            "PRE-ORDER — STATUS CLOSED/UNAVAILABLE": 4,
+            "INCOMING / UPCOMING": 5,
+            "IN STOCK (explicit wording)": 6,
+            "LIVE / ORDERABLE": 7,
+            "SOLD OUT / CLOSED": 8,
+            "PRE-ORDER CLOSED / SOLD OUT": 9,
+            "UNKNOWN / NOT EXPOSED": 10,
         }
         lifecycle_order = sorted(
             scan_products,
@@ -2330,7 +2454,7 @@ def main() -> int:
         )
         lifecycle_lines: list[str] = []
         status_emoji = {
-            "IN TRANSIT": "🚚", "PRE-ORDER OPEN": "🟡", "PRE-ORDER — STATUS UNCLEAR": "🟡",
+            "ARRIVED AT RETAILER / WAREHOUSE": "📦", "IN TRANSIT": "🚚", "PRE-ORDER OPEN": "🟡", "PRE-ORDER — STATUS UNCLEAR": "🟡",
             "PRE-ORDER — STATUS CLOSED/UNAVAILABLE": "🔴", "INCOMING / UPCOMING": "🟠",
             "IN STOCK (explicit wording)": "🟢", "LIVE / ORDERABLE": "🔵",
             "SOLD OUT / CLOSED": "🔴", "PRE-ORDER CLOSED / SOLD OUT": "🔴",
@@ -2347,11 +2471,13 @@ def main() -> int:
             retailer = str(product.get("store", "Retailer"))
             price = format_price(product.get("price"))
             eta = str(product.get("arrival_date") or "date not published")
+            channel = str(product.get("purchase_channel") or purchase_channel_status(product))
             lifecycle_lines.append(
                 f"{emoji} **{status_name}** · {retailer}\n"
                 f"{title_link}\n"
                 f"**Set:** {set_name} · **Type:** {product_type}\n"
-                f"**Price:** {price} · **ETA/release:** {eta}"
+                f"**Price:** {price} · **Purchase:** {channel}\n"
+                f"**ETA/release:** {eta}"
             )
         overflow = len(lifecycle_order) - min(len(lifecycle_order), 24)
         if overflow > 0:
@@ -2369,7 +2495,9 @@ def main() -> int:
             lines = []
             for product in incoming_items[:12]:
                 signal = product.get("incoming_signal")
-                if signal == "IN_TRANSIT":
+                if signal == "ARRIVED_AT_RETAILER":
+                    label = "📦 ARRIVED / UNLOADED AT RETAILER (explicit wording)"
+                elif signal == "IN_TRANSIT":
                     label = "🚚 IN TRANSIT (explicit wording)"
                 elif product.get("preorder"):
                     label = "📅 PREORDER / UPCOMING"
@@ -2383,7 +2511,8 @@ def main() -> int:
                 set_name = str(product.get("set_name") or identify_set_name(title))
                 product_type = str(product.get("product_type") or identify_product_type(title, str(product.get("signal_text", ""))))
                 lifecycle, _status_color, _status_note = lifecycle_status(product)
-                lines.append(f"**{label}** · {store_name}\n{link_title}\n**Detected status:** {lifecycle}\n**Set:** {set_name} · **Type:** {product_type}\n**ETA/release date:** {eta} · **Branch allocation:** not published")
+                channel = str(product.get("purchase_channel") or purchase_channel_status(product))
+                lines.append(f"**{label}** · {store_name}\n{link_title}\n**Detected status:** {lifecycle}\n**Set:** {set_name} · **Type:** {product_type}\n**Purchase channel:** {channel}\n**ETA/release date:** {eta} · **Branch allocation:** not published")
             remaining = len(incoming_items) - min(len(incoming_items), 12)
             if remaining:
                 lines.append(f"…plus {remaining} additional matching listing(s).")
@@ -2405,7 +2534,7 @@ def main() -> int:
             "description": (
                 "**Total restocks:** the watcher can count detected public-page transitions from unavailable/unknown to orderable, across scans. It cannot count physical units sold/restocked unless the retailer publishes a quantity.\n\n"
                 "**Branches:** current adapters do not provide reliable branch-by-branch stock. Branch names and quantities will not be guessed.\n\n"
-                "**Arrival dates:** displayed only when a retailer page explicitly provides a date phrase. ‘In transit’ is used only when the page explicitly says shipment/in-transit; it does not generate an invented ETA."
+                "**Arrival dates:** displayed only when a retailer page explicitly provides a date phrase (including ETA wording). ‘In transit’ and ‘arrived/unloaded’ statuses are used only when public wording supports them; the watcher does not infer private logistics or invent an ETA."
             ),
             "color": 0x34495E,
         })
@@ -2421,4 +2550,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-    
