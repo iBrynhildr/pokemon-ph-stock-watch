@@ -211,6 +211,24 @@ OFFICIAL_NEWS_SOURCES: list[dict[str, str]] = [
         "url": "https://press.pokemon.com/en/Items/Schedule/Pokemon-Trading-Card-Game?types=3",
         "kind": "release_schedule",
     },
+    {
+        "key": "pokemon_global_october_2026_products",
+        "name": "Official Pokémon.com October 2026 TCG product releases",
+        "url": "https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026",
+        "kind": "product_article",
+    },
+    {
+        "key": "pokemon_global_delta_reign_announcement",
+        "name": "Official Pokémon TCG Mega Evolution—Delta Reign announcement",
+        "url": "https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex",
+        "kind": "product_article",
+    },
+    {
+        "key": "pokemon_global_30th_celebration_announcement",
+        "name": "Official Pokémon TCG 30th Celebration announcement",
+        "url": "https://pokemon.gamespress.com/MEDIA-ALERT-Pokemon-Unveils-New-Pokemon-Trading-Card-Game-30th-Celebra",
+        "kind": "product_article",
+    },
 ]
 
 POKEMON_RE = re.compile(r"pok[eé]mon", re.IGNORECASE)
@@ -1504,6 +1522,27 @@ def scrape_official_source(session: requests.Session, source: dict[str, str], st
     kind = source.get("kind", "asia_news")
     if kind == "release_schedule":
         return parse_official_release_schedule(response.text, source["url"], source), True
+    if kind == "product_article":
+        items = parse_official_release_article(response.text, source["url"], source)
+        # Keep a source-level notice when the official article is valid but its product
+        # layout differs from the heading parser. This still links to the official article
+        # and explicitly avoids claiming Philippine preorder availability.
+        if not items:
+            soup = BeautifulSoup(response.text, "html.parser")
+            heading = soup.find("h1") or soup.find("title")
+            title = clean_text(heading.get_text(" ", strip=True)) if heading else source["name"]
+            if title and (is_tcg_product(title) or "pokemon" in title.casefold()):
+                items = [{
+                    "store_key": source["key"], "store": source["name"],
+                    "title": title[:250], "url": source["url"], "published": "",
+                    "summary": "Official Pokémon TCG product announcement. Open the official source for product details and dates; this does not confirm Philippine retailer availability.",
+                    "feed": source["url"], "official_product_news": "true",
+                    "official_source_type": "global_release_article", "alert_on_first_scan": "false",
+                }]
+        for item in items:
+            item["official_source_type"] = "global_release_article"
+            item.setdefault("alert_on_first_scan", "false")
+        return items, True
     if kind == "article_archive":
         candidates = discover_official_release_articles(response.text, source["url"], source)
         items: dict[str, dict[str, str]] = {}
