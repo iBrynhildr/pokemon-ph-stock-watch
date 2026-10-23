@@ -32,6 +32,9 @@ USER_AGENT = os.getenv(
     "PokemonPHStockWatch/1.0 (+https://github.com; periodic public-page checks)",
 )
 MAX_DISCORD_EMBEDS = 10
+# Discord applies a 6,000-character aggregate limit across all embeds in one message.
+# Leave a margin so each webhook payload remains comfortably below that limit.
+MAX_DISCORD_EMBED_CHARS = 5_500
 MAX_STATE_PRODUCTS = 2500
 MAX_STATE_ANNOUNCEMENTS = 500
 
@@ -984,10 +987,101 @@ def health_alert(store: dict[str, Any], healthy: bool) -> dict[str, Any]:
     }
 
 
+def discord_embed_char_count(embed: dict[str, Any]) -> int:
+    """Return the text count Discord applies to an embed's aggregate character budget."""
+    total = len(str(embed.get("title", ""))) + len(str(embed.get("description", "")))
+    for field in embed.get("fields", []) or []:
+        total += len(str(field.get("name", ""))) + len(str(field.get("value", "")))
+    footer = embed.get("footer") or {}
+    author = embed.get("author") or {}
+    total += len(str(footer.get("text", ""))) + len(str(author.get("name", "")))
+    return total
+
+
+def prepare_discord_embed(source: dict[str, Any]) -> dict[str, Any]:
+    """Clamp embed properties to Discord limits and keep each embed under the aggregate cap."""
+    embed = dict(source)
+    if "title" in embed:
+        embed["title"] = str(embed.get("title") or "")[:256]
+    if "description" in embed:
+        embed["description"] = str(embed.get("description") or "")[:4096]
+
+    # Invalid or oversized optional URL values can also make a webhook payload fail.
+    for url_key in ("url",):
+        url = embed.get(url_key)
+        if url is not None and not (isinstance(url, str) and url.startswith(("https://", "http://"))):
+            embed.pop(url_key, None)
+
+    cleaned_fields = []
+    for field in (embed.get("fields", []) or [])[:25]:
+        name = str(field.get("name", "Field"))[:256] or "Field"
+        value = str(field.get("value", "—"))[:1024] or "—"
+        cleaned_fields.append({"name": name, "value": value, "inline": bool(field.get("inline", False))})
+    if "fields" in embed:
+        embed["fields"] = cleaned_fields
+
+    for parent_key, child_key, limit in (("footer", "text", 2048), ("author", "name", 256)):
+        child = embed.get(parent_key)
+        if isinstance(child, dict) and child_key in child:
+            child = dict(child)
+            child[child_key] = str(child.get(child_key) or "")[:limit]
+            embed[parent_key] = child
+
+    # Keep the information in fields first; trim long narrative text if an embed is
+    # individually too large. Most importantly, never send a malformed oversized embed.
+    while discord_embed_char_count(embed) > MAX_DISCORD_EMBED_CHARS:
+        excess = discord_embed_char_count(embed) - MAX_DISCORD_EMBED_CHARS
+        description = str(embed.get("description", ""))
+        if description:
+            new_length = max(0, len(description) - excess)
+            embed["description"] = description[:new_length].rstrip()
+            continue
+        fields = embed.get("fields", []) or []
+        if fields:
+            last = fields[-1]
+            value = str(last.get("value", ""))
+            if len(value) > 1:
+                last["value"] = value[:max(1, len(value) - excess)].rstrip() or "—"
+            else:
+                fields.pop()
+            continue
+        footer = embed.get("footer") or {}
+        footer_text = str(footer.get("text", ""))
+        if footer_text:
+            footer["text"] = footer_text[:max(0, len(footer_text) - excess)].rstrip()
+            embed["footer"] = footer
+            continue
+        title = str(embed.get("title", ""))
+        if title:
+            embed["title"] = title[:max(0, len(title) - excess)].rstrip()
+            continue
+        break
+    return embed
+
+
+def chunk_discord_embeds(embeds: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+    """Pack webhook messages under both Discord's per-message embed limits."""
+    prepared = [prepare_discord_embed(embed) for embed in embeds]
+    chunks: list[list[dict[str, Any]]] = []
+    current: list[dict[str, Any]] = []
+    current_chars = 0
+    for embed in prepared:
+        char_count = discord_embed_char_count(embed)
+        if current and (len(current) >= MAX_DISCORD_EMBEDS or current_chars + char_count > MAX_DISCORD_EMBED_CHARS):
+            chunks.append(current)
+            current = []
+            current_chars = 0
+        current.append(embed)
+        current_chars += char_count
+    if current:
+        chunks.append(current)
+    return chunks or [[]]
+
+
 def send_discord(session: requests.Session, embeds: list[dict[str, Any]], content: str | None = None) -> None:
     if not DISCORD_WEBHOOK_URL:
         raise RuntimeError("DISCORD_WEBHOOK_URL is missing. Add it as a GitHub Actions repository secret.")
-    chunks = [embeds[i:i + MAX_DISCORD_EMBEDS] for i in range(0, len(embeds), MAX_DISCORD_EMBEDS)] or [[]]
+    chunks = chunk_discord_embeds(embeds)
     for index, chunk in enumerate(chunks):
         payload: dict[str, Any] = {"embeds": chunk, "allowed_mentions": {"parse": []}}
         if content and index == 0:
@@ -1009,7 +1103,11 @@ def send_discord(session: requests.Session, embeds: list[dict[str, Any]], conten
                     LOG.warning("Discord returned HTTP %s; retrying", response.status_code)
                     time.sleep(retry_after)
                     continue
-                raise RuntimeError(f"Discord webhook returned HTTP {response.status_code}")
+                # Discord's response body gives a useful validation path (e.g. embeds[0]);
+                # include only that response detail and never the webhook URL or payload.
+                detail = re.sub(r"\s+", " ", str(getattr(response, "text", ""))).strip()[:900]
+                suffix = f": {detail}" if detail else ""
+                raise RuntimeError(f"Discord webhook returned HTTP {response.status_code}{suffix}")
             except requests.RequestException as exc:
                 if attempt == 2:
                     raise RuntimeError(f"Discord webhook request failed: {exc.__class__.__name__}") from exc
