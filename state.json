@@ -2647,6 +2647,46 @@
       "title": "MEDIA ALERT: New Pokémon Trading Card Game: Mega Evolution—Delta Reign Expansion Brings Mega Rayquaza ex Back to Battle",
       "url": "https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex"
     },
+    "pokemon_global_news_archive|https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-booster-bundle": {
+      "first_seen": "2026-10-23T16:58:19+00:00",
+      "published": "November 6, 2026",
+      "release_date": "November 6, 2026",
+      "store": "Official Pokémon.com TCG news and product articles",
+      "title": "Pokémon TCG: Mega Evolution—Delta Reign Booster Bundle",
+      "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-booster-bundle"
+    },
+    "pokemon_global_news_archive|https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-booster-display-box": {
+      "first_seen": "2026-10-23T16:58:19+00:00",
+      "published": "November 6, 2026",
+      "release_date": "November 6, 2026",
+      "store": "Official Pokémon.com TCG news and product articles",
+      "title": "Pokémon TCG: Mega Evolution—Delta Reign Booster Display Box",
+      "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-booster-display-box"
+    },
+    "pokemon_global_news_archive|https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-build-battle-box": {
+      "first_seen": "2026-10-23T16:58:19+00:00",
+      "published": "November 6, 2026",
+      "release_date": "November 6, 2026",
+      "store": "Official Pokémon.com TCG news and product articles",
+      "title": "Pokémon TCG: Mega Evolution—Delta Reign Build & Battle Box",
+      "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-build-battle-box"
+    },
+    "pokemon_global_news_archive|https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-elite-trainer-box": {
+      "first_seen": "2026-10-23T16:58:19+00:00",
+      "published": "November 6, 2026",
+      "release_date": "November 6, 2026",
+      "store": "Official Pokémon.com TCG news and product articles",
+      "title": "Pokémon TCG: Mega Evolution—Delta Reign Elite Trainer Box",
+      "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-elite-trainer-box"
+    },
+    "pokemon_global_news_archive|https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-pokemon-center-elite-trainer-box": {
+      "first_seen": "2026-10-23T16:58:19+00:00",
+      "published": "November 6, 2026",
+      "release_date": "November 6, 2026",
+      "store": "Official Pokémon.com TCG news and product articles",
+      "title": "Pokémon TCG: Mega Evolution—Delta Reign Pokémon Center Elite Trainer Box",
+      "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-pokemon-center-elite-trainer-box"
+    },
     "pokemon_global_october_2026_products|https://www.pokemon.com/us/news/check-out-every-pokemon-tcg-product-release-in-october-2026#pokemon-tcg-30th-celebration-battle-deck-espeon-ex-umbreon-ex": {
       "first_seen": "2026-10-23T02:14:31+00:00",
       "published": "",
@@ -2709,7 +2749,75 @@
     "total_preorder_signals": 26,
     "total_restock_signals": 0
   },
-  "official_release_article_cache": {},
+  "official_release_article_cache": {
+    "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase": [
+      {
+        "alert_on_first_scan": "true",
+        "feed": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase",
+        "official_product_news": "true",
+        "official_source_type": "global_release_article",
+        "published": "November 6, 2026",
+        "release_date": "November 6, 2026",
+        "store": "Official Pokémon.com TCG news and product articles",
+        "store_key": "pokemon_global_news_archive",
+        "summary": "Official product article lists availability: November 6, 2026. Available November 6, 2026 If your goal is to get your hands on as many Pokémon TCG cards as possible, the Mega Evolution—Delta Reign Booster Display Box is the product for you. With each Booster Display Box, you bring home 36 booster packs, each containing 10 cards and one Basic Energy. Whether you’re collecting to compete or on the hunt for cards with artwork that speaks to you, you’re bound to find something to further your journey.",
+        "title": "Pokémon TCG: Mega Evolution—Delta Reign Booster Display Box",
+        "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-booster-display-box"
+      },
+      {
+        "alert_on_first_scan": "true",
+        "feed": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase",
+        "official_product_news": "true",
+        "official_source_type": "global_release_article",
+        "published": "November 6, 2026",
+        "release_date": "November 6, 2026",
+        "store": "Official Pokémon.com TCG news and product articles",
+        "store_key": "pokemon_global_news_archive",
+        "summary": "Official product article lists availability: November 6, 2026. Available November 6, 2026 If you’re looking to add Pokémon TCG cards and accessories to your collection, Elite Trainer Boxes are the way to go. The M ega Evolution—Delta Reign Elite Trainer Box contains nine booster packs from the expansion, a full-art foil promo card featuring Kyogre, 65 card sleeves, 40 Pokémon TCG Energy cards, damage-counter dice, a coin-flip die, a plastic coin, and a sturdy box to store all your goodies. Elevate your skills with assistance from a player’s guide containing useful tips for building winning decks using cards from this expansion.",
+        "title": "Pokémon TCG: Mega Evolution—Delta Reign Elite Trainer Box",
+        "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-elite-trainer-box"
+      },
+      {
+        "alert_on_first_scan": "true",
+        "feed": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase",
+        "official_product_news": "true",
+        "official_source_type": "global_release_article",
+        "published": "November 6, 2026",
+        "release_date": "November 6, 2026",
+        "store": "Official Pokémon.com TCG news and product articles",
+        "store_key": "pokemon_global_news_archive",
+        "summary": "Official product article lists availability: November 6, 2026. Available November 6, 2026 The Pokémon Center Elite Trainer Box has all the amazing and useful items listed above, plus a few additional treasures. With the Pokémon Center Elite Trainer Box, you’ll receive 11 booster packs, two more than the regular Elite Trainer Box. And instead of one full-art promo card featuring Kyogre, you’ll receive two—one with a Pokémon Center logo.",
+        "title": "Pokémon TCG: Mega Evolution—Delta Reign Pokémon Center Elite Trainer Box",
+        "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-pokemon-center-elite-trainer-box"
+      },
+      {
+        "alert_on_first_scan": "true",
+        "feed": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase",
+        "official_product_news": "true",
+        "official_source_type": "global_release_article",
+        "published": "November 6, 2026",
+        "release_date": "November 6, 2026",
+        "store": "Official Pokémon.com TCG news and product articles",
+        "store_key": "pokemon_global_news_archive",
+        "summary": "Official product article lists availability: November 6, 2026. Available November 6, 2026 Seek out Build & Battle Boxes at local game stores during Pokémon TCG Prerelease events before they become more widely available following the expansion’s official release. This box contains a 40-card ready-to-play deck that includes one of four unique foil promo cards, four Pokémon TCG: Mega Evolution—Delta Reign booster packs, and a code card for Pokémon TCG Live.",
+        "title": "Pokémon TCG: Mega Evolution—Delta Reign Build & Battle Box",
+        "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-build-battle-box"
+      },
+      {
+        "alert_on_first_scan": "true",
+        "feed": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase",
+        "official_product_news": "true",
+        "official_source_type": "global_release_article",
+        "published": "November 6, 2026",
+        "release_date": "November 6, 2026",
+        "store": "Official Pokémon.com TCG news and product articles",
+        "store_key": "pokemon_global_news_archive",
+        "summary": "Official product article lists availability: November 6, 2026. Available November 6, 2026 If one Pokémon TCG booster pack sparks joy for you, imagine how much fun you’ll have with six! The Pokémon TCG: Mega Evolution—Delta Reign Booster Bundle brings you a full half-dozen booster packs featuring cards from the expansion. Get ready to make it rain booster packs! Look for these Pokémon TCG products at the Pokémon Center and where other Pokémon TCG products are sold. Mega Evolution—Delta Reign Tags Trading Card Game Pokémon TCG Product Showcase News",
+        "title": "Pokémon TCG: Mega Evolution—Delta Reign Booster Bundle",
+        "url": "https://www.pokemon.com/us/news/pokemon-tcg-mega-evolution-delta-reign-product-showcase#pokemon-tcg-mega-evolution-delta-reign-booster-bundle"
+      }
+    ]
+  },
   "official_source_health": {
     "pokemon_asia_news": true,
     "pokemon_global_30th_celebration_announcement": true,
