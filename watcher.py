@@ -148,6 +148,122 @@ UPCOMING_PATTERNS = (
     r"\barrived at (?:our|the) (?:warehouse|store)\b",
 )
 
+# A maintained recognition list helps report set/expansion names when the retailer includes
+# them in the product title. It is not treated as a release calendar or inventory source.
+KNOWN_TCG_SETS: tuple[tuple[str, str], ...] = tuple(sorted([
+    # Upcoming and recently announced 2026 products / special collections.
+    ("focused fighters premium collection", "Focused Fighters Premium Collection"),
+    ("focused fighters", "Focused Fighters Premium Collection"),
+    ("first partner illustration collection series 3", "First Partner Illustration Collection—Series 3"),
+    ("first partner illustration collection series 2", "First Partner Illustration Collection—Series 2"),
+    ("first partner illustration collection series 1", "First Partner Illustration Collection—Series 1"),
+    ("first partner illustration collection", "First Partner Illustration Collection"),
+    ("first partner collection series 3", "First Partner Illustration Collection—Series 3"),
+    ("first partner collection series 2", "First Partner Illustration Collection—Series 2"),
+    ("first partner collection series 1", "First Partner Illustration Collection—Series 1"),
+    ("mega greninja ex league battle deck", "Mega Greninja ex League Battle Deck"),
+    ("30th celebration booster bundle", "30th Celebration Booster Bundle"),
+    ("30th celebration ultra premium collection", "30th Celebration Ultra-Premium Collection"),
+    ("30th celebration ditto premium collection", "30th Celebration Ditto Premium Collection"),
+    ("30th celebration battle deck", "30th Celebration Battle Deck"),
+    ("30th celebration mini tin", "30th Celebration Mini Tin"),
+    ("30th celebration tin", "30th Celebration Tin"),
+    ("delta reign", "Mega Evolution—Delta Reign"),
+    ("aura seeker", "Japanese Pokémon TCG—Aura Seeker"),
+    ("30th celebration classic collection", "30th Celebration: Classic Collection"),
+    ("mega evolution ascended heroes", "Mega Evolution—Ascended Heroes"),
+    ("mega evolution phantasmal flames", "Mega Evolution—Phantasmal Flames"),
+    ("mega evolution perfect order", "Mega Evolution—Perfect Order"),
+    ("mega evolution chaos rising", "Mega Evolution—Chaos Rising"),
+    ("mega evolution pitch black", "Mega Evolution—Pitch Black"),
+    ("mega evolution delta reign", "Mega Evolution—Delta Reign"),
+    ("scarlet and violet prismatic evolutions", "Scarlet & Violet—Prismatic Evolutions"),
+    ("scarlet & violet prismatic evolutions", "Scarlet & Violet—Prismatic Evolutions"),
+    ("scarlet and violet shrouded fable", "Scarlet & Violet—Shrouded Fable"),
+    ("scarlet & violet shrouded fable", "Scarlet & Violet—Shrouded Fable"),
+    ("scarlet and violet twilight masquerade", "Scarlet & Violet—Twilight Masquerade"),
+    ("scarlet & violet twilight masquerade", "Scarlet & Violet—Twilight Masquerade"),
+    ("scarlet and violet temporal forces", "Scarlet & Violet—Temporal Forces"),
+    ("scarlet & violet temporal forces", "Scarlet & Violet—Temporal Forces"),
+    ("scarlet and violet destined rivals", "Scarlet & Violet—Destined Rivals"),
+    ("scarlet & violet journey together", "Scarlet & Violet—Journey Together"),
+    ("scarlet and violet surging sparks", "Scarlet & Violet—Surging Sparks"),
+    ("scarlet & violet stellar crown", "Scarlet & Violet—Stellar Crown"),
+    ("scarlet & violet paldean fates", "Scarlet & Violet—Paldean Fates"),
+    ("scarlet & violet paldea evolved", "Scarlet & Violet—Paldea Evolved"),
+    ("scarlet & violet obsidian flames", "Scarlet & Violet—Obsidian Flames"),
+    ("scarlet & violet paradox rift", "Scarlet & Violet—Paradox Rift"),
+    ("scarlet & violet black bolt", "Scarlet & Violet—Black Bolt"),
+    ("scarlet & violet white flare", "Scarlet & Violet—White Flare"),
+    ("pokemon 151", "Scarlet & Violet—151"),
+    ("mega evolution", "Mega Evolution"),
+    ("30th celebration", "30th Celebration"),
+    ("ascended heroes", "Mega Evolution—Ascended Heroes"),
+    ("phantasmal flames", "Mega Evolution—Phantasmal Flames"),
+    ("perfect order", "Mega Evolution—Perfect Order"),
+    ("chaos rising", "Mega Evolution—Chaos Rising"),
+    ("pitch black", "Mega Evolution—Pitch Black"),
+    ("delta reign", "Mega Evolution—Delta Reign"),
+    ("black bolt", "Scarlet & Violet—Black Bolt"),
+    ("white flare", "Scarlet & Violet—White Flare"),
+    ("destined rivals", "Scarlet & Violet—Destined Rivals"),
+    ("journey together", "Scarlet & Violet—Journey Together"),
+    ("prismatic evolutions", "Scarlet & Violet—Prismatic Evolutions"),
+    ("surging sparks", "Scarlet & Violet—Surging Sparks"),
+    ("stellar crown", "Scarlet & Violet—Stellar Crown"),
+    ("shrouded fable", "Scarlet & Violet—Shrouded Fable"),
+    ("twilight masquerade", "Scarlet & Violet—Twilight Masquerade"),
+    ("temporal forces", "Scarlet & Violet—Temporal Forces"),
+    ("paldean fates", "Scarlet & Violet—Paldean Fates"),
+    ("paradox rift", "Scarlet & Violet—Paradox Rift"),
+    ("151", "Scarlet & Violet—151"),
+    ("obsidian flames", "Scarlet & Violet—Obsidian Flames"),
+    ("paldea evolved", "Scarlet & Violet—Paldea Evolved"),
+    ("scarlet & violet", "Scarlet & Violet"),
+    ("crown zenith", "Crown Zenith"),
+    ("silver tempest", "Silver Tempest"),
+    ("lost origin", "Lost Origin"),
+    ("pokemon go", "Pokémon GO"),
+    ("astral radiance", "Astral Radiance"),
+    ("brilliant stars", "Brilliant Stars"),
+    ("fusion strike", "Fusion Strike"),
+    ("evolving skies", "Evolving Skies"),
+    ("chilling reign", "Chilling Reign"),
+    ("battle styles", "Battle Styles"),
+    ("shining fates", "Shining Fates"),
+    ("vivid voltage", "Vivid Voltage"),
+    ("darkness ablaze", "Darkness Ablaze"),
+    ("hidden fates", "Hidden Fates"),
+    ("celebrations", "Celebrations"),
+], key=lambda pair: len(pair[0]), reverse=True))
+
+PRODUCT_TYPE_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("Ultra-Premium Collection", ("ultra-premium collection", "ultra premium collection", "upc")),
+    ("Elite Trainer Box (ETB)", ("elite trainer box", " etb", "etb ")),
+    ("Booster Display / Booster Box", ("booster display", "booster box", "booster box display", "display box")),
+    ("Booster Bundle", ("booster bundle", "bundle of booster")),
+    ("Build & Battle Box", ("build & battle", "build and battle")),
+    ("Premium Collection", ("premium collection",)),
+    ("Collection Box", ("collection box", "special collection", "collection set")),
+    ("Booster Pack", ("booster pack", "single booster", "booster (")),
+    ("Blister Pack", ("3-pack blister", "three-pack blister", "blister pack", "checklane blister", "blister")),
+    ("Tin", ("mini tin", "collector chest", "tin ", " tin")),
+    ("Deck / Battle Deck", ("battle deck", "starter deck", "ex deck", "league battle deck", "theme deck")),
+    ("Promo Card / Promo Set", ("promo card", "promo set", "promotional card")),
+    ("Booster Case", ("booster case", "sealed case")),
+)
+
+IN_STOCK_PATTERNS = (
+    r"\bin stock\b", r"\bon[- ]hand\b", r"\bon hand\b", r"\bready stock\b",
+    r"\bavailable now\b", r"\bstocks? available\b", r"\bavailable in store\b",
+    r"\bavailable for immediate purchase\b", r"\bin[- ]store stock\b",
+)
+CLOSED_STATUS_PATTERNS = (
+    r"\bclosed\b", r"\bexpired\b", r"\bsold out\b", r"\bout of stock\b",
+    r"\bunavailable\b", r"\bfully allocated\b", r"\bno longer accepting\b",
+    r"\bpre[- ]?orders? closed\b", r"\bpre[- ]?order period ended\b",
+)
+
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -187,6 +303,80 @@ def incoming_signal(text: str) -> str:
     if any(re.search(pattern, normalized, re.I) for pattern in UPCOMING_PATTERNS):
         return "UPCOMING_OR_PREORDER"
     return "NONE"
+
+
+def identify_set_name(title: str) -> str:
+    """Identify a known expansion when its name is present in the listing title."""
+    normalized = normalize_text(title)
+    normalized = normalized.replace("—", " ").replace("–", " ").replace("-", " ")
+    normalized = re.sub(r"[^a-z0-9& ]+", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    # Anniversary phrasing is commonly used by retailers instead of the formal set name.
+    if re.search(r"\b30th\s+(?:anniversary|celebration)\b", normalized):
+        if "classic collection" in normalized:
+            return "30th Celebration: Classic Collection"
+        return "30th Celebration"
+    for phrase, canonical in KNOWN_TCG_SETS:
+        needle = normalize_text(phrase).replace("—", " ").replace("–", " ").replace("-", " ")
+        needle = re.sub(r"[^a-z0-9& ]+", " ", needle)
+        needle = re.sub(r"\s+", " ", needle).strip()
+        if re.search(r"(?<![a-z0-9])" + re.escape(needle) + r"(?![a-z0-9])", normalized):
+            return canonical
+    # Common expansion shorthand in item titles.
+    if re.search(r"\bsv0?8\b", normalized):
+        return "Scarlet & Violet—Surging Sparks (SV8 shorthand)"
+    if re.search(r"\bsv10\.5b?\b", normalized):
+        return "Scarlet & Violet—Black Bolt (SV10.5B shorthand)"
+    if re.search(r"\bsv10\.5w\b", normalized):
+        return "Scarlet & Violet—White Flare (SV10.5W shorthand)"
+    return "Not explicit in listing title"
+
+
+def identify_product_type(title: str, description: str = "") -> str:
+    """Best-effort classification of sealed Pokémon TCG product format."""
+    normalized = normalize_text(f"{title} {description}")
+    # Prefer the title, but descriptions can clarify an abbreviated item name.
+    for label, terms in PRODUCT_TYPE_PATTERNS:
+        if any(term in normalized for term in terms):
+            return label
+    if re.search(r"\b(booster|pack)\b", normalized):
+        return "Booster product (format unclear)"
+    if "pokemon tcg" in normalized or "pokemon trading card game" in normalized or "tcg" in normalized:
+        return "TCG product (format unclear)"
+    return "Unknown product format"
+
+
+def lifecycle_status(product: dict[str, Any]) -> tuple[str, int, str]:
+    """Return a conservative lifecycle status, embed color, and explanation.
+
+    'LIVE / ORDERABLE' means the page appears orderable, not necessarily physically on-hand.
+    'IN STOCK' is reserved for explicit stock wording from the page.
+    """
+    text_value = normalize_text(product.get("signal_text", ""))
+    incoming = product.get("incoming_signal", "NONE")
+    available = product.get("available")
+    preorder = bool(product.get("preorder"))
+    is_closed = any(re.search(pattern, text_value, re.I) for pattern in CLOSED_STATUS_PATTERNS)
+
+    if incoming == "IN_TRANSIT":
+        return "IN TRANSIT", 0x3498DB, "The public text explicitly mentions shipment/in-transit status."
+    if preorder and is_closed:
+        return "PRE-ORDER CLOSED / SOLD OUT", 0xE74C3C, "The listing indicates a preorder but also says it is closed or unavailable."
+    if preorder and available is True:
+        return "PRE-ORDER OPEN", 0xF1C40F, "The product appears orderable and preorder wording is present."
+    if preorder and available is False:
+        return "PRE-ORDER — STATUS CLOSED/UNAVAILABLE", 0xE67E22, "Preorder wording remains, but the public page marks the item unavailable."
+    if preorder:
+        return "PRE-ORDER — STATUS UNCLEAR", 0xF1C40F, "Preorder wording is present; the page does not expose reliable availability."
+    if incoming == "UPCOMING_OR_PREORDER":
+        return "INCOMING / UPCOMING", 0xE67E22, "The page mentions an upcoming arrival/release; this is not proof of physical transit."
+    if available is False or is_closed:
+        return "SOLD OUT / CLOSED", 0xE74C3C, "The public page marks the item unavailable, sold out, or closed."
+    if any(re.search(pattern, text_value, re.I) for pattern in IN_STOCK_PATTERNS):
+        return "IN STOCK (explicit wording)", 0x2ECC71, "The public page explicitly says in stock, on hand, or equivalent."
+    if available is True:
+        return "LIVE / ORDERABLE", 0x3498DB, "The public page allows ordering; physical on-hand stock is not guaranteed."
+    return "UNKNOWN / NOT EXPOSED", 0x95A5A6, "The public page does not expose enough information to confirm stock status."
 
 
 def extract_arrival_date(text: str) -> str | None:
@@ -300,7 +490,7 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
     elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to cart|buy now|in stock|on hand)\b", normalized_full, re.I):
         if available is None:
             available = True
-    return {
+    product = {
         "store_key": store["key"],
         "store": store["name"],
         "handle": handle,
@@ -314,6 +504,13 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
         "signal_text": full_text[:1800],
         "source": source_name,
     }
+    product["set_name"] = identify_set_name(title)
+    product["product_type"] = identify_product_type(title, description)
+    status, status_color, status_note = lifecycle_status(product)
+    product["lifecycle_status"] = status
+    product["lifecycle_color"] = status_color
+    product["lifecycle_note"] = status_note
+    return product
 
 
 def merge_product(existing: dict[str, Any] | None, incoming: dict[str, Any]) -> dict[str, Any]:
@@ -332,7 +529,7 @@ def merge_product(existing: dict[str, Any] | None, incoming: dict[str, Any]) -> 
         merged["preorder"] = True
     elif "preorder" not in merged:
         merged["preorder"] = incoming.get("preorder", False)
-    for field in ("incoming_signal", "arrival_date", "signal_text"):
+    for field in ("incoming_signal", "arrival_date", "signal_text", "set_name", "product_type", "lifecycle_status", "lifecycle_color", "lifecycle_note"):
         if incoming.get(field):
             merged[field] = incoming[field]
         elif field not in merged:
@@ -721,24 +918,28 @@ def product_alert(kind: str, product: dict[str, Any], old: dict[str, Any] | None
     description_parts.append("This is a public-page signal, not access to private distributor or warehouse systems.")
     url = product.get("url") or ""
     source_value = f"[Open product page]({url})" if url else "Product link not provided by source"
+    lifecycle, lifecycle_color, lifecycle_note = lifecycle_status(product)
     fields = [
         {"name": "Retailer", "value": str(product.get("store", "Unknown retailer"))[:1024], "inline": True},
+        {"name": "Lifecycle status", "value": f"**{lifecycle}**\n{lifecycle_note}"[:1024], "inline": True},
+        {"name": "Set / expansion", "value": str(product.get("set_name") or identify_set_name(str(product.get("title", ""))))[:1024], "inline": True},
+        {"name": "Product format", "value": str(product.get("product_type") or identify_product_type(str(product.get("title", "")), str(product.get("signal_text", ""))))[:1024], "inline": True},
         {"name": "Price shown", "value": price_text[:1024], "inline": True},
-        {"name": "Availability", "value": status[:1024], "inline": False},
+        {"name": "Availability detail", "value": status[:1024], "inline": True},
         {"name": "Upcoming / shipment signal", "value": incoming_text, "inline": False},
         {"name": "ETA / release date", "value": str(product.get("arrival_date") or "Not published by source")[:1024], "inline": True},
         {"name": "Branch-level stock", "value": "Not published by monitored page", "inline": True},
         {"name": "Total units", "value": "Not published by monitored page", "inline": True},
         {"name": "Source", "value": source_value[:1024], "inline": False},
     ]
-    if kind in ("restock", "new_in_stock"):
-        color = 0xE74C3C if kind == "restock" else 0x2ECC71
-    elif kind in ("in_transit", "upcoming", "preorder", "preorder_flag"):
-        color = 0xF1C40F
+    if kind == "restock":
+        color = 0xE74C3C  # newly orderable transition worth checking immediately
     elif kind == "price_drop":
         color = 0x3498DB
+    elif kind in ("in_transit", "upcoming", "preorder", "preorder_flag"):
+        color = lifecycle_color
     else:
-        color = 0x9B59B6
+        color = lifecycle_color
     return {
         "title": f"{title_prefix}: {product.get('title', 'Pokémon TCG product')}"[:256],
         "url": url or None,
@@ -757,6 +958,8 @@ def announcement_alert(item: dict[str, str]) -> dict[str, Any]:
         "A retailer announcement was published. Open the original post to verify date, preorder status, and availability."
     )
     fields = [
+        {"name": "Set / expansion", "value": identify_set_name(item.get("title", "") + " " + item.get("summary", ""))[:1024], "inline": True},
+        {"name": "Product format", "value": identify_product_type(item.get("title", ""), item.get("summary", ""))[:1024], "inline": True},
         {"name": "Source", "value": item.get("store", "Unknown source")[:1024], "inline": True},
         {"name": "Published", "value": item.get("published") or "Date not provided in parsed page", "inline": True},
         {"name": "What this confirms", "value": note, "inline": False},
@@ -1049,14 +1252,18 @@ def main() -> int:
         send_discord(session, [welcome])
         state["welcome_sent"] = True
 
-    # Versioned source report: resend once after the readable/color-coded report upgrade.
+    # Versioned source report: resend when the lifecycle/set-status board is upgraded.
     # Use Discord fields and separate embeds so source health is easy to scan.
-    if int(state.get("source_report_version", 0) or 0) < 2:
+    if int(state.get("source_report_version", 0) or 0) < 3:
         scan_products = [p for items in current_products_by_store.values() for p in items]
         scan_tcg_count = len(scan_products)
         scan_orderable = sum(1 for p in scan_products if p.get("available") is True)
-        scan_preorder = sum(1 for p in scan_products if p.get("preorder") or p.get("incoming_signal") == "UPCOMING_OR_PREORDER")
-        scan_transit = sum(1 for p in scan_products if p.get("incoming_signal") == "IN_TRANSIT")
+        scan_preorder = sum(1 for p in scan_products if str(p.get("lifecycle_status", "")).startswith("PRE-ORDER"))
+        scan_transit = sum(1 for p in scan_products if p.get("lifecycle_status") == "IN TRANSIT")
+        scan_in_stock = sum(1 for p in scan_products if p.get("lifecycle_status") == "IN STOCK (explicit wording)")
+        scan_live = sum(1 for p in scan_products if p.get("lifecycle_status") == "LIVE / ORDERABLE")
+        scan_incoming = sum(1 for p in scan_products if p.get("lifecycle_status") == "INCOMING / UPCOMING")
+        scan_soldout = sum(1 for p in scan_products if p.get("lifecycle_status") in ("SOLD OUT / CLOSED", "PRE-ORDER CLOSED / SOLD OUT", "PRE-ORDER — STATUS CLOSED/UNAVAILABLE"))
         reachable_retailers = sum(1 for _, _, healthy in store_counts.values() if healthy)
         known_retailers = len(STORES)
         restock_total = int(metrics.get("total_restock_signals", 0) or 0)
@@ -1072,9 +1279,12 @@ def main() -> int:
             "color": 0x5865F2,
             "fields": [
                 {"name": "TCG listings parsed", "value": str(scan_tcg_count), "inline": True},
-                {"name": "Marked orderable", "value": str(scan_orderable), "inline": True},
-                {"name": "Preorder / upcoming signals", "value": str(scan_preorder), "inline": True},
-                {"name": "Explicit in-transit claims", "value": str(scan_transit), "inline": True},
+                {"name": "🔵 Live / orderable", "value": str(scan_live), "inline": True},
+                {"name": "🟢 Explicitly in stock", "value": str(scan_in_stock), "inline": True},
+                {"name": "🟡 Pre-order statuses", "value": str(scan_preorder), "inline": True},
+                {"name": "🟠 Incoming / upcoming", "value": str(scan_incoming), "inline": True},
+                {"name": "🚚 In transit (explicit)", "value": str(scan_transit), "inline": True},
+                {"name": "🔴 Sold out / closed", "value": str(scan_soldout), "inline": True},
                 {"name": "Restock signals this scan", "value": str(run_metrics["restock"]), "inline": True},
                 {"name": "Restock signals detected since tracking began", "value": str(restock_total), "inline": True},
                 {"name": "Physical units / branch totals", "value": "Not available unless retailer publishes them", "inline": False},
@@ -1086,8 +1296,10 @@ def main() -> int:
         for store in STORES:
             count, available_count, healthy = store_counts.get(store["key"], (0, 0, False))
             items = current_products_by_store.get(store["key"], [])
-            upcoming_count = sum(1 for p in items if p.get("preorder") or p.get("incoming_signal") == "UPCOMING_OR_PREORDER")
-            transit_count = sum(1 for p in items if p.get("incoming_signal") == "IN_TRANSIT")
+            upcoming_count = sum(1 for p in items if str(p.get("lifecycle_status", "")).startswith("PRE-ORDER") or p.get("lifecycle_status") == "INCOMING / UPCOMING")
+            transit_count = sum(1 for p in items if p.get("lifecycle_status") == "IN TRANSIT")
+            in_stock_count = sum(1 for p in items if p.get("lifecycle_status") == "IN STOCK (explicit wording)")
+            live_count = sum(1 for p in items if p.get("lifecycle_status") == "LIVE / ORDERABLE")
             eta_count = sum(1 for p in items if p.get("arrival_date"))
             if not healthy:
                 status_label, color = "🔴 NOT REACHABLE on this scan", 0xE74C3C
@@ -1102,9 +1314,10 @@ def main() -> int:
                 "color": color,
                 "fields": [
                     {"name": "TCG listings parsed", "value": str(count), "inline": True},
-                    {"name": "Marked orderable", "value": str(available_count), "inline": True},
-                    {"name": "Preorder / upcoming", "value": str(upcoming_count), "inline": True},
-                    {"name": "Explicit in-transit claims", "value": str(transit_count), "inline": True},
+                    {"name": "🔵 Live / orderable", "value": str(live_count), "inline": True},
+                    {"name": "🟢 Explicitly in stock", "value": str(in_stock_count), "inline": True},
+                    {"name": "🟡 Pre-order / upcoming", "value": str(upcoming_count), "inline": True},
+                    {"name": "🚚 Explicit in-transit", "value": str(transit_count), "inline": True},
                     {"name": "Listings with a date phrase", "value": str(eta_count), "inline": True},
                     {"name": "Branch-by-branch stock", "value": "Not published by this adapter", "inline": True},
                     {"name": "Physical unit count", "value": "Not exposed by monitored public page", "inline": False},
@@ -1130,6 +1343,62 @@ def main() -> int:
                 ],
             })
 
+        # Product-level lifecycle board: show the exact listing/set and product format,
+        # and don't equate a retailer's orderable flag with confirmed physical on-hand stock.
+        lifecycle_rank = {
+            "IN TRANSIT": 0,
+            "PRE-ORDER OPEN": 1,
+            "PRE-ORDER — STATUS UNCLEAR": 2,
+            "PRE-ORDER — STATUS CLOSED/UNAVAILABLE": 3,
+            "INCOMING / UPCOMING": 4,
+            "IN STOCK (explicit wording)": 5,
+            "LIVE / ORDERABLE": 6,
+            "SOLD OUT / CLOSED": 7,
+            "PRE-ORDER CLOSED / SOLD OUT": 8,
+            "UNKNOWN / NOT EXPOSED": 9,
+        }
+        lifecycle_order = sorted(
+            scan_products,
+            key=lambda p: (
+                lifecycle_rank.get(str(p.get("lifecycle_status", "UNKNOWN / NOT EXPOSED")), 99),
+                str(p.get("store", "")), str(p.get("title", "")).casefold()
+            ),
+        )
+        lifecycle_lines: list[str] = []
+        status_emoji = {
+            "IN TRANSIT": "🚚", "PRE-ORDER OPEN": "🟡", "PRE-ORDER — STATUS UNCLEAR": "🟡",
+            "PRE-ORDER — STATUS CLOSED/UNAVAILABLE": "🔴", "INCOMING / UPCOMING": "🟠",
+            "IN STOCK (explicit wording)": "🟢", "LIVE / ORDERABLE": "🔵",
+            "SOLD OUT / CLOSED": "🔴", "PRE-ORDER CLOSED / SOLD OUT": "🔴",
+            "UNKNOWN / NOT EXPOSED": "⚪",
+        }
+        for product in lifecycle_order[:24]:
+            status_name = str(product.get("lifecycle_status", "UNKNOWN / NOT EXPOSED"))
+            emoji = status_emoji.get(status_name, "⚪")
+            title = str(product.get("title", "Pokémon TCG product"))[:110]
+            link = str(product.get("url", ""))
+            title_link = f"[{title}]({link})" if link else title
+            set_name = str(product.get("set_name") or identify_set_name(title))
+            product_type = str(product.get("product_type") or identify_product_type(title, str(product.get("signal_text", ""))))
+            retailer = str(product.get("store", "Retailer"))
+            price = format_price(product.get("price"))
+            eta = str(product.get("arrival_date") or "date not published")
+            lifecycle_lines.append(
+                f"{emoji} **{status_name}** · {retailer}\n"
+                f"{title_link}\n"
+                f"**Set:** {set_name} · **Type:** {product_type}\n"
+                f"**Price:** {price} · **ETA/release:** {eta}"
+            )
+        overflow = len(lifecycle_order) - min(len(lifecycle_order), 24)
+        if overflow > 0:
+            lifecycle_lines.append(f"… plus {overflow} more product(s). See retailer pages for full listings.")
+        report_embeds.append({
+            "title": "🗂️ TCG product & set status board",
+            "description": ("\n\n".join(lifecycle_lines) if lifecycle_lines else "No TCG product listings were parsed during this scan." )[:4000],
+            "color": 0x5865F2,
+            "footer": {"text": "Set names and product formats are best-effort matches from listing titles. LIVE/ORDERABLE does not prove physical on-hand stock."},
+        })
+
         incoming_items = [p for p in scan_products if p.get("incoming_signal") in ("IN_TRANSIT", "UPCOMING_OR_PREORDER") or p.get("preorder")]
         incoming_items.sort(key=lambda p: (0 if p.get("incoming_signal") == "IN_TRANSIT" else 1, str(p.get("store", "")), str(p.get("title", "")).casefold()))
         if incoming_items:
@@ -1147,7 +1416,10 @@ def main() -> int:
                 title = str(product.get("title", "Pokémon TCG product"))[:120]
                 store_name = str(product.get("store", "Retailer"))
                 link_title = f"[{title}]({link})" if link else title
-                lines.append(f"**{label}** · {store_name}\n{link_title}\n**ETA/release date:** {eta} · **Branch allocation:** not published")
+                set_name = str(product.get("set_name") or identify_set_name(title))
+                product_type = str(product.get("product_type") or identify_product_type(title, str(product.get("signal_text", ""))))
+                lifecycle, _status_color, _status_note = lifecycle_status(product)
+                lines.append(f"**{label}** · {store_name}\n{link_title}\n**Detected status:** {lifecycle}\n**Set:** {set_name} · **Type:** {product_type}\n**ETA/release date:** {eta} · **Branch allocation:** not published")
             remaining = len(incoming_items) - min(len(incoming_items), 12)
             if remaining:
                 lines.append(f"…plus {remaining} additional matching listing(s).")
@@ -1175,7 +1447,7 @@ def main() -> int:
         })
         send_discord(session, report_embeds, content="🛰️ **Pokémon TCG Drop Radar — readable source report**\nColor key: 🟢 listings parsed · 🟡 page responded but no TCG listings parsed · 🔴 page unavailable · 🟣 official news only")
         state["source_report_sent"] = True
-        state["source_report_version"] = 2
+        state["source_report_version"] = 3
 
     save_state(state)
     LOG.info("Scan complete: %s product(s) visible, %s currently marked orderable; %s product alert(s), %s announcement alert(s).",
