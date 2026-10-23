@@ -103,6 +103,38 @@ STORES: list[dict[str, Any]] = [
         "coverage": "Public HTML listing/detail links only; login-only details are not accessed",
     },
     {
+        "key": "datablitz",
+        "name": "DataBlitz",
+        "base": "https://ecommerce.datablitz.com.ph",
+        "catalog_urls": [
+            ("Pokémon TCG collection", "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection"),
+            ("Pokémon company collection", "https://ecommerce.datablitz.com.ph/collections/the-pokemon-company-international-inc/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/the-pokemon-company-international-inc"),
+            ("Trading card collection", "https://ecommerce.datablitz.com.ph/collections/trading-card/products.json?limit=250&page=1", "https://ecommerce.datablitz.com.ph/collections/trading-card"),
+        ],
+        "suggest_url": "https://ecommerce.datablitz.com.ph/search/suggest.json",
+        "feeds": [],
+        "html_urls": [],
+        "collection_url": "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection",
+        "coverage": "Public Pokémon TCG and trading-card collections plus product search; only products matching the Pokémon TCG filter are reported",
+    },
+    {
+        "key": "gameline",
+        "name": "GameLine",
+        "base": "https://gameline.ph",
+        "catalog_urls": [
+            ("Pokémon collection", "https://gameline.ph/collections/pokemon/products.json?limit=250&page=1", "https://gameline.ph/collections/pokemon"),
+            ("Trading card games collection", "https://gameline.ph/collections/trading-card-games/products.json?limit=250&page=1", "https://gameline.ph/collections/trading-card-games"),
+            ("Latest catalogue page", "https://gameline.ph/products.json?limit=250&page=1", "https://gameline.ph/collections/pokemon"),
+        ],
+        "suggest_url": "https://gameline.ph/search/suggest.json",
+        "feeds": [],
+        "html_urls": [
+            ("Public Pokémon TCG product listings", "https://gameline.ph/search?q=pokemon+tcg&type=product"),
+        ],
+        "collection_url": "https://gameline.ph/collections/pokemon",
+        "coverage": "Public product JSON/search suggestions and server-rendered product links; coverage depends on public catalogue endpoints",
+    },
+    {
         "key": "hobby_arena",
         "name": "Hobby Arena",
         "base": "https://www.hobbyarena.ph",
@@ -298,6 +330,24 @@ def is_preorder(text: str) -> bool:
     ))
 
 
+# Tournament/event announcements are not inventory or commercial pre-order signals.
+# Apply this to retailer feeds and official news so registration posts don't clutter Discord.
+TOURNAMENT_EVENT_TERMS = (
+    "tournament", "registration", "register now", "league season",
+    "championship series", "world championships", "championship", "regional league",
+    "master ball league", "premier ball league", "great ball league", "league cup",
+    "league challenge", "roadshow", "academia", "entry fee", "registration fee",
+    "participation fee", "event fee", "paid registration", "sign up for",
+    "sign-up for", "pre-release event", "prerelease event", "event outline",
+)
+
+
+def is_tournament_announcement(title: str, summary: str = "", url: str = "") -> bool:
+    """True for organized-play/event notices, not product listings or stock updates."""
+    combined = normalize_text(" ".join([title or "", summary or "", url or ""]))
+    return any(term in combined for term in TOURNAMENT_EVENT_TERMS)
+
+
 def incoming_signal(text: str) -> str:
     """Classify only what the public text explicitly says; never infer private logistics."""
     normalized = normalize_text(text)
@@ -400,6 +450,8 @@ def extract_arrival_date(text: str) -> str | None:
 
 
 def is_relevant_announcement(title: str, summary: str = "", url: str = "") -> bool:
+    if is_tournament_announcement(title, summary, url):
+        return False
     text_value = normalize_text(" ".join([title, summary, url]))
     return bool(POKEMON_RE.search(text_value) and any(term in text_value for term in ANNOUNCEMENT_TERMS))
 
@@ -437,6 +489,27 @@ def product_url(store: dict[str, Any], product: dict[str, Any]) -> str:
     return store["collection_url"]
 
 
+def is_paid_event_listing(title: str, description: str = "", url: str = "") -> bool:
+    """Reject tournament/registration listings while preserving actual sealed products."""
+    title_norm = normalize_text(title)
+    context = normalize_text(" ".join([title or "", description or "", url or ""]))
+    product_markers = (
+        "booster", "elite trainer box", " etb", "collection", "battle deck", "battle box",
+        "mini tin", "tin ", "tin(", "blister", "deck", "trading card game classic",
+        "premium tournament collection", "trainer toolkit", "sleeves", "binder",
+        "promo card", "promo pack", "single card", "card set",
+    )
+    # The phrase "Premium Tournament Collection" is a product name, not an event.
+    if any(marker in title_norm for marker in product_markers):
+        return False
+    event_markers = (
+        "registration", "register now", "entry fee", "participation fee", "event fee",
+        "paid registration", "sign up", "sign-up", "gym battle", "league challenge",
+        "league cup", "tournament", "pre-release event", "prerelease event", "event pass",
+    )
+    return any(marker in context for marker in event_markers)
+
+
 def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: str) -> dict[str, Any] | None:
     title = clean_text(raw.get("title") or raw.get("name"))
     description = clean_text(raw.get("body_html") or raw.get("descriptionHtml") or raw.get("description") or raw.get("body"))
@@ -444,6 +517,9 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
     if isinstance(tags, str):
         tags = [part.strip() for part in tags.split(",")]
     if not is_tcg_product(title, description, tags):
+        return None
+    if is_paid_event_listing(title, description, str(raw.get("url") or raw.get("onlineStoreUrl") or "")):
+        LOG.debug("Ignoring Pokémon TCG event/registration listing: %s", title[:160])
         return None
 
     handle = str(raw.get("handle") or "").strip()
@@ -771,16 +847,17 @@ def scrape_announcements(session: requests.Session, store: dict[str, Any]) -> tu
 
 
 def parse_official_product_news(content: str, page_url: str, source: dict[str, str]) -> list[dict[str, str]]:
-    """Parse public product/release entries from the official Pokémon TCG news page.
+    """Parse only title-level official product/release items, excluding organized-play events.
 
-    This labels official release news as product/release information, not store stock.
-    It deliberately skips tournaments, registrations, and general campaigns.
+    The official news hub mixes Product, Campaign, Event, and Other items. The previous
+    implementation matched against a large ancestor container; on this page that container
+    could include many unrelated headlines, causing tournament-registration links to pass the
+    product filter. Matching the headline itself avoids that false-positive path.
     """
     soup = BeautifulSoup(content, "html.parser")
     product_terms = (
-        "arriving", "new expansion", "expansion battle", "release promo", "new promo cards",
-        "product availability", "product release", "arriving on", "pokemon tcg: ",
-        "pokemon trading card game",
+        "arriving", "new expansion", "release promo", "new promo cards",
+        "product availability", "product release", "arriving on",
     )
     results: dict[str, dict[str, str]] = {}
     for anchor in soup.select("a[href]"):
@@ -788,21 +865,27 @@ def parse_official_product_news(content: str, page_url: str, source: dict[str, s
         href = urljoin(page_url, anchor.get("href", ""))
         if not title or href.rstrip("/") == page_url.rstrip("/"):
             continue
-        parent = anchor
-        for _ in range(3):
-            if parent.parent is None:
+        # Use the headline for classification; page-level/section-level context can contain
+        # unrelated keywords from neighboring event cards and must not qualify this link.
+        if is_tournament_announcement(title):
+            continue
+        title_normalized = normalize_text(title)
+        if not any(term in title_normalized for term in product_terms):
+            continue
+
+        # Retain a short item-local context for the Discord report, never the entire news list.
+        context = title
+        parent = anchor.parent
+        for _ in range(5):
+            if parent is None:
                 break
-            parent = parent.parent
+            candidate = clean_text(parent.get_text(" ", strip=True))
+            if len(title) <= len(candidate) <= 700:
+                context = candidate
             if parent.name in ("li", "article"):
                 break
-        context = clean_text(parent.get_text(" ", strip=True))
-        combined = normalize_text(title + " " + context)
-        is_product_item = any(term in combined for term in product_terms)
-        # Site is the official Pokémon TCG news hub. Require product/release language,
-        # so league sign-ups and general tournament notices do not become stock alerts.
-        if not is_product_item:
-            continue
-        if any(term in combined for term in ("registration", "league season", "championship series", "academia:", "roadshow", "tournament")) and not any(term in combined for term in ("arriving", "new expansion", "release promo", "product availability", "new promo cards")):
+            parent = parent.parent
+        if is_tournament_announcement(context) and not any(term in title_normalized for term in product_terms):
             continue
         results[href] = {
             "store_key": source["key"],
@@ -810,7 +893,7 @@ def parse_official_product_news(content: str, page_url: str, source: dict[str, s
             "title": title[:250],
             "url": href,
             "published": "",
-            "summary": context[:1000],
+            "summary": context[:700],
             "feed": page_url,
             "official_product_news": "true",
         }
