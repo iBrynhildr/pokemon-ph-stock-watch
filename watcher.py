@@ -462,6 +462,66 @@ def normalize_text(value: str) -> str:
     return re.sub(r"\s+", " ", value.replace("Pokémon", "Pokemon").replace("pokémon", "pokemon")).casefold()
 
 
+def extract_jpstr_listing_status(text: str, title: str = "") -> str | None:
+    """Extract JPSTR's explicit listing badge without letting description text win.
+
+    JPSTR detail pages can repeat the title in several places. The old parser used the
+    first title occurrence and sometimes cut off the nearby Open/Closed badge. Prefer
+    the listing header before "Basic Info", then inspect title-adjacent card text.
+    Description wording such as "preorder closes [date]" is not a closed status.
+    """
+    value = clean_text(text)
+    if not value:
+        return None
+
+    # On detail pages the status badge, title, and price are in the header before
+    # Basic Info. This avoids stale or historical wording in the long description.
+    basic_info = re.search(r"\b(?:Basic Info|Listing Details|Listing Breakdown)\b", value, re.I)
+    header = value[:basic_info.start()] if basic_info else value
+    candidates = [header]
+
+    # Listing cards may contain several products on one page, so prefer the text
+    # immediately around the matching title rather than unrelated neighboring cards.
+    if title:
+        matches = list(re.finditer(re.escape(clean_text(title)), value, re.I))
+        for match in matches:
+            start = max(0, match.start() - 300)
+            end = min(len(value), match.end() + 260)
+            candidate = value[start:end]
+            local_basic = re.search(r"\b(?:Basic Info|Listing Details|Listing Breakdown)\b", candidate, re.I)
+            if local_basic:
+                candidate = candidate[:local_basic.start()]
+            candidates.append(candidate)
+
+    # De-duplicate while retaining the most useful header-first order.
+    seen: set[str] = set()
+    segments = []
+    for candidate in candidates:
+        candidate = clean_text(candidate)
+        if candidate and candidate not in seen:
+            seen.add(candidate)
+            segments.append(normalize_text(candidate))
+
+    for segment in segments:
+        # Positive explicit badges must be checked before closed terms: descriptions
+        # can mention old deadlines even while the current listing is open.
+        if re.search(r"\bon[- ]hand\s+open\b|\bopen\s+on[- ]hand\b", segment):
+            return "ON_HAND_OPEN"
+        if re.search(r"\b(?:open\s+pre[- ]?order|pre[- ]?order\s+open|preorder\s+open)\b", segment):
+            return "PREORDER_OPEN"
+        # JPSTR sometimes renders the badge as brand + standalone Open, followed by
+        # the product title (which itself contains Pre-Order), rather than one phrase.
+        if re.search(r"\bthe pokemon company\s+open\b", segment) and re.search(r"\bpre[- ]?order\b|\bpreorder\b", segment):
+            return "PREORDER_OPEN"
+        if re.search(r"\bon[- ]hand\s+closed\b|\bclosed\s+on[- ]hand\b", segment):
+            return "ON_HAND_CLOSED"
+        if re.search(r"\b(?:pre[- ]?order|preorder)\s+closed\b|\bclosed\s+pre[- ]?order\b", segment):
+            return "PREORDER_CLOSED"
+        if re.search(r"\bthe pokemon company\s+closed\b", segment) and re.search(r"\bpre[- ]?order\b|\bpreorder\b", segment):
+            return "PREORDER_CLOSED"
+    return None
+
+
 # Explicit names of other trading-card games should never qualify for this
 # Pokémon-only watcher, even if a generic description/tag happens to contain
 # phrases such as "trading card game" or "booster".
@@ -841,11 +901,22 @@ def lifecycle_status(product: dict[str, Any]) -> tuple[str, int, str]:
     available = product.get("available")
     preorder = bool(product.get("preorder"))
     is_closed = any(re.search(pattern, text_value, re.I) for pattern in CLOSED_STATUS_PATTERNS)
+    jpstr_status = product.get("jpstr_status")
 
     if incoming == "ARRIVED_AT_RETAILER":
         return "ARRIVED AT RETAILER / WAREHOUSE", 0x9B59B6, "The public text explicitly says stock arrived, was received, or was unloaded at a retailer/warehouse location."
     if incoming == "IN_TRANSIT":
         return "IN TRANSIT", 0x3498DB, "The public text explicitly mentions shipment/in-transit status."
+    if jpstr_status == "ON_HAND_OPEN":
+        return "IN STOCK / ON HAND — ORDERABLE", 0x2ECC71, "JPSTR explicitly marks the listing On Hand and Open."
+    if jpstr_status == "PREORDER_OPEN":
+        return "PRE-ORDER OPEN", 0xF1C40F, "JPSTR explicitly marks the preorder Open."
+    if jpstr_status == "ON_HAND_CLOSED":
+        return "SOLD OUT / ON-HAND LISTING CLOSED", 0xE74C3C, "JPSTR explicitly marks the on-hand listing Closed."
+    if jpstr_status == "PREORDER_CLOSED":
+        return "PRE-ORDER CLOSED / SOLD OUT", 0xE74C3C, "JPSTR explicitly marks the preorder Closed."
+    if jpstr_status == "AVAILABLE":
+        return ("PRE-ORDER OPEN", 0xF1C40F, "JPSTR marks the listing Available and preorder wording is present.") if preorder else ("LIVE / ORDERABLE", 0x3498DB, "JPSTR marks the listing Available.")
     if preorder and is_closed:
         return "PRE-ORDER CLOSED / SOLD OUT", 0xE74C3C, "The listing indicates a preorder but also says it is closed or unavailable."
     if preorder and available is True:
@@ -873,6 +944,15 @@ def preorder_status_bucket(product: dict[str, Any] | None) -> str | None:
     has_preorder_context = bool(product.get("preorder")) or any(
         term in text_value for term in ("pre-order", "pre order", "preorder", "down payment", "reservation")
     )
+    jpstr_status = product.get("jpstr_status")
+    if jpstr_status == "ON_HAND_OPEN" or jpstr_status == "ON_HAND_CLOSED":
+        return None
+    if jpstr_status == "PREORDER_OPEN":
+        return "OPEN / ORDERABLE"
+    if jpstr_status == "PREORDER_CLOSED":
+        return "CLOSED / UNAVAILABLE"
+    if jpstr_status == "AVAILABLE":
+        return "OPEN / ORDERABLE" if product.get("available") is True else "STATUS UNCLEAR"
     if not has_preorder_context:
         return None
     if any(re.search(pattern, text_value, re.I) for pattern in CLOSED_STATUS_PATTERNS) or product.get("available") is False:
@@ -1040,14 +1120,36 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
 
     full_text = " ".join([title, description, clean_text(tags)])
     signal = incoming_signal(full_text)
-    # Availability must not be inferred from the words "pre-order" alone: expired or
-    # closed listings often still contain those words.
+    # JPSTR exposes an explicit listing badge (e.g. "On Hand Open") separately from
+    # the long product description. Treat that badge as authoritative over generic
+    # closed/preorder wording in a title or description.
+    jpstr_status = raw.get("jpstr_status") if store.get("key") == "jpstr" else None
+    if store.get("key") == "jpstr" and not jpstr_status:
+        jpstr_status = extract_jpstr_listing_status(full_text, title)
+    # Availability must not be inferred from "pre-order" alone: closed listings often
+    # retain preorder text and may still show generic cart controls.
     normalized_full = normalize_text(full_text)
-    if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", normalized_full, re.I):
+    if jpstr_status == "ON_HAND_OPEN":
+        available = True
+        preorder_flag = False
+        if signal == "UPCOMING_OR_PREORDER":
+            signal = "NONE"
+    elif jpstr_status == "PREORDER_OPEN":
+        available = True
+        preorder_flag = True
+    elif jpstr_status == "ON_HAND_CLOSED":
         available = False
-    elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to (?:cart|basket)|buy now|in stock|on hand)\b", normalized_full, re.I):
-        if available is None:
-            available = True
+        preorder_flag = False
+    elif jpstr_status == "PREORDER_CLOSED":
+        available = False
+        preorder_flag = True
+    else:
+        if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", normalized_full, re.I):
+            available = False
+        elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to (?:cart|basket)|buy now|in stock|on hand)\b", normalized_full, re.I):
+            if available is None:
+                available = True
+        preorder_flag = is_preorder(full_text)
     product = {
         "store_key": store["key"],
         "store": store["name"],
@@ -1056,11 +1158,12 @@ def normalize_product(store: dict[str, Any], raw: dict[str, Any], source_name: s
         "url": url,
         "available": available,
         "price": price_text,
-        "preorder": is_preorder(full_text),
+        "preorder": preorder_flag,
         "incoming_signal": signal,
         "arrival_date": extract_arrival_date(full_text),
         "signal_text": full_text[:1800],
         "source": source_name,
+        "jpstr_status": jpstr_status,
     }
     product["set_name"] = matched_set_name
     product["product_type"] = identify_product_type(title, description)
@@ -1084,11 +1187,13 @@ def merge_product(existing: dict[str, Any] | None, incoming: dict[str, Any]) -> 
         merged["available"] = incoming["available"]
     if incoming.get("price") is not None:
         merged["price"] = incoming["price"]
-    if incoming.get("preorder") is True:
+    if incoming.get("jpstr_status") in ("ON_HAND_OPEN", "ON_HAND_CLOSED", "PREORDER_OPEN", "PREORDER_CLOSED", "AVAILABLE"):
+        merged["preorder"] = bool(incoming.get("preorder"))
+    elif incoming.get("preorder") is True:
         merged["preorder"] = True
     elif "preorder" not in merged:
         merged["preorder"] = incoming.get("preorder", False)
-    for field in ("incoming_signal", "arrival_date", "signal_text", "set_name", "product_type", "purchase_channel", "lifecycle_status", "lifecycle_color", "lifecycle_note"):
+    for field in ("incoming_signal", "arrival_date", "signal_text", "set_name", "product_type", "purchase_channel", "lifecycle_status", "lifecycle_color", "lifecycle_note", "jpstr_status"):
         if incoming.get(field):
             merged[field] = incoming[field]
         elif field not in merged:
@@ -1457,6 +1562,8 @@ def parse_html_product_cards(store: dict[str, Any], page_url: str, source_name: 
             "available": available,
             "price": price_match.group(0) if price_match else None,
         }
+        if store.get("key") == "jpstr":
+            raw["jpstr_status"] = extract_jpstr_listing_status(card_text, title)
         item = normalize_product(store, raw, source_name)
         if item:
             records[item["handle"]] = merge_product(records.get(item["handle"]), item)
@@ -1503,8 +1610,13 @@ def parse_html_product_detail_page(store: dict[str, Any], page_url: str, source_
             if price_value:
                 break
     signal_text = f"{title} {description}"
+    jpstr_status = extract_jpstr_listing_status(page_text, title) if store.get("key") == "jpstr" else None
     available: bool | None = None
-    if re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", signal_text, re.I):
+    if jpstr_status in ("ON_HAND_OPEN", "PREORDER_OPEN", "AVAILABLE"):
+        available = True
+    elif jpstr_status in ("ON_HAND_CLOSED", "PREORDER_CLOSED"):
+        available = False
+    elif re.search(r"\b(closed|expired|sold out|out of stock|unavailable|fully allocated|no longer accepting)\b", signal_text, re.I):
         available = False
     elif re.search(r"\b(open pre[- ]?order|pre[- ]?order now|add to (?:cart|basket)|buy now|in stock|on hand)\b", signal_text, re.I):
         available = True
@@ -1518,6 +1630,7 @@ def parse_html_product_detail_page(store: dict[str, Any], page_url: str, source_
         "description": description[:5000],
         "available": available,
         "price": price_value,
+        "jpstr_status": jpstr_status,
     }
     item = normalize_product(store, raw, source_name)
     return [item] if item else []
@@ -2466,7 +2579,7 @@ def main() -> int:
             new_signal = product.get("incoming_signal")
             old_preorder_status = preorder_status_bucket(old)
             new_preorder_status = preorder_status_bucket(product)
-            if old_preorder_status is not None and new_preorder_status is None:
+            if old_preorder_status is not None and new_preorder_status is None and product.get("jpstr_status") not in ("ON_HAND_OPEN", "ON_HAND_CLOSED"):
                 current_text = normalize_text(str(product.get("signal_text", "")))
                 if product.get("available") is False or any(re.search(pattern, current_text, re.I) for pattern in CLOSED_STATUS_PATTERNS):
                     new_preorder_status = "CLOSED / UNAVAILABLE"
