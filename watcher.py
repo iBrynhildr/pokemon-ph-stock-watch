@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Cloud-run Pokémon TCG drop radar for public Philippine retailer/news pages.
 
-Designed for GitHub Actions: no local machine, browser, or Discord bot process needed.
+Designed for GitHub Actions. Selected public retailer pages get a bounded Playwright/Chromium fallback if static parsing finds no TCG product links.
 """
 from __future__ import annotations
 
+import atexit
 import html
 import json
 import logging
@@ -37,6 +38,25 @@ MAX_DISCORD_EMBEDS = 10
 MAX_DISCORD_EMBED_CHARS = 5_500
 MAX_STATE_PRODUCTS = 2500
 MAX_STATE_ANNOUNCEMENTS = 500
+
+# A lightweight browser is used only when a public page returns successfully but
+# normal HTML/catalogue parsing finds no matching product links. This is a fallback,
+# not a CAPTCHA/login bypass. The workflow installs Chromium and caps each run.
+BROWSER_FALLBACK_ENABLED = os.getenv("BROWSER_FALLBACK_ENABLED", "true").strip().casefold() not in ("0", "false", "no", "off")
+try:
+    BROWSER_FALLBACK_MAX_PAGES = max(0, min(20, int(os.getenv("BROWSER_FALLBACK_MAX_PAGES", "10"))))
+except ValueError:
+    BROWSER_FALLBACK_MAX_PAGES = 10
+try:
+    BROWSER_FALLBACK_TIMEOUT_MS = max(3000, min(25000, int(os.getenv("BROWSER_FALLBACK_TIMEOUT_MS", "12000"))))
+except ValueError:
+    BROWSER_FALLBACK_TIMEOUT_MS = 12000
+BROWSER_FALLBACK_TARGET_KEYS = {"green_gate_hobbies", "jpstr", "datablitz", "gameline", "arken", "hobby_arena"}
+_BROWSER_RUNTIME: Any = None
+_BROWSER_INSTANCE: Any = None
+_BROWSER_PAGES_USED = 0
+_BROWSER_HTML_CACHE: dict[str, str | None] = {}
+_BROWSER_IMPORT_WARNING_SHOWN = False
 
 # Explicit user-requested retailer exclusions; do not re-add these to source adapters.
 EXCLUDED_RETAILER_DOMAINS = {"gamextreme.ph", "www.gamextreme.ph"}
@@ -103,7 +123,7 @@ STORES: list[dict[str, Any]] = [
             ("On-hand product listings", "https://jpstr.ph/"),
         ],
         "collection_url": "https://jpstr.ph/preorders",
-        "coverage": "Public HTML listing/detail links only; login-only details are not accessed",
+        "coverage": "Public HTML listing/detail links with bounded JavaScript-rendered fallback; login-only details are not accessed",
     },
     {
         "key": "datablitz",
@@ -118,9 +138,11 @@ STORES: list[dict[str, Any]] = [
         "suggest_url": "https://ecommerce.datablitz.com.ph/search/suggest.json",
         "suggest_queries": ["pokemon", "pokemon tcg", "30th celebration"],
         "feeds": [],
-        "html_urls": [],
+        "html_urls": [
+            ("Pokémon TCG collection (browser-render fallback)", "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection"),
+        ],
         "collection_url": "https://ecommerce.datablitz.com.ph/collections/pokemon-tcg-collection",
-        "coverage": "Public Pokémon TCG and trading-card collections plus product search; only products matching the Pokémon TCG filter are reported",
+        "coverage": "Public Pokémon TCG/trading-card collections and search, with a JavaScript-rendered public-page fallback when static parsing finds no product links",
     },
     {
         "key": "gameline",
@@ -139,7 +161,7 @@ STORES: list[dict[str, Any]] = [
             ("Public Pokémon product search", "https://gameline.ph/search?q=pokemon&type=product"),
         ],
         "collection_url": "https://gameline.ph/collections/pokemon",
-        "coverage": "Public product JSON/search suggestions and server-rendered product links; coverage depends on public catalogue endpoints",
+        "coverage": "Public product JSON/search suggestions plus bounded JavaScript-rendered fallback when static public pages return no matching products",
     },
     {
         "key": "arken",
@@ -155,7 +177,7 @@ STORES: list[dict[str, Any]] = [
             ("30th Celebration Knock Out Collection preorder page", "https://arken.ph/shop/cardzone/pokemon-trading-card-game-en/pokemon-tcg-30th-celebration-knock-out-collection/"),
         ],
         "collection_url": "https://arken.ph/shop/cardzone/pokemon-trading-card-game-en/",
-        "coverage": "Public WooCommerce-style Pokémon TCG category plus a directly monitored 30th Celebration Knock Out Collection product page; only publicly visible product status is read",
+        "coverage": "Public Pokémon TCG category and directly monitored Knock Out Collection page with bounded JavaScript-rendered fallback; only public product status is read",
     },
     {
         "key": "hobby_arena",
@@ -166,7 +188,7 @@ STORES: list[dict[str, Any]] = [
         "feeds": [],
         "html_urls": [("Homepage featured products/pre-orders", "https://www.hobbyarena.ph/")],
         "collection_url": "https://www.hobbyarena.ph/",
-        "coverage": "Public homepage HTML product links only; if the site renders listings only with JavaScript, results may be limited",
+        "coverage": "Public homepage HTML and structured data, with bounded JavaScript-rendered fallback when static parsing finds no product links",
     },
 ]
 
@@ -600,7 +622,7 @@ def product_url(store: dict[str, Any], product: dict[str, Any]) -> str:
     if raw_url:
         absolute = urljoin(store["base"], str(raw_url))
         # Avoid accidentally linking a product to a different domain.
-        if urlparse(absolute).netloc == urlparse(store["base"]).netloc:
+        if _canonical_host(absolute) == _canonical_host(store["base"]):
             return absolute.split("?")[0]
     if handle:
         return f"{store['base']}/products/{handle}"
@@ -760,6 +782,156 @@ def get_response(session: requests.Session, url: str, params: dict[str, str] | N
         return None
 
 
+def _canonical_host(url: str) -> str:
+    host = (urlparse(url).hostname or "").casefold()
+    return host[4:] if host.startswith("www.") else host
+
+
+def close_browser_renderer() -> None:
+    """Close the lazily-created Playwright runtime, if this run needed it."""
+    global _BROWSER_RUNTIME, _BROWSER_INSTANCE
+    try:
+        if _BROWSER_INSTANCE is not None:
+            _BROWSER_INSTANCE.close()
+    except Exception:
+        pass
+    try:
+        if _BROWSER_RUNTIME is not None:
+            _BROWSER_RUNTIME.stop()
+    except Exception:
+        pass
+    _BROWSER_INSTANCE = None
+    _BROWSER_RUNTIME = None
+
+
+atexit.register(close_browser_renderer)
+
+
+def render_public_page(url: str, store_base: str) -> str | None:
+    """Render a public page with Chromium when static parsing was insufficient.
+
+    This intentionally does not solve CAPTCHAs, log in, click purchase buttons, or
+    retry denied pages. It reads the same publicly accessible page a normal browser
+    can visit and returns rendered DOM HTML to the existing product parser.
+    """
+    global _BROWSER_RUNTIME, _BROWSER_INSTANCE, _BROWSER_PAGES_USED, _BROWSER_IMPORT_WARNING_SHOWN
+    if not BROWSER_FALLBACK_ENABLED or BROWSER_FALLBACK_MAX_PAGES <= 0:
+        return None
+    if _canonical_host(url) != _canonical_host(store_base):
+        LOG.warning("Skipping browser fallback for a URL outside the retailer domain: %s", url)
+        return None
+    if url in _BROWSER_HTML_CACHE:
+        return _BROWSER_HTML_CACHE[url]
+    if _BROWSER_PAGES_USED >= BROWSER_FALLBACK_MAX_PAGES:
+        LOG.info("Browser fallback page limit (%s) reached; remaining pages will use static parsing only", BROWSER_FALLBACK_MAX_PAGES)
+        _BROWSER_HTML_CACHE[url] = None
+        return None
+
+    try:
+        from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        if not _BROWSER_IMPORT_WARNING_SHOWN:
+            LOG.warning("Playwright is not installed; JavaScript-rendered fallback is unavailable")
+            _BROWSER_IMPORT_WARNING_SHOWN = True
+        _BROWSER_HTML_CACHE[url] = None
+        return None
+
+    try:
+        if _BROWSER_RUNTIME is None or _BROWSER_INSTANCE is None:
+            _BROWSER_RUNTIME = sync_playwright().start()
+            _BROWSER_INSTANCE = _BROWSER_RUNTIME.chromium.launch(
+                headless=True,
+                args=["--no-sandbox", "--disable-dev-shm-usage"],
+            )
+        page = _BROWSER_INSTANCE.new_page(
+            user_agent=USER_AGENT,
+            locale="en-PH",
+            viewport={"width": 1365, "height": 1000},
+        )
+        # Product text and DOM remain available without downloading nonessential media.
+        def route_nonessential_media(route: Any) -> None:
+            try:
+                if route.request.resource_type in {"image", "font", "media"}:
+                    route.abort()
+                else:
+                    route.continue_()
+            except Exception:
+                try:
+                    route.continue_()
+                except Exception:
+                    pass
+        page.route("**/*", route_nonessential_media)
+        LOG.info("JavaScript fallback: rendering public page %s", url)
+        _BROWSER_PAGES_USED += 1
+        response = page.goto(url, wait_until="domcontentloaded", timeout=BROWSER_FALLBACK_TIMEOUT_MS)
+        if response is not None and response.status in (401, 403, 429, 503):
+            LOG.warning("Browser fallback stopped for %s after HTTP %s; not attempting to bypass access restrictions", url, response.status)
+            page.close()
+            _BROWSER_HTML_CACHE[url] = None
+            return None
+        if response is not None and response.status >= 500:
+            LOG.warning("Browser fallback stopped for %s after HTTP %s", url, response.status)
+            page.close()
+            _BROWSER_HTML_CACHE[url] = None
+            return None
+        # Give client-side hydration a short window. Network-idle is best-effort because
+        # some shops keep analytics or inventory connections open indefinitely.
+        try:
+            page.wait_for_load_state("networkidle", timeout=1800)
+        except PlaywrightTimeoutError:
+            pass
+        page.wait_for_timeout(700)
+        try:
+            page.evaluate("window.scrollTo(0, Math.min(document.body.scrollHeight || 0, 2400))")
+            page.wait_for_timeout(250)
+            page.evaluate("window.scrollTo(0, 0)")
+        except Exception:
+            pass
+        final_url = page.url or url
+        if _canonical_host(final_url) != _canonical_host(store_base):
+            LOG.warning("Browser page redirected outside the retailer domain; ignoring rendered HTML from %s", url)
+            page.close()
+            _BROWSER_HTML_CACHE[url] = None
+            return None
+        rendered = page.content()
+        low = clean_text(BeautifulSoup(rendered, "html.parser").get_text(" ", strip=True)).casefold()
+        if any(marker in low for marker in (
+            "verify you are human", "complete the captcha", "captcha challenge",
+            "access denied", "checking your browser", "unusual traffic detected",
+        )):
+            LOG.warning("Browser fallback saw an access/challenge page at %s; not attempting to bypass it", url)
+            page.close()
+            _BROWSER_HTML_CACHE[url] = None
+            return None
+        page.close()
+        _BROWSER_HTML_CACHE[url] = rendered
+        return rendered
+    except Exception as exc:
+        LOG.warning("JavaScript browser fallback failed for %s: %s", url, exc.__class__.__name__)
+        try:
+            close_browser_renderer()
+        finally:
+            _BROWSER_HTML_CACHE[url] = None
+        return None
+
+
+def browser_fallback_products(store: dict[str, Any], page_url: str, source_name: str, detail: bool = False) -> list[dict[str, Any]]:
+    """Render and parse one selected public page after the ordinary parser found none."""
+    rendered = render_public_page(page_url, store["base"])
+    if not rendered:
+        return []
+    if detail:
+        products = parse_html_product_detail_page(store, page_url, f"{source_name} JavaScript-rendered fallback", rendered)
+    else:
+        products = parse_html_product_cards(store, page_url, f"{source_name} JavaScript-rendered fallback", rendered)
+    if products:
+        LOG.info("JavaScript fallback found %s TCG listing(s) at %s", len(products), page_url)
+    else:
+        LOG.info("JavaScript fallback rendered %s but still found no matching public TCG product links", page_url)
+    return products
+
+
 def products_from_json_response(data: Any) -> list[dict[str, Any]] | None:
     if isinstance(data, dict) and isinstance(data.get("products"), list):
         return [p for p in data["products"] if isinstance(p, dict)]
@@ -794,7 +966,7 @@ def parse_jsonld_product_records(store: dict[str, Any], page_url: str, source_na
     """Extract public Product structured-data records when product cards omit readable links."""
     soup = BeautifulSoup(content, "html.parser")
     records: dict[str, dict[str, Any]] = {}
-    base_domain = urlparse(store["base"]).netloc.casefold()
+    base_domain = _canonical_host(store["base"])
     for script in soup.select('script[type="application/ld+json"]'):
         raw_json = script.string or script.get_text(" ", strip=True)
         if not raw_json:
@@ -811,7 +983,7 @@ def parse_jsonld_product_records(store: dict[str, Any], page_url: str, source_na
             if isinstance(raw_url, dict):
                 raw_url = raw_url.get("@id", "")
             absolute_url = urljoin(page_url, str(raw_url)) if raw_url else ""
-            if not absolute_url or urlparse(absolute_url).netloc.casefold() != base_domain:
+            if not absolute_url or _canonical_host(absolute_url) != base_domain:
                 continue
             if not re.search(r"/(?:products?|listings?)/[^/?#]+", urlparse(absolute_url).path, re.I):
                 continue
@@ -883,7 +1055,7 @@ def parse_html_product_cards(store: dict[str, Any], page_url: str, source_name: 
         if not standard_product_path and not arken_tcg_path:
             continue
         href = urljoin(page_url, raw_href)
-        if urlparse(href).netloc.casefold() != urlparse(store["base"]).netloc.casefold():
+        if _canonical_host(href) != _canonical_host(store["base"]):
             continue
         handle = urlparse(href).path.rstrip("/").split("/")[-1]
         if not handle:
@@ -1062,19 +1234,21 @@ def scrape_store_products(session: requests.Session, store: dict[str, Any]) -> t
             found[product["handle"]] = merge_product(found.get(product["handle"]), product)
 
     # Extra public HTML pages are used for retailers that do not expose a known
-    # Shopify-style JSON catalogue. This parses visible server-rendered product
-    # links only; it does not execute browser JavaScript or bypass logins.
+    # Shopify-style JSON catalogue. If static HTML yields no cards, try a bounded
+    # Playwright/Chromium pass for selected retailers where client-side rendering is common.
     for source_name, page_url in store.get("html_urls", []):
         response = get_response(session, page_url)
         if response is None:
             source_successes.append(False)
             continue
         page_products = parse_html_product_cards(store, page_url, source_name, response.text)
+        if not page_products and store.get("key") in BROWSER_FALLBACK_TARGET_KEYS:
+            page_products = browser_fallback_products(store, page_url, source_name)
         source_successes.append(True)
         for product in page_products:
             found[product["handle"]] = merge_product(found.get(product["handle"]), product)
         if not page_products:
-            LOG.warning("Fetched %s but found no public HTML product links matching the Pokémon TCG filter; JavaScript-only listings may not be visible", page_url)
+            LOG.warning("Fetched %s but found no matching public product links after static and browser fallback; listings may be inaccessible or rendered differently", page_url)
     # Direct product details are useful for high-priority releases/preorders on stores
     # whose category/product routing isn't compatible with the standard catalog parser.
     for source_name, page_url in store.get("detail_urls", []):
@@ -1083,8 +1257,10 @@ def scrape_store_products(session: requests.Session, store: dict[str, Any]) -> t
         if response is None:
             continue
         detail_products = parse_html_product_detail_page(store, page_url, source_name, response.text)
+        if not detail_products and store.get("key") in BROWSER_FALLBACK_TARGET_KEYS:
+            detail_products = browser_fallback_products(store, page_url, source_name, detail=True)
         if not detail_products:
-            LOG.warning("Fetched %s but could not parse a matching public TCG product detail", page_url)
+            LOG.warning("Fetched %s but could not parse a matching public TCG product detail after browser fallback", page_url)
         for product in detail_products:
             found[product["handle"]] = merge_product(found.get(product["handle"]), product)
     # A source is healthy if at least one of its configured public paths could be read.
@@ -1900,6 +2076,9 @@ def main() -> int:
             if page_already_initialized or item.get("alert_on_first_scan") == "true":
                 announcement_alerts.append(announcement_alert(item))
         state["initialized_feeds"][source["url"]] = True
+
+    if _BROWSER_PAGES_USED:
+        LOG.info("JavaScript browser fallback rendered %s public page(s) this scan", _BROWSER_PAGES_USED)
 
     # Keep cumulative counts across GitHub Actions runs. These are detected signals,
     # not physical unit counts and not a branch-by-branch inventory total.
