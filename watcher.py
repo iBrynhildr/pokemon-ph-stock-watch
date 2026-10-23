@@ -423,11 +423,35 @@ def normalize_text(value: str) -> str:
     return re.sub(r"\s+", " ", value.replace("Pokémon", "Pokemon").replace("pokémon", "pokemon")).casefold()
 
 
+# Explicit names of other trading-card games should never qualify for this
+# Pokémon-only watcher, even if a generic description/tag happens to contain
+# phrases such as "trading card game" or "booster".
+NON_POKEMON_TCG_TITLE_RE = re.compile(
+    r"\b(?:magic\s*:\s*the\s*gathering|magic\s+cards?|"
+    r"mtg\s+(?:cards?|boosters?|booster\s+packs?|trading\s+cards?)|"
+    r"yu[\s-]?gi[\s-]?oh!?|one\s+piece\s+card\s+game|"
+    r"digimon\s+card\s+game|disney\s+lorcana|weiss\s+schwarz|"
+    r"flesh\s+and\s+blood(?:\s+tcg)?|star\s+wars\s+unlimited|"
+    r"riftbound|union\s+arena|dragon\s+ball\s+super\s+card\s+game)\b",
+    re.IGNORECASE,
+)
+
+
 def is_tcg_product(title: str, description: str = "", tags: Any = None) -> bool:
+    title_text = normalize_text(title or "")
     combined = normalize_text(" ".join([title or "", description or "", clean_text(tags)]))
+
+    # Fail closed on an explicit non-Pokémon card-game product title. This avoids
+    # letting generic catalogue descriptions or tags make Magic cards appear in
+    # the Pokémon-only alert feed.
+    if NON_POKEMON_TCG_TITLE_RE.search(title_text):
+        return False
+
     if POKEMON_RE.search(combined) and any(term in combined for term in CARD_TERMS):
         return True
-    return any(marker in combined for marker in KNOWN_TCG_PRODUCT_MARKERS)
+    # Retain known Pokémon-specific sealed product names when retailer titles omit
+    # "Pokémon" or "TCG"; do not use generic card-game keywords as exceptions.
+    return any(marker in title_text for marker in KNOWN_TCG_PRODUCT_MARKERS)
 
 
 def is_preorder(text: str) -> bool:
