@@ -2745,7 +2745,7 @@
   "metrics": {
     "total_explicit_in_transit_signals": 0,
     "total_explicit_retailer_arrival_signals": 0,
-    "total_new_orderable_listings": 14,
+    "total_new_orderable_listings": 16,
     "total_preorder_signals": 26,
     "total_restock_signals": 0
   },
@@ -9921,6 +9921,28 @@
       "title": "2025 Pokémon TCG World Championships Decks",
       "url": "https://shop.greengatehobbies.com/products/2025-pokemon-tcg-world-championships-decks"
     },
+    "green_gate_hobbies|dragon-shield-dual-matte-standard-sleeves-black-and-gold": {
+      "arrival_date": null,
+      "available": true,
+      "first_seen": "2026-10-25T09:21:45+00:00",
+      "handle": "dragon-shield-dual-matte-standard-sleeves-black-and-gold",
+      "incoming_signal": "NONE",
+      "jpstr_status": null,
+      "lifecycle_color": 9807270,
+      "lifecycle_note": "The public page does not expose enough information to confirm stock status.",
+      "lifecycle_status": "UNKNOWN / NOT EXPOSED",
+      "preorder": false,
+      "price": "4199.00",
+      "product_type": "Tin",
+      "purchase_channel": "PURCHASE CHANNEL NOT CONFIRMED",
+      "set_name": "30th Celebration",
+      "signal_text": "Pokemon TCG - 30th Celebration - Greninja - 4 Pack TIN - EN Pokemon TCG - 30th Celebration - Greninja - 4 Pack TIN - EN ",
+      "source": "Pokémon TCG sealed products",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokemon TCG - 30th Celebration - Greninja - 4 Pack TIN - EN",
+      "url": "https://shop.greengatehobbies.com/products/dragon-shield-dual-matte-standard-sleeves-black-and-gold"
+    },
     "green_gate_hobbies|pokemon-mega-evolution-chaos-rising-booster-bundle": {
       "arrival_date": null,
       "available": true,
@@ -9986,6 +10008,28 @@
       "store_key": "green_gate_hobbies",
       "title": "Pokemon TCG: Mega Evolution Phantasmal Flames",
       "url": "https://shop.greengatehobbies.com/products/pokemon-phantasmal-flames"
+    },
+    "green_gate_hobbies|pokemon-tcg-30th-celebration-sylveon-4-pack-tin-en": {
+      "arrival_date": null,
+      "available": true,
+      "first_seen": "2026-10-25T09:21:45+00:00",
+      "handle": "pokemon-tcg-30th-celebration-sylveon-4-pack-tin-en",
+      "incoming_signal": "NONE",
+      "jpstr_status": null,
+      "lifecycle_color": 9807270,
+      "lifecycle_note": "The public page does not expose enough information to confirm stock status.",
+      "lifecycle_status": "UNKNOWN / NOT EXPOSED",
+      "preorder": false,
+      "price": "4199.00",
+      "product_type": "Tin",
+      "purchase_channel": "PURCHASE CHANNEL NOT CONFIRMED",
+      "set_name": "30th Celebration",
+      "signal_text": "Pokemon TCG - 30th Celebration - Sylveon - 4 Pack TIN - EN Pokemon TCG - 30th Celebration - Sylveon - 4 Pack TIN - EN ",
+      "source": "Pokémon TCG sealed products",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokemon TCG - 30th Celebration - Sylveon - 4 Pack TIN - EN",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-30th-celebration-sylveon-4-pack-tin-en"
     },
     "green_gate_hobbies|pokemon-tcg-ascended-heroes-mega-feraligatr-ex-box": {
       "arrival_date": null,
