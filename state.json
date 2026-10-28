@@ -9923,7 +9923,7 @@
     },
     "green_gate_hobbies|dragon-shield-dual-matte-standard-sleeves-black-and-gold": {
       "arrival_date": null,
-      "available": true,
+      "available": false,
       "first_seen": "2026-10-25T09:21:45+00:00",
       "handle": "dragon-shield-dual-matte-standard-sleeves-black-and-gold",
       "incoming_signal": "NONE",
@@ -10011,7 +10011,7 @@
     },
     "green_gate_hobbies|pokemon-tcg-30th-celebration-sylveon-4-pack-tin-en": {
       "arrival_date": null,
-      "available": true,
+      "available": false,
       "first_seen": "2026-10-25T09:21:45+00:00",
       "handle": "pokemon-tcg-30th-celebration-sylveon-4-pack-tin-en",
       "incoming_signal": "NONE",
