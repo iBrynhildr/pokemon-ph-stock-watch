@@ -2753,7 +2753,7 @@
   "metrics": {
     "total_explicit_in_transit_signals": 0,
     "total_explicit_retailer_arrival_signals": 0,
-    "total_new_orderable_listings": 20,
+    "total_new_orderable_listings": 21,
     "total_preorder_signals": 27,
     "total_restock_signals": 0
   },
@@ -10060,6 +10060,28 @@
       "store_key": "green_gate_hobbies",
       "title": "Pokemon TCG: Ascended Heroes Mega Feraligatr ex Box",
       "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-ascended-heroes-mega-feraligatr-ex-box"
+    },
+    "green_gate_hobbies|pokemon-tcg-enhanced-2-pack-blister-gengar-marshadow-team-rockets-mimikyu": {
+      "arrival_date": null,
+      "available": true,
+      "first_seen": "2026-10-30T09:44:41+00:00",
+      "handle": "pokemon-tcg-enhanced-2-pack-blister-gengar-marshadow-team-rockets-mimikyu",
+      "incoming_signal": "NONE",
+      "jpstr_status": null,
+      "lifecycle_color": 3447003,
+      "lifecycle_note": "The public page allows ordering; physical on-hand stock is not guaranteed.",
+      "lifecycle_status": "LIVE / ORDERABLE",
+      "preorder": false,
+      "price": "1190.00",
+      "product_type": "Booster Pack",
+      "purchase_channel": "ONLINE PRODUCT-PAGE ORDERABILITY",
+      "set_name": "Mega Evolution—Chaos Rising",
+      "signal_text": "Pokémon TCG: Enhanced 2-Pack Blister (Gengar, Marshadow & Team Rocket's Mimikyu) Expand your Pokémon TCG collection with this exciting set featuring foil promo cards of Gengar, Marshadow, and Team Rocket’s Mimikyu ! Each set also includes a collectible plastic coin and two Pokémon TCG booster packs, giving you more cards to discover and add to your collection. What's Included: 3 foil cards featuring Gengar, Marshadow, and Team Rocket’s Mimikyu 1 collectible plastic coin 1 Pokémon TCG: Pitch Black Booster Pack 1 Pokémon TCG: Chaos Rising Booster Pack Perfect for Pokémon fans, players, and collectors looking to add these featured Pokémon and more booster packs to their collection! ",
+      "source": "Store search suggestions (latest pokemon tcg set)",
+      "store": "Green Gate Hobbies",
+      "store_key": "green_gate_hobbies",
+      "title": "Pokémon TCG: Enhanced 2-Pack Blister (Gengar, Marshadow & Team Rocket's Mimikyu)",
+      "url": "https://shop.greengatehobbies.com/products/pokemon-tcg-enhanced-2-pack-blister-gengar-marshadow-team-rockets-mimikyu"
     },
     "green_gate_hobbies|pokemon-tcg-me02-5-mega-ascended-heroes-elite-booster-box-etb-case-10x-etbs": {
       "arrival_date": "February 28, 2026",
