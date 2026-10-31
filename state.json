@@ -10041,7 +10041,7 @@
     },
     "green_gate_hobbies|pokemon-tcg-30th-celebration-mini-tin": {
       "arrival_date": null,
-      "available": true,
+      "available": false,
       "first_seen": "2026-10-30T16:17:19+00:00",
       "handle": "pokemon-tcg-30th-celebration-mini-tin",
       "incoming_signal": "NONE",
