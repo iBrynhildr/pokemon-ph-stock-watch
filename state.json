@@ -10174,7 +10174,7 @@
     },
     "green_gate_hobbies|pokemon-mega-evolution-chaos-rising-checklane-blister-pack": {
       "arrival_date": null,
-      "available": true,
+      "available": false,
       "first_seen": "2026-10-23T03:56:07+00:00",
       "handle": "pokemon-mega-evolution-chaos-rising-checklane-blister-pack",
       "incoming_signal": "NONE",
