@@ -3032,7 +3032,7 @@
     "pokemon_global_delta_reign_announcement": true,
     "pokemon_global_news_archive": true,
     "pokemon_global_october_2026_products": true,
-    "pokemon_global_release_schedule": false
+    "pokemon_global_release_schedule": true
   },
   "products": {
     "arken|pokemon-tcg-30th-celebration-2-pack-blister": {
@@ -10378,15 +10378,15 @@
       "incoming_signal": "UPCOMING_OR_PREORDER",
       "jpstr_status": null,
       "lifecycle_color": 15105570,
-      "lifecycle_note": "The page mentions an upcoming arrival/release; this is not proof of physical transit.",
-      "lifecycle_status": "INCOMING / UPCOMING",
+      "lifecycle_note": "Preorder wording remains, but the public page marks the item unavailable.",
+      "lifecycle_status": "PRE-ORDER — STATUS CLOSED/UNAVAILABLE",
       "preorder": true,
       "price": "18000.00",
       "product_type": "Elite Trainer Box (ETB)",
       "purchase_channel": "PURCHASE CHANNEL NOT CONFIRMED",
       "set_name": "Mega Evolution—Ascended Heroes",
-      "signal_text": "Pokemon TCG Mega Evolution (ME02.5) Ascended Heroes - Elite Booster Box (ETB) CASE (10x ETB's) [SUBJECT TO ALLOCATION] Pokemon TCG Mega Evolution (ME02.5) Ascended Heroes - Elite Booster Box (ETB) CASE (10x ETB's) [SUBJECT TO ALLOCATION] ",
-      "source": "Pokémon TCG sealed products",
+      "signal_text": "Pokemon TCG Mega Evolution (ME02.5) Ascended Heroes - Elite Booster Box (ETB) CASE (10x ETB's) [SUBJECT TO ALLOCATION] This is an early pre-order offer courtesy of our partner distributor. No further information other than what is displayed below has been disclosed to retailers/vendors. By placing a pre-order, you acknowledge and understand the risks. Should the distributor reduce our allocation, you may only receive portion quantities of the case/display (rounded DOWN, by increments of 1.00, based on declared allocation %) or we may need to cancel your pre-order entirely. PRE-ORDERS PLACED/PAID FOR ARE FINAL NON-CANCELLABLE PRE-ORDER - UNLESS ALLOCATION CUT Est. Arrival Date: February 28, 2026 t:ptcg_sealed",
+      "source": "Store search suggestions (ascended heroes)",
       "store": "Green Gate Hobbies",
       "store_key": "green_gate_hobbies",
       "title": "Pokemon TCG Mega Evolution (ME02.5) Ascended Heroes - Elite Booster Box (ETB) CASE (10x ETB's) [SUBJECT TO ALLOCATION]",
